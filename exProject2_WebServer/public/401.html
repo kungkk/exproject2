@@ -1,0 +1,49 @@
+﻿<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="refresh" content="3;URL=/projects">
+    <title></title>
+    <link rel='stylesheet' href='http://css1.spclite2.dufu:8000/stylesheets/bootstrap-3.3.5.min.css' />
+    <link rel='stylesheet' href='http://css2.spclite2.dufu:8000/stylesheets/font-awesome-4.3.0.min.css' />
+    <link rel='stylesheet' href='http://css2.spclite2.dufu:8000/stylesheets/style.css' />
+
+    <script>
+        var count = 3;
+
+        var counter = setInterval(timer, 1000); //1000 will  run it every 1 second
+        function timer() {
+            count = count - 1;
+            if (count <= 0) {
+                clearInterval(counter);
+                return;
+            }
+
+            document.getElementById("timer").innerHTML = count; // watch for spelling
+        }
+    </script>
+</head>
+<body>
+    <div class="header container-fluid navbar-fixed-top">
+        <div class="row header_sub">
+            <!--<img src="http://img1.spclite2.dufu:8000/images/logo.png" class="logo" /> <h1>Dufu SPC System</h1>-->
+        </div>
+        <div class="row header_nav">
+        </div>
+    </div>
+
+    <div class="container container-fluid">
+        <div class="col-sm-2 col-md-2 col-lg-2"></div>
+        <div class="col-sm-8 col-md-8 col-lg-8">
+            <h1 style="margin:20% 0 2% 10%;"><i class="fa fa-exclamation-triangle"></i> HTTP Error 401 <small>Unauthorized: Access is denied!</small></h1>
+            <small style="margin:50% 0 0 30%;font-size:14px;">Sorry. You do not have permission to access this page.</small>
+            <p style="margin:10% 0 0 37%;">You will be redirected in <span id="timer" style="font-weight:bold;">3</span> seconds...</p>
+        </div>
+        <div class="col-sm-2 col-md-2 col-lg-2"></div>
+
+    </div>
+
+    <div class="footer container-fluid navbar-fixed-bottom"></div>
+</body>
+</html>
