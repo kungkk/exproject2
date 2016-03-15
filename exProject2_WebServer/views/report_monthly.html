@@ -1,0 +1,106 @@
+﻿{% extends 'z_layout.html' %}
+
+{% block content %}
+{% if layout == "default" %}
+<section class="content-header">
+    <h1>
+        <i class="fa fa-calendar"></i>&nbsp;&nbsp;<span my-translator>Monthly Plan Report</span>
+    </h1>
+</section>
+{% endif %}
+
+{% if layout == "default" %}
+<div class="row" data-ng-controller="report_monthly_controller" style="padding:0 10px 10px 10px;">
+    <section class="content">
+        <div class="row col-sm-12 col-md-12 col-lg-12 nopadding">
+            <div class="col-sm-3 col-md-3 col-lg-3 nopadding">
+                <div class='input-group'>
+                    <div class='input-group-addon'><span my-translator>Month</span> &nbsp;&nbsp;</div>
+                    <select class="form-control" data-ng-model="month"
+                            data-ng-options="month.value as month.name for month in months"></select>
+                </div>
+            </div>
+            <div class="col-sm-3 col-md-3 col-lg-3 nopadding">
+                <div class='input-group'>
+                    <div class='input-group-addon'><span my-translator>Year</span></div>
+                    <select class='form-control' data-ng-model="year" name="year">
+                        <option value="{% raw %}{{year}}{% endraw %}" data-ng-repeat="year in years" data-ng-bind="year"></option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-sm-3 col-md-3 col-lg-3 nopadding">
+                <div class='input-group'>
+                    <div class='input-group-addon'><span my-translator>User</span></div>
+                    <select class='form-control' data-ng-model="user_id" name="user_id">
+                        <option value="{% raw %}{{mtxUser.id}}{% endraw %}" data-ng-repeat="mtxUser in mtxUsers">{% raw %}{{mtxUser.family_name}}{% endraw %} {% raw %}{{mtxUser.given_name}}{% endraw %}</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-sm-3 col-md-3 col-lg-3 nopadding">
+                <div class='input-group'>
+                    &nbsp;&nbsp;&nbsp;&nbsp;
+                    <button id="btnsubmit" type="submit" class="btn btn-primary" data-ng-click="get()">
+                        <span data-ng-hide="loading"><span my-translator>View</span></span>
+
+                        <span data-ng-show="loading">
+                            <i class="fa fa-spinner fa-spin"></i>
+                            <span my-translator>Viewing</span>
+                        </span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class='row col-sm-12 col-md-12 col-lg-12 nopadding' style="margin-top:20px;">
+            <div style='background-color:#fff;width:99.9%;' my-chart>
+            </div>
+        </div>
+
+        <div class='row col-sm-12 col-md-12 col-lg-12 nopadding' style="margin-top:20px;">
+            <table class="table table-striped table-bordered table-hover ng-table-responsive">
+                <thead>
+                    <tr>
+                        <th><span my-translator>Project</span></th>
+                        <th><span my-translator>Module</span></th>
+                        <th><span my-translator>Plan Hours</span></th>
+                        <th><span my-translator>Worked Hours</span></th>
+                        <th><span my-translator>Completeness %</span></th>
+                        <th><span my-translator>Performances %</span></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr data-ng-repeat="data in dataset track by $index" data-ng-if="($index % 2) == 1">
+                        <td data-ng-bind="data.project_name"></td>
+                        <td data-ng-bind="data.module_name"></td>
+                        <td>{% raw %}{{ dataset[$index-1].hours }}{% endraw %} &nbsp;&nbsp; ({% raw %}{{ dataset[$index-1].hours/8 | number:1 }}{% endraw %} <span my-translator>Days</span>)</td>
+                        <td>{% raw %}{{ data.hours }}{% endraw %} &nbsp;&nbsp; ({% raw %}{{ data.hours/8 | number:1 }}{% endraw %} <span my-translator>Days</span>)</td>
+                        <td data-ng-bind="data.hours/dataset[$index-1].hours*100 | number:1"></td>
+                        <td data-ng-bind="100-(data.hours/dataset[$index-1].hours*100) | number:1"></td>
+                    </tr>
+                    <tr style="font-weight:bold;">
+                        <td></td>
+                        <td><span class="pull-right" my-translator>Total Hours</span></td>
+                        <td data-ng-bind="total_hours_plan | number:1"></td>
+                        <td data-ng-bind="total_hours_worked | number:1"></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr style="font-weight:bold;">
+                        <td></td>
+                        <td><span class="pull-right" my-translator>Total Man Days</span></td>
+                        <td data-ng-bind="total_days_plan | number:1"></td>
+                        <td data-ng-bind="total_days_worked | number:1"></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+</div>
+{% endif %}
+
+{% if layout == "default" %}
+<script src="/javascripts/controllers/report_monthly.js"></script>
+{% endif %}
+{% endblock %}

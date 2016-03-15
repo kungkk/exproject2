@@ -1,0 +1,107 @@
+﻿{% extends 'z_layout.html' %}
+
+{% block content %}
+{% if layout == "default" %}
+<section class="content-header">
+    <h1>
+        <i class="fa fa-calendar"></i>&nbsp;&nbsp;<span my-translator>Project Based Report</span>
+    </h1>
+</section>
+{% endif %}
+
+{% if layout == "default" %}
+<div class="row" data-ng-controller="report_project_based_controller" style="padding:0 10px 10px 10px;">
+    <section class="content">
+        <div class="row col-sm-12 col-md-12 col-lg-12" style="margin-bottom:15px;">
+            <div class="form-group col-sm-10 col-md-10 col-lg-10 nopadding nomargin">
+                <label class="col-sm-1 col-md-1 col-lg-1 nopadding"><span my-translator>Filter By</span></label>
+                <div class="col-sm-8 col-md-8 col-lg-8 nopadding nomargin">
+                    <select class='form-control' data-ng-model="project_id" name="project_id">
+                        <option value="{% raw %}{{mtxProject.id}}{% endraw %}" data-ng-repeat="mtxProject in mtxProjects" data-ng-bind="mtxProject.name"></option>
+                    </select>
+                </div>
+
+                <div class="form-group col-sm-2 col-md-2 col-lg-2">
+                    <button type="button" class="btn btn-primary" data-ng-click="get()">
+                        <span data-ng-hide="loading"><span my-translator>View</span></span>
+
+                        <span data-ng-show="loading">
+                            <i class="fa fa-spinner fa-spin"></i>
+                            <span my-translator>Viewing</span>
+                        </span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class='row col-sm-12 col-md-12 col-lg-12 nopadding'>
+            <table class='tblItems table table-bordered table-striped' cellspacing='0' cellpadding='0' style='font-size:14px;'>
+                <thead>
+                    <tr>
+                        <th><span my-translator>Name</span></th>
+                        <th><span my-translator>Members</span></th>
+                        <th><span my-translator>Modules</span></th>
+                        <th><span my-translator>Started</span></th>
+                        <th><span my-translator>Ended</span></th>
+                        <th><span my-translator>Remaining Days</span></th>
+                        <th><span my-translator>Worked Hours</span></th>
+                        <th><span my-translator>PM Assigned Hours</span></th>
+                        <th><span my-translator>Completeness (%)</span></th>
+                        <th><span my-translator>Performances (%)</span></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr data-ng-repeat="data in dataset">
+                        <td>
+                            <a class="pointer" data-ng-click="get_modules(data.id)" data-ng-bind="data.name"></a>
+                        </td>
+                        <td data-ng-bind="data.Members.length"></td>
+                        <td data-ng-bind="data.Modules.length"></td>
+                        <td data-ng-bind="data.started | date:'yyyy-MM-dd' : 'UTC'"></td>
+                        <td data-ng-bind="data.ended | date:'yyyy-MM-dd' : 'UTC'"></td>
+                        <td data-ng-bind="data.ended | calRemainingDay:today" class="text-right"></td>
+                        <td data-ng-bind="data.total_worked" class="text-right"></td>
+                        <td data-ng-bind="data.total_pm_assigned" class="text-right"></td>
+                        <td data-ng-if="data.total_pm_assigned == null || data.total_pm_assigned == 0" class="text-right"><small class='badge bg-red' title='0 hour are assigned by PM'>error</small></td>
+                        <td data-ng-if="data.total_pm_assigned > 0" data-ng-bind="data.total_worked/data.total_pm_assigned*100 | number: 0" class="text-right"></td>
+                        <td data-ng-if="data.total_pm_assigned == null || data.total_pm_assigned == 0" class="text-right" class="text-right"><small class='badge bg-red' title='0 hour are assigned by PM'>error</small></td>
+                        <td data-ng-if="data.total_pm_assigned > 0 && data.total_worked/data.total_pm_assigned*100 > 100" data-ng-bind="100-(data.total_worked/data.total_pm_assigned*100) | number: 0" class="text-right"></td>
+                        <td data-ng-if="data.total_pm_assigned > 0 && data.total_worked/data.total_pm_assigned*100 < 100" data-ng-bind="data.total_worked/data.total_pm_assigned*100|number:0" class="text-right"></td>
+                        <td data-ng-if="data.total_pm_assigned > 0 && data.total_worked/data.total_pm_assigned*100 == 100" class="text-right">-</td>
+                    </tr>
+
+                    <tr id="module_{% raw %}{{data2.id}}{% endraw %}" data-ng-repeat="data2 in dataset2" class="module">
+                        <td colspan="3">
+                            <a class="pointer" data-ng-bind="data2.name" style="margin-left:30px;" add-module-users module-id="{% raw %}{{data2.id}}{% endraw %}" project-id="{% raw %}{{data2.project_id}}{% endraw %}"></a>
+                            <span data-ng-if="data2.is_endless==true">(Endless)</span>
+                        </td>
+                        <td data-ng-bind="data2.started | date:'yyyy-MM-dd' : 'UTC'"></td>
+                        <td data-ng-bind="data2.ended | date:'yyyy-MM-dd' : 'UTC'"></td>
+                        <td data-ng-if="data2.is_endless==true" class="text-right">-</td>
+                        <td data-ng-if="data2.is_endless==false && data2.ended == null" class="text-right"><small class='badge bg-red' title='No actual ended date was set.'>error</small></td>
+                        <td data-ng-if="data2.is_endless==false && data2.ended !== null" data-ng-bind="data2.ended | calRemainingDay:today" class="text-right"></td>
+                        <td data-ng-bind="data2.items_hours" class="text-right"></td>
+                        <td data-ng-bind="data2.mu_hours" class="text-right"></td>
+                        <td data-ng-if="data2.mu_hours == null || data2.mu_hours == 0" class="text-right"><small class='badge bg-red' title='0 hour are assigned by PM'>error</small></td>
+                        <td data-ng-if="data2.mu_hours > 0" data-ng-bind="data2.items_hours/data2.mu_hours*100|number:0" class="text-right"></td>
+                        <td data-ng-if="data2.mu_hours == null || data2.mu_hours == 0" class="text-right"><small class='badge bg-red' title='0 hour are assigned by PM'>error</small></td>
+                        <td data-ng-if="data2.mu_hours > 0 && data2.items_hours/data2.mu_hours*100 < 100" data-ng-bind="data2.items_hours/data2.mu_hours*100|number:0" class="text-right"></td>
+                        <td data-ng-if="data2.mu_hours > 0 && data2.items_hours/data2.mu_hours*100 == 100" class="text-right">-</td>
+                    </tr>
+
+                </tbody>
+            </table>
+        </div>
+
+        <div class='row col-sm-12 col-md-12 col-lg-12 nopadding' style="margin-top:20px;" data-ng-show="show_chart">
+            <div style='background-color:#fff;width:99.9%;' my-chart>
+            </div>
+        </div>
+    </section>
+</div>
+{% endif %}
+
+{% if layout == "default" %}
+<script src="/javascripts/controllers/report_project_based.js"></script>
+{% endif %}
+{% endblock %}

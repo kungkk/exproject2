@@ -1,0 +1,58 @@
+﻿{% extends 'z_layout.html' %}
+
+{% block content %}
+<section class="content-header" style="margin-top:50px;">
+    <h1>
+        <i class="fa fa-user"></i>&nbsp;&nbsp;<span my-translator>Sign In</span>
+    </h1>
+</section>
+
+<section class="content" data-ng-controller="signin_controller" style="margin-top:50px;">
+    <div class="row col-sm-1 col-md-1 col-lg-1"></div>
+    <div class="row col-sm-9 col-md-9 col-lg-9">
+        <form class="form-horizontal" name="frmSignIn" role="form" method="post" novalidate>
+            <div class="form-group">
+                <label class="col-sm-5 col-md-5 col-lg-5 text-right"><span my-translator>Username</span></label>
+                <div class="col-sm-5 col-md-5 col-lg-5">
+                    <input type="text" name="username" class="form-control" data-ng-model="username" autocomplete="off" data-ng-pattern="validate_invalid_characters" placeholder="" title="" my-translator-attr="Username" required />
+                    <span class="label label-danger" data-ng-show="submitted && frmSignIn.username.$error.pattern">
+                        <span my-translator>Username contains invalid characters.</span>
+                    </span>
+                    <span class="label label-danger" data-ng-show="submitted && frmSignIn.username.$error.required">
+                        <span my-translator>Username must not be blank.</span>
+                    </span>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-5 col-md-5 col-lg-5 text-right"><span my-translator>Password</span></label>
+                <div class="col-sm-5 col-md-5 col-lg-5">
+                    <input type="password" name="password" class="form-control" data-ng-model="password" autocomplete="off" data-ng-pattern="validate_invalid_characters" placeholder="" title="" my-translator-attr="PASSWORD" required />
+                    <span class="label label-danger" data-ng-show="submitted && frmSignIn.passsword.$error.pattern">
+                        <span my-translator>Password contains invalid characters</span>
+                    </span>
+                    <span class="label label-danger" data-ng-show="submitted && frmSignIn.password.$error.required">
+                        <span my-translator>Password must not be blank.</span>
+                    </span>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-5 col-md-5 col-lg-5 text-right">&nbsp;</label>
+                <div class="col-sm-5 col-md-5 col-lg-5">
+                    <button type="submit" class="btn btn-primary" data-ng-click="submit(frmSignIn)">
+                        <span data-ng-hide="loading"><span my-translator>Sign In</span></span>
+
+                        <span data-ng-show="loading">
+                            <i class="fa fa-spinner fa-spin"></i>
+                            <span my-translator>Signing In</span>
+                        </span>
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</section>
+
+<script src="/javascripts/controllers/signin.js"></script>
+{% endblock %}

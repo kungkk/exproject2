@@ -1,0 +1,196 @@
+﻿{% if layout == 'ajax' %}
+    {% block content %}{% endblock %}
+{% endif %}
+
+{% if layout == 'default' %}
+    <!doctype html>
+    <html data-ng-app='myApp'>
+    <head>
+        <base href="/">
+        <meta charset="utf-8">
+        <meta content="utf-8" http-equiv="encoding">
+        <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+        <title>{% block title %}{{ action_name }}{% endblock %}</title>
+        {% block head %}
+
+        {% if config['url_address'] == 'name' %}
+            <link rel='stylesheet' href='http://css1.exproject2.jcc:8000/stylesheets/bootstrap-3.3.5.min.css' />
+            <link rel='stylesheet' href='http://css2.exproject2.jcc:8000/stylesheets/font-awesome-4.3.0.min.css' />
+            <link rel='stylesheet' href='http://css2.exproject2.jcc:8000/stylesheets/jquery-ui-1.11.4.min.css' />
+            <link rel='stylesheet' href='http://css2.exproject2.jcc:8000/stylesheets/jquery.datetimepicker.css' />
+            <link rel='stylesheet' href='http://css2.exproject2.jcc:8000/stylesheets/jquery.dataTables-1.10.9.min.css' />
+            <link rel='stylesheet' href='http://css2.exproject2.jcc:8000/stylesheets/AdminLTE.css' />
+            <link rel='stylesheet' href='http://css2.exproject2.jcc:8000/stylesheets/style.css' />
+
+            <script src="http://js1.exproject2.jcc:8000/javascripts/jquery/jquery-2.1.4.min.js"></script>
+            <script src="http://js1.exproject2.jcc:8000/javascripts/jquery/jquery-ui-1.11.4.min.js"></script>
+            <script src="http://js1.exproject2.jcc:8000/javascripts/bootstrap/bootstrap-3.3.5.min.js"></script>
+
+            <script src="http://js1.exproject2.jcc:8000/javascripts/angularjs/angular-1.4.7/angular.min.js"></script>
+            <script src="http://js1.exproject2.jcc:8000/javascripts/angularjs/angular-1.4.7/angular-cookies.min.js"></script>
+            <script src="http://js1.exproject2.jcc:8000/javascripts/angularjs/angular-1.4.7/angular-route.min.js"></script>
+        
+            <script src="http://js2.exproject2.jcc:8000/javascripts/dataTables/jquery.dataTables-1.10.9.min.js"></script>
+            <script src="http://js2.exproject2.jcc:8000/javascripts/dataTables/angular-datatables-0.5.0.min.js"></script>
+            <script src="http://js2.exproject2.jcc:8000/javascripts/dataTables/dataTables.columnFilter.js"></script>
+            <script src="http://js2.exproject2.jcc:8000/javascripts/dataTables/angular-datatables.columnfilter-0.4.3.min.js"></script>
+            <script src="http://js2.exproject2.jcc:8000/javascripts/charts/highcharts/highcharts.4.1.9.min.js"></script>
+
+            <!--<script src="http://js2.exproject2.jcc:8000/javascripts/bootstrap/AdminLTE.js"></script>-->
+
+            <script src="http://js2.exproject2.jcc:8000/javascripts/jccwebserver.json"></script>
+            <script src="http://js2.exproject2.jcc:8000/javascripts/app.js"></script>
+        {% endif %}
+
+        {% if config['url_address'] == 'ip' %}
+            <link rel='stylesheet' href='/stylesheets/bootstrap-3.3.5.min.css' />
+            <link rel='stylesheet' href='/stylesheets/font-awesome-4.3.0.min.css' />
+            <link rel='stylesheet' href='/stylesheets/jquery-ui-1.11.4.min.css' />
+            <link rel='stylesheet' href='/stylesheets/jquery.datetimepicker.css' />
+            <link rel='stylesheet' href='/stylesheets/jquery.dataTables-1.10.9.min.css' />
+            <link rel='stylesheet' href='/stylesheets/AdminLTE.css' />
+            <link rel='stylesheet' href='/stylesheets/style.css' />
+
+            <script src="/javascripts/jquery/jquery-2.1.4.min.js"></script>
+            <script src="/javascripts/jquery/jquery-ui-1.11.4.min.js"></script>
+            <script src="/javascripts/bootstrap/bootstrap-3.3.5.min.js"></script>
+
+            <script src="/javascripts/angularjs/angular-1.4.7/angular.min.js"></script>
+            <script src="/javascripts/angularjs/angular-1.4.7/angular-cookies.min.js"></script>
+            <script src="/javascripts/angularjs/angular-1.4.7/angular-route.min.js"></script>
+
+            <script src="/javascripts/dataTables/jquery.dataTables-1.10.9.min.js"></script>
+            <script src="/javascripts/dataTables/angular-datatables-0.5.0.min.js"></script>
+            <script src="/javascripts/dataTables/dataTables.columnFilter.js"></script>
+            <script src="/javascripts/dataTables/angular-datatables.columnfilter-0.4.3.min.js"></script>
+            <script src="/javascripts/charts/highcharts/highcharts.4.1.9.min.js"></script>
+
+            <!--<script src="/javascripts/bootstrap/AdminLTE.js"></script>-->
+
+            <script src="/javascripts/jccwebserver.json"></script>
+            <script src="/javascripts/app.js"></script>
+        {% endif %}
+
+
+        {% endblock %}
+    </head>
+    <body class="skin-blue fixed" data-ng-attr-action="{{ action_name }}" data-ng-attr-userid="{{ session.user_id }}">
+        <header class="header">
+            <a href="/index" class="logo">exProject2</a>
+
+            <!-- Header Navbar: style can be found in header.less -->
+            <nav class="navbar navbar-static-top" role="navigation">
+                <!-- Sidebar toggle button-->
+
+                <a href="#" class="navbar-btn sidebar-toggle" data-toggle="offcanvas" role="button">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </a>
+
+                <div class="navbar-right">
+                    <ul class="nav navbar-nav">
+                        {% if session.username != '' %}
+
+                        <li class="dropdown">
+                            <a href='/user/{{ session.user_id }}'>
+                                <i class="fa fa-user"></i>
+                                {{ session.username }}
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <a href="/user_profile"><i class="fa fa-fw fa-user"></i> Profile</a>
+                                </li>
+                                <li class="divider"></li>
+                                <li>
+                                    <a href="/signout"><i class="fa fa-fw fa-power-off"></i> Sign Out</a>
+                                </li>
+                            </ul>
+                        </li>
+
+                        <li>
+                            <a href="/signout"><i class="fa fa-fw fa-power-off"></i> Sign Out</a>
+                        </li>
+                        {% else %}
+                        <li><a href="/signin"><span my-translator>Sign In</span></a></li>
+                        {% endif %}
+                    </ul>
+                </div>
+            </nav>
+        </header>
+
+        <div id="wrapper" class="wrapper row-offcanvas row-offcanvas-left">
+            {% if session.username != '' %}
+            <aside class="left-side sidebar-offcanvas">
+                <section class="sidebar">
+                    <!-- Sidebar user panel -->
+                    <!--<div class="user-panel">
+                        <div class="pull-left image">
+                            <img src="/webroot/images/avatar3.png" class="img-circle" alt="User Image" />
+                        </div>
+                        <div class="pull-left info">
+                            <p></p>
+                        </div>
+                    </div>-->
+
+                    <!-- sidebar menu: : style can be found in sidebar.less -->
+
+                    <ul class="sidebar-menu">
+                        <li>
+                            <a href="/projects"><i class="fa fa-puzzle-piece"></i><span>Projects</span></a>
+                        </li>
+                        <li>
+                            <a href="/plans"><i class="fa fa-calendar"></i> <span>Monthly Plans</span></a>
+                        </li>
+                        <li>
+                            <a href="/issues"><i class="fa fa-exclamation-circle"></i> <span>Issues</span></a>
+                        </li>
+                        <li class="treeview">
+                            <a>
+                                <i class="fa fa-table"></i> <span>Report</span>
+                                <i class="fa fa-angle-left pull-right"></i>
+                            </a>
+                            <ul class="treeview-menu" style="display: block;">
+                                <li><a href="/report_issues"><i class="fa fa-angle-double-right"></i>Issues</a></li>
+                                <li><a href="/report_monthly"><i class="fa fa-angle-double-right"></i>Monthly Plan</a></li>
+                                <li><a href="/report_project_based"><i class="fa fa-angle-double-right"></i>Project Based</a></li>
+                                <li><a href="/report_user_based"><i class="fa fa-angle-double-right"></i>User Based</a></li>
+                                <li><a href="/report_weekly"><i class="fa fa-angle-double-right"></i>Weekly</a></li>
+                            </ul>
+                        </li>
+                        <li class="treeview active">
+                            <a>
+                                <i class="fa fa-key"></i> <span>Access Control</span>
+                                <i class="fa fa-angle-left pull-right"></i>
+                            </a>
+                            <ul class="treeview-menu" style="display: block;">
+                                <li><a href="/groups"><i class="fa fa-angle-double-right"></i>Groups</a></li>
+                                <li><a href="/permissions"><i class="fa fa-angle-double-right"></i>Permissions</a></li>
+                                <li><a href="/users"><i class="fa fa-angle-double-right"></i>Users</a></li>
+                                <li><a href="/change_password"><i class="fa fa-angle-double-right"></i>Change Password</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <small class='pull-right'><br />&copy;2016 exProject v2.0.0.0&nbsp;&nbsp;&nbsp;&nbsp;</small>
+                </section>
+            </aside>
+            {% else %}
+            <aside class="left-side sidebar-offcanvas collapse-left"></aside>
+            {% endif %}
+
+            {% if session.username != '' %}
+            <aside id="right_content" class="right-side" style="margin-top:50px;">
+                <div id="messages" class="alert" data-ng-class="alert_status" data-ng-show="messages" data-ng-bind="messages">{{messages}}</div>
+                {% block content %}{% endblock %}
+            </aside>
+            {% else %}
+            <aside id="right_content" class="right-side strech">
+                <div id="messages" class="alert" data-ng-class="alert_status" data-ng-show="messages" data-ng-bind="messages">{{messages}}</div>
+                {% block content %}{% endblock %}
+            </aside>
+            {% endif %}
+        </div>
+    </body>
+</html>
+{% endif %}

@@ -1,0 +1,103 @@
+﻿{% extends 'z_layout.html' %}
+
+{% block content %}
+
+{% if layout == "default" %}
+<div class="page-header">
+    <h2>
+        <small>
+            <span my-translator>Add New Task</span>
+        </small>
+    </h2>
+</div>
+{% endif %}
+
+<div class="row" data-ng-controller="task_controller" style="margin-top:20px;">
+    <form class="form-horizontal" name="frmTask" role="form" data-ng-attr-button='{{button}}' novalidate>
+        <div class="row col-sm-12 col-md-12 col-lg-12">
+            <div class="col-sm-12 col-md-12 col-lg-12 form-group">
+                <label class="col-sm-3 col-md-3 col-lg-3 text-right"><span my-translator>Project</span></label>
+                <div class="col-sm-8 col-md-8 col-lg-8 nopadding">
+                    <select data-ng-model="project_id"
+                            data-ng-options="project.id as project.name for project in projects" data-ng-change="onchange()" class='form-control input-sm'>
+                        <option value=""><span my-translator>-Select a Project-</span></option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div class="row col-sm-12 col-md-12 col-lg-12" data-ng-hide="is_hide">
+            <div class="col-sm-12 col-md-12 col-lg-12 form-group">
+                <label class="col-sm-3 col-md-3 col-lg-3 text-right"><span my-translator>Module</span></label>
+                <div class="col-sm-8 col-md-8 col-lg-8 nopadding">
+                    <select data-ng-model="module_id"
+                            data-ng-options="module.id as module.name for module in modules" class='form-control input-sm'>
+                        <option value=""><span my-translator>-Select a Module-</span></option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div class="row col-sm-12 col-md-12 col-lg-12" data-ng-hide="is_hide">
+            <div class="col-sm-6 col-md-6 col-lg-6 form-group">
+                <label class="col-sm-6 col-md-6 col-lg-6 text-right"><span my-translator>Date</span></label>
+                <div class="col-sm-6 col-md-6col-lg-6 nopadding">
+                    <div class='input-group' style="margin-left:9px;">
+                        <div class='input-group-addon'><span my-translator>Started</span> &nbsp;&nbsp;</div>
+                        <input type="text" class="form-control pull-right" name="started" title="Enter plan started date" data-ng-model="started" readonly="readonly" required my-date-picker-task2 />
+                        <span class="label label-danger" data-ng-show="submitted && frmTask.started.$error.required">
+                            <span my-translator>Started date must not be blank.</span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6 col-md-6 col-lg-6 form-group">
+                <div class="col-sm-6 col-md-6 col-lg-6 nopadding">
+                    <div class='input-group'>
+                        <div class='input-group-addon'><span my-translator>Ended</span></div>
+                        <input type="text" class="form-control pull-right" name="ended" title="Enter plan ended date" data-ng-model="ended" readonly="readonly" my-date-picker-task2 />
+                        <span class="label label-danger" data-ng-show="submitted && frmTask.ended.$error.required">
+                            <span my-translator>Ended date must not be blank.</span>
+                        </span>
+                        <span class="label label-danger" data-ng-show="valid_time">
+                            <span my-translator>Date must not greater than "Started" date</span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row col-sm-12 col-md-12 col-lg-12" data-ng-hide="is_hide">
+            <div class="col-sm-12 col-md-12 col-lg-12 form-group">
+                <label class="col-sm-3 col-md-3 col-lg-3 text-right"><span my-translator>Man Days</span></label>
+                <div class="col-sm-2 col-md-2 col-lg-2 nopadding">
+                    <select data-ng-model="hours"
+                            data-ng-options="mtxHour as mtxHour for mtxHour in mtxHours" data-ng-change="onchange()" class='form-control input-sm'>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div class="row col-sm-12 col-md-12 col-lg-12" data-ng-hide="is_hide">
+            <div class="form-group">
+                <label class="col-sm-3 col-md-3 col-lg-3 text-right">&nbsp;</label>
+                <div class="col-sm-9 col-md-9 col-lg-9 nopadding">
+                    <button type="button" class="btn btn-primary" data-ng-click="create(frmTask)">
+                        <span data-ng-hide="loading"><span my-translator>Create</span></span>
+
+                        <span data-ng-show="loading">
+                            <i class="fa fa-spinner fa-spin"></i>
+                            <span my-translator>Creating</span>
+                        </span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+
+{% if layout == "default" %}
+<script src="/javascripts/controllers/task.js"></script>
+{% endif %}
+{% endblock %}

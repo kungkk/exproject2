@@ -1,0 +1,188 @@
+﻿{% extends 'z_layout.html' %}
+
+{% block content %}
+
+{% if layout == "default" %}
+<div class="page-header">
+    <h2>
+        <small>
+            <span my-translator>Add New Module</span>
+        </small>
+    </h2>
+</div>
+{% endif %}
+
+<div class="row" data-ng-controller="module_controller" style="margin-top:20px;" data-ng-if="show_module==true">
+    <form class="form-horizontal" name="frmModule" role="form" data-ng-attr-button='{{button}}' novalidate>
+        <div class="row col-sm-12 col-md-12 col-lg-12">
+            <div class="col-sm-12 col-md-12 col-lg-12 form-group">
+                <label class="col-sm-3 col-md-3 col-lg-3 text-right"><span my-translator>Name</span></label>
+                <div class="col-sm-8 col-md-8 col-lg-8 nopadding">
+                    <input type="hidden" data-ng-model="module_hidden_id" />
+                    <input type="text" name="module_name" class="form-control" data-ng-model="module_name" autocomplete="off" placeholder="" title="" data-ng-hide="is_edit" my-translator-attr="Name" />
+                    <input type="text" name="module_name" class="form-control" data-ng-model="module_name" autocomplete="off" placeholder="" title="" data-ng-show="is_edit" my-translator-attr="Name" />
+                    <span class="label label-danger" data-ng-show="frmModule.module_name.$error.pattern || submitted && frmModule.module_name.$error.pattern">
+                        <span my-translator>Name contains invalid characters.</span>
+                    </span>
+                    <span class="label label-danger" data-ng-show="submitted && frmProject.module_name.$error.required">
+                        <span my-translator>Name must not be blank.</span>
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <div class="row col-sm-12 col-md-12 col-lg-12" data-ng-hide="is_edit">
+            <div class="col-sm-6 col-md-6 col-lg-6 form-group">
+                <label class="col-sm-6 col-md-6 col-lg-6 text-right"><span my-translator>Plan</span></label>
+                <div class="col-sm-6 col-md-6col-lg-6 nopadding">
+                    <div class='input-group' style="margin-left:9px;">
+                        <div class='input-group-addon'><span my-translator>From</span> &nbsp;&nbsp;</div>
+                        <input type="text" class="form-control pull-right" name="module_plan_started" title="Enter plan started date" data-ng-model="module_plan_started" readonly="readonly" required my-date-picker />
+                        <span class="label label-danger" data-ng-show="submitted && frmProject.module_plan_started.$error.required">
+                            <span my-translator>Plan started date must not be blank.</span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6 col-md-6 col-lg-6 form-group">
+                <!--<label class="col-sm-6 col-md-6 col-lg-6 text-right"><span my-translator>To</span></label>-->
+                <div class="col-sm-6 col-md-6 col-lg-6 nopadding">
+                    <div class='input-group'>
+                        <div class='input-group-addon'><span my-translator>To</span></div>
+                        <input type="text" class="form-control pull-right" name="module_plan_ended" title="Enter plan ended date" data-ng-model="module_plan_ended" readonly="readonly" required my-date-picker />
+                        <span class="label label-danger" data-ng-show="submitted && frmProject.module_plan_ended.$error.required">
+                            <span my-translator>Plan ended date must not be blank.</span>
+                        </span>
+                        <span class="label label-danger" data-ng-show="valid_time">
+                            <span my-translator>Date must not greater than "From" date</span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row col-sm-12 col-md-12 col-lg-12" data-ng-hide="is_edit">
+            <div class="col-sm-6 col-md-6 col-lg-6 form-group">
+                <label class="col-sm-6 col-md-6 col-lg-6 text-right"><span my-translator>Actual</span></label>
+                <div class="col-sm-6 col-md-6 col-lg-6 nopadding">
+                    <div class='input-group' style="margin-left:9px;">
+                        <div class='input-group-addon'><span my-translator>From</span> &nbsp;&nbsp;</div>
+                        <input type="text" class="form-control pull-right" name="module_started" title="Enter plan started date" data-ng-model="module_started" readonly="readonly" required my-date-picker />
+                        <span class="label label-danger" data-ng-show="submitted && frmProject.module_started.$error.required">
+                            <span my-translator>Actual started date must not be blank.</span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6 col-md-6 col-lg-6 form-group">
+                <!--<label class="col-sm-6 col-md-6 col-lg-6 text-right"><span my-translator>To</span></label>-->
+                <div class="col-sm-6 col-md-6 col-lg-6 nopadding">
+                    <div class='input-group'>
+                        <div class='input-group-addon'><span my-translator>To</span></div>
+                        <input type="text" class="form-control pull-right" name="module_ended" title="Enter plan ended date" data-ng-model="module_ended" readonly="readonly" required my-date-picker />
+                        <span class="label label-danger" data-ng-show="submitted && frmProject.module_ended.$error.required">
+                            <span my-translator>Actual ended date must not be blank.</span>
+                        </span>
+                        <span class="label label-danger" data-ng-show="valid_time">
+                            <span my-translator>Date must not greater than "From" date</span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row col-sm-12 col-md-12 col-lg-12" data-ng-hide="is_edit">
+            <div class="form-group">
+                <label class="col-sm-3 col-md-3 col-lg-3 text-right"><span my-translator>Note</span></label>
+                <div class="col-sm-7 col-md-7 col-lg-7 nopadding">
+                    <textarea class="form-control" name="module_note" rows="2" data-ng-model="module_note"></textarea>
+                </div>
+            </div>
+        </div>
+
+        <div class="row col-sm-12 col-md-12 col-lg-12" data-ng-hide="is_edit">
+            <div class="form-group">
+                <label class="col-sm-3 col-md-3 col-lg-3 text-right"><span my-translator>Is Completed</span></label>
+                <div class="col-sm-9 col-md-9 col-lg-9 nopadding">
+                    <input name="is_completed" data-ng-model="module_is_completed" type="checkbox">
+                </div>
+            </div>
+        </div>
+
+        <div class="row col-sm-12 col-md-12 col-lg-12" data-ng-hide="is_edit">
+            <div class="form-group">
+                <label class="col-sm-3 col-md-3 col-lg-3 text-right"><span my-translator>Is Endless</span></label>
+                <div class="col-sm-9 col-md-9 col-lg-9 nopadding">
+                    <input name="is_endless" data-ng-model="module_is_endless" type="checkbox">
+                </div>
+            </div>
+        </div>
+
+        <div class="row col-sm-12 col-md-12 col-lg-12">
+            <div class="form-group">
+                <label class="col-sm-3 col-md-3 col-lg-3 text-right">&nbsp;</label>
+                <div class="col-sm-9 col-md-9 col-lg-9 nopadding">
+                    <button type="button" class="btn btn-primary" data-ng-click="create(frmModule)" data-ng-show="is_edit">
+                        <span data-ng-hide="loading"><span my-translator>Create</span></span>
+
+                        <span data-ng-show="loading">
+                            <i class="fa fa-spinner fa-spin"></i>
+                            <span my-translator>Creating</span>
+                        </span>
+                    </button>
+
+                    <button type="button" class="btn btn-primary" data-ng-click="save(frmModule)" data-ng-hide="is_edit">
+                        <span data-ng-hide="loading"><span my-translator>Save</span></span>
+
+                        <span data-ng-show="loading">
+                            <i class="fa fa-spinner fa-spin"></i>
+                            <span my-translator>Saving</span>
+                        </span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<div class="row" data-ng-controller="module_users_controller" data-ng-if="show_module==false">
+    <table class="table table-striped table-bordered table-hover ng-table-responsive" style="width:93%;margin:0 20px 20px 30px;">
+        <thead>
+            <tr>
+                <th style="width:1%;"></th>
+                <th><span my-translator>Developer</span></th>
+                <th><span my-translator>Hours</span></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr data-ng-repeat="module_user in module_users">
+                <td>
+                    <input type="checkbox" data-ng-model="users_checked.items[module_user.user_id]" data-ng-change="toggle_module_users($index, module_user.module_user_id, module_user.user_id)" data-ng-checked="module_user.checkbox == 1" />
+                </td>
+                <td>{% raw %}{{module_user.family_name}}{% endraw %} {% raw %}{{module_user.given_name}}{% endraw %}</td>
+                <td data-ng-if="module_user.checkbox == 0">-</td>
+                <td data-ng-if="module_user.checkbox == 1">
+                    <input type='text' class='form-control' name='hours' title='Enter hours' data-ng-model="module_user.hours" data-attr="{% raw %}{{module_user.module_user_id}}{% endraw %}" data-ng-change="onchange(module_user.module_user_id)" />
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-ng-click="update()">
+            <span data-ng-hide="loading"><span my-translator>Save</span></span>
+
+            <span data-ng-show="loading">
+                <i class="fa fa-spinner fa-spin"></i>
+                <span my-translator>Saving</span>
+            </span>
+        </button>
+    </div>
+    
+</div>
+
+
+{% if layout == "default" %}
+<script src="/javascripts/controllers/module.js"></script>
+{% endif %}
+{% endblock %}

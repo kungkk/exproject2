@@ -1,0 +1,423 @@
+﻿{% extends 'z_layout.html' %}
+
+{% block content %}
+
+{% if layout == "default" %}
+<section class="content-header">
+    <h1>
+        <i class="fa fa-puzzle-piece"></i>&nbsp;&nbsp;<span my-translator>Project</span>
+    </h1>
+</section>
+{% endif %}
+
+{% if layout == "ajax" %}
+<section class="content" style="margin-left:10px;">
+    <form class="form-horizontal" name="frmProject" role="form" data-ng-attr-button='{{button}}' novalidate>
+        <div class="row col-sm-12 col-md-12 col-lg-12 nopadding">
+            <div class="form-group col-sm-4 col-md-4 col-lg-4">
+                <div class="col-sm-12 col-md-12 col-lg-12 nopadding">
+                    <input type="text" name="code" class="form-control" data-ng-model="code" autocomplete="off" data-ng-pattern="validate_invalid_characters" placeholder="Code" title="Code" my-translator-attr="Code" />
+                    <span class="label label-danger" data-ng-show="frmProject.code.$error.pattern || submitted && frmProject.code.$error.pattern">
+                        <span my-translator>Code contains invalid characters.</span>
+                    </span>
+                </div>
+            </div>
+
+            <div class="form-group col-sm-8 col-md-8 col-lg-8">
+                <div class="col-sm-12 col-md-12 col-lg-12">
+                    <input type="text" name="name" class="form-control" data-ng-model="name" autocomplete="off" data-ng-pattern="validate_invalid_characters" placeholder="Name" title="Name" my-translator-attr="Name" required />
+                    <span class="label label-danger" data-ng-show="frmProject.name.$error.pattern || submitted && frmProject.name.$error.pattern">
+                        <span my-translator>Name contains invalid characters</span>
+                    </span>
+                    <span class="label label-danger" data-ng-show="submitted && frmProject.name.$error.required">
+                        <span my-translator>Name must not be blank.</span>
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <div class="row col-sm-12 col-md-12 col-lg-12 nopadding">
+            <div class="form-group col-sm-6 col-md-6 col-lg-6">
+                <div class="col-sm-6 col-md-6 col-lg-6 nopadding">
+                    <div class='input-group'>
+                        <div class='input-group-addon'><span my-translator>Plan From</span> &nbsp;&nbsp;</div>
+                        <input type="text" class="form-control pull-right" name="plan_started" title="Enter plan started date" data-ng-model="plan_started" readonly="readonly" required my-date-picker />
+                        <span class="label label-danger" data-ng-show="submitted && frmProject.plan_ended.$error.required">
+                            <span my-translator>Plan started date must not be blank.</span>
+                        </span>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-md-6 col-lg-6 nopadding">
+                    <div class='input-group'>
+                        <div class='input-group-addon'><span my-translator>To</span></div>
+                        <input type="text" class="form-control pull-right" name="plan_ended" title="Enter plan ended date" data-ng-model="plan_ended" readonly="readonly" required my-date-picker />
+                        <span class="label label-danger" data-ng-show="submitted && frmProject.plan_ended.$error.required">
+                            <span my-translator>Plan ended date must not be blank.</span>
+                        </span>
+                        <span class="label label-danger" data-ng-show="valid_time">
+                            <span my-translator>Date must not greater than "From" date</span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row col-sm-12 col-md-12 col-lg-12 nopadding">
+            <div class="form-group col-sm-6 col-md-6 col-lg-6">
+                <div class="col-sm-6 col-md-6 col-lg-6 nopadding">
+                    <div class='input-group'>
+                        <div class='input-group-addon'><span my-translator>Actual From</span></div>
+                        <input type="text" class="form-control pull-right" name="started" title="Enter started date" data-ng-model="started" readonly="readonly" required my-date-picker />
+                        <span class="label label-danger" data-ng-show="submitted && frmProject.started.$error.required">
+                            <span my-translator>Started date must not be blank.</span>
+                        </span>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-md-6 col-lg-6 nopadding">
+                    <div class='input-group'>
+                        <div class='input-group-addon'><span my-translator>To</span></div>
+                        <input type="text" class="form-control pull-right" name="ended" title="Enter ended date" data-ng-model="ended" readonly="readonly" required my-date-picker />
+                        <span class="label label-danger" data-ng-show="submitted && frmProject.ended.$error.required">
+                            <span my-translator>Ended date must not be blank.</span>
+                        </span>
+                        <span class="label label-danger" data-ng-show="valid_time2">
+                            <span my-translator>Date must not greater than "From" date</span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group col-sm-6 col-md-6 col-lg-6">
+                {% if button == "create" %}
+                &nbsp;&nbsp;&nbsp;&nbsp;
+                <button id="btnsubmit" type="submit" class="btn btn-primary" data-ng-click="create(frmProject)">
+                    <span data-ng-hide="loading"><span my-translator>Create</span></span>
+
+                    <span data-ng-show="loading">
+                        <i class="fa fa-spinner fa-spin"></i>
+                        <span my-translator>Creating</span>
+                    </span>
+                </button>
+                {% endif %}
+            </div>
+        </div>
+    </form>
+</section>
+{% endif %}
+
+{% if layout == "default" %}
+<section class="content" data-ng-controller="project_controller">
+    <form class="form-horizontal" name="frmProject" role="form" data-ng-attr-button='{{button}}' novalidate>
+        <div class="row col-sm-12 col-md-12 col-lg-12 nopadding">
+            <div class="form-group col-sm-4 col-md-4 col-lg-4">
+                <label class="col-sm-12 col-md-12 col-lg-12 nopadding"><span my-translator>Code</span></label>
+                <div class="col-sm-12 col-md-12 col-lg-12 nopadding">
+                    <input type="text" name="code" class="form-control" data-ng-model="code" autocomplete="off" data-ng-pattern="validate_invalid_characters" placeholder="Code" title="Code" my-translator-attr="Code" />
+                    <span class="label label-danger" data-ng-show="frmProject.code.$error.pattern || submitted && frmProject.code.$error.pattern">
+                        <span my-translator>Code contains invalid characters.</span>
+                    </span>
+                </div>
+            </div>
+
+            <div class="form-group col-sm-8 col-md-8 col-lg-8">
+                <label class="col-sm-12 col-md-12 col-lg-12"><span my-translator>Name</span></label>
+                <div class="col-sm-12 col-md-12 col-lg-12">
+                    <input type="text" name="name" class="form-control" data-ng-model="name" autocomplete="off" data-ng-pattern="validate_invalid_characters" placeholder="Name" title="Name" my-translator-attr="Name" required />
+                    <span class="label label-danger" data-ng-show="frmProject.name.$error.pattern || submitted && frmProject.name.$error.pattern">
+                        <span my-translator>Name contains invalid characters</span>
+                    </span>
+                    <span class="label label-danger" data-ng-show="submitted && frmProject.name.$error.required">
+                        <span my-translator>Name must not be blank.</span>
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <div class="row col-sm-12 col-md-12 col-lg-12 nopadding">
+            <div class="form-group col-sm-6 col-md-6 col-lg-6">
+                <div class="col-sm-6 col-md-6 col-lg-6 nopadding">
+                    <div class='input-group'>
+                        <div class='input-group-addon'><span my-translator>Plan From</span> &nbsp;&nbsp;</div>
+                        <input type="text" class="form-control pull-right" name="plan_started" data-ng-model="plan_started" title="Enter plan started date" readonly="readonly" my-date-picker />
+                    </div>
+                </div>
+                <div class="col-sm-6 col-md-6 col-lg-6 nopadding">
+                    <div class='input-group'>
+                        <div class='input-group-addon'><span my-translator>To</span></div>
+                        <input type="text" class="form-control pull-right" name="plan_ended" title="Enter plan ended date" data-ng-model="plan_ended" readonly="readonly" my-date-picker />
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row col-sm-12 col-md-12 col-lg-12 nopadding">
+            <div class="form-group col-sm-6 col-md-6 col-lg-6">
+                <div class="col-sm-6 col-md-6 col-lg-6 nopadding">
+                    <div class='input-group'>
+                        <div class='input-group-addon'><span my-translator>Actual From</span></div>
+                        <input type="text" class="form-control pull-right" name="started" title="Enter started date" data-ng-model="started" readonly="readonly" my-date-picker />
+                    </div>
+                </div>
+                <div class="col-sm-6 col-md-6 col-lg-6 nopadding">
+                    <div class='input-group'>
+                        <div class='input-group-addon'><span my-translator>To</span></div>
+                        <input type="text" class="form-control pull-right" name="ended" title="Enter ended date" data-ng-model="ended" readonly="readonly" my-date-picker />
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row col-sm-12 col-md-12 col-lg-12 nopadding">
+            <div class="form-group col-sm-6 col-md-6 col-lg-6">
+                <label class="col-sm-12 col-md-12 col-lg-12 nopadding"><span my-translator>Note</span></label>
+                <div class="col-sm-12 col-md-12 col-lg-12 nopadding">
+                    <textarea class="form-control" name="note" rows="1" placeholder="Note" title="Note" data-ng-pattern="validate_invalid_characters" data-ng-model="note"></textarea>
+                    <span class="label label-danger" data-ng-show="frmProject.note.$error.pattern || submitted && frmProject.note.$error.pattern">
+                        <span my-translator>Note contains invalid characters</span>
+                    </span>
+                </div>
+            </div>
+            <div class="form-group col-sm-6 col-md-6 col-lg-6">
+                {% if button == "save" %}
+                &nbsp;&nbsp;&nbsp;&nbsp;
+                <button type="submit" class="btn btn-primary" style="margin-top:30px;" data-ng-click="save(frmProject)">
+                    <span data-ng-hide="loading"><span my-translator>Save</span></span>
+
+                    <span data-ng-show="loading">
+                        <i class="fa fa-spinner fa-spin"></i>
+                        <span my-translator>Saving</span>
+                    </span>
+                </button>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="row col-sm-12 col-md-12 col-lg-12 nopadding">
+            <div class="box box-primary form-input">
+                <div class="box-header">
+                    <h3 class="box-title">
+                        <span my-translator>Members</span>
+                        <a class='fa fa-plus pull-right pointer' data-toggle='tooltip' title='Click to add member' data-ng-click="load_member(0)"></a>
+                    </h3>
+                </div>
+                <div class="box-body">
+                    <ol class='member'>
+                        <li data-ng-repeat="member in members" data-ng-if="member.active==1">
+                            <div class='callout callout-info padding_sm nomargin'>
+                                <a class="pointer" data-ng-click="delete_member(member.id, member.User.family_name, member.User.given_name)" title="Delete this member." style="color:red;"><i class="fa fa-remove"></i></a>&nbsp;&nbsp;
+                                <label>
+                                    <span data-ng-bind="member.User.family_name"></span> <span data-ng-bind="member.User.given_name"></span>
+                                </label>
+                                <small data-ng-if="member.project_leader == 1"><label>( Leader )<label></small>
+                            </div>
+                        </li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+
+        <div class="row col-sm-12 col-md-12 col-lg-12 nopadding">
+            <div class="box box-primary form-input">
+                <div class="box-header">
+                    <h3 class="box-title">
+                        <span my-translator>Modules</span>
+                        <a class='fa fa-plus pull-right pointer' data-toggle='tooltip' title='Click to create new module' data-ng-click="load_module(0)"></a>
+                    </h3>
+                    <div class="col-sm-10 col-md-10 col-lg-10 pull-right" style="padding:6px;">
+                        <label class="col-sm-3 col-md-3 col-lg-3 text-right"><span my-translator>Filter Modules By:</span></label>
+                        <div class="col-sm-3 col-md-3 col-lg-3 nopadding">
+                            <select class='input-sm' data-ng-model="module_status" data-ng-change="onchange_mode()" style="width:150px;">
+                                <option value="all"><span my-translator>All</span></option>
+                                <option value="1"><span my-translator>Completed</span></option>
+                                <option value="0"><span my-translator>Not Completed</span></option>
+                            </select>
+                        </div>
+
+                        <div class="col-sm-6 col-md-6 col-lg-6 nopadding">
+                            <b><span my-translator>View All Items From</span></b>
+                            <button type="button" class="btn btn-primary" data-ng-click="view()" style="float:right;margin-left:5px;">
+                                <span data-ng-hide="loading"><span my-translator>View</span></span>
+
+                                <span data-ng-show="loading">
+                                    <i class="fa fa-spinner fa-spin"></i>
+                                    <span my-translator>Viewing</span>
+                                </span>
+                            </button>
+                            <input type="text" class="form-control input-sm" name="items_filter_to_date" title="Filter To" data-ng-model="items_filter_to_date" readonly="readonly" style="width:110px;float:right;" required my-date-picker />
+                            <span style="width:30px;float:right;text-align:center;">To</span>
+                            <input type="text" class="form-control input-sm" name="items_filter_from_date" title="Filter from" data-ng-model="items_filter_from_date" readonly="readonly" style="width:110px;float:right;" required my-date-picker />
+                        </div>
+                    </div>
+                </div>
+                <div class="box-body">
+                    <ol data-ng-if="modules.length > 0">
+                        <li data-ng-repeat="module in modules track by $index" data-ng-if="module.is_completed==false && module.active == 1 && module_status == 0 || module.is_completed==true && module.active == 1 && module_status == 1 || module.active == 1 && module_status == 'all'">
+                            <div id="mod_{% raw %}{{module.id}}{% endraw %}" class='box-body table-responsive callout callout-info'>
+                                <a class='fa fa-flag-checkered pull-right pointer' data-ng-if="module.is_completed == false" data-toggle='tooltip' title='Click to add item' data-ng-click="load_item(module.id)" style="margin-right:10px;"></a>
+                                <a href='/history?module_id={% raw %}{{module.id}}{% endraw %}' class='pull-right pointer' data-toggle='tooltip' target="history_{% raw %}{{module.id}}{% endraw %}" title='Click to view history for this module.' style="margin-right:10px;">
+                                    <i class="fa fa-clock-o"></i>
+                                </a>
+                                <a class='pull-right pointer' data-toggle='tooltip' title='This module has module.ModuleUsers.length developers. Click to set or manage developers.' data-ng-click="load_module_users(module.id, module.name)" style="margin-right:10px;">
+                                    <span data-ng-bind="module.ModuleUsers.length"></span>
+                                    <i class="fa fa-users"></i>
+                                </a>
+                                <h4>
+                                    <a class="pointer" data-ng-click="delete_module(module.id, module.name)" title="Delete this item." style="color:red;"><i class="fa fa-remove"></i></a>
+                                    &nbsp;
+                                    <a class='pointer' data-toggle='tooltip' title='Click to edit module.' data-ng-bind="module.name" data-ng-click="load_module(module.id, $index)"></a>
+                                    <small data-ng-if="module.is_endless==1">&nbsp;&nbsp;<span my-translator>(Endless)</span></small>
+                                </h4>
+
+                                <div data-ng-if="module.is_endless==0">
+                                    <label><span my-translator>Planning From : </span>&nbsp;</label>
+                                    <span data-ng-if="module.plan_started != null" data-ng-bind="module.plan_started | date:'yyyy-MM-dd' : 'UTC'"></span>&nbsp;
+                                    <span data-ng-if="module.plan_started == null">-</span>&nbsp;
+                                    <label><span my-translator>To</span>&nbsp;</label>
+                                    <span data-ng-if="module.plan_ended != null" data-ng-bind="module.plan_ended | date:'yyyy-MM-dd' : 'UTC'"></span>&nbsp;
+                                    <span data-ng-if="module.plan_ended == null">-</span>
+
+                                    &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+                                    <label><span my-translator>Actual From : </span>&nbsp;</label>
+                                    <span data-ng-if="module.started != null" data-ng-bind="module.started | date:'yyyy-MM-dd' : 'UTC'"></span>&nbsp;
+                                    <span data-ng-if="module.started == null">-</span>&nbsp;
+                                    <label><span my-translator>To</span>&nbsp;</label>
+                                    <span data-ng-if="module.ended != null" data-ng-bind="module.ended | date:'yyyy-MM-dd' : 'UTC'"></span>&nbsp;
+                                    <span data-ng-if="module.ended == null">-</span>&nbsp;
+                                    <!--<div class='progress' data-ng-if="module_user.hours > 0" data-ng-repeat="module_user in module.ModuleUsers">
+                                    <span class='initial_progress_bar' data-ng-if="calcTotal(module.Items)/module_user.hours*100==0">0%</span>
+
+                                    <div class='progress-bar progress-bar-red' data-ng-if="calcTotal(module.Items)/module_user.hours*100>0 && calcTotal(module.Items)/module_user.hours*100 <=59" data-ng-style="{'width': calcTotal(module.Items)/module_user.hours*100}">
+                                        <span style="display:block;height:20px;width:300px;color:#000;font-size:12px;">{% raw %}{{module_user.User.family_name}}{% endraw %} {% raw %}{{module_user.User.given_name}}{% endraw %}&nbsp;~&nbsp;{% raw %}{{calcTotal(module.Items)}}{% endraw %} / {% raw %}{{module_user.hours}}{% endraw %} <span my-translator>hours</span>.&nbsp;&nbsp; {% raw %}{{calcTotal(module.Items)/module_user.hours*100 | number:0}}{% endraw %}% <span my-translator>Complete</span></span>
+                                    </div>
+
+                                    <div class='progress-bar progress-bar-yellow' data-ng-if="calcTotal(module.Items)/module_user.hours*100>=60 && calcTotal(module.Items)/module_user.hours*100 <=79" data-ng-style="{'width': calcTotal(module.Items)/module_user.hours*100}">
+                                        <span style="display:block;height:20px;width:300px;color:#000;font-size:12px;">{% raw %}{{module_user.User.family_name}}{% endraw %} {% raw %}{{module_user.User.given_name}}{% endraw %}&nbsp;~&nbsp;{% raw %}{{calcTotal(module.Items)}}{% endraw %} / {% raw %}{{module_user.hours}}{% endraw %} <span my-translator>hours</span>.&nbsp;&nbsp; {% raw %}{{calcTotal(module.Items)/module_user.hours*100 | number:0}}{% endraw %}% <span my-translator>Complete</span></span>
+                                    </div>
+
+                                    <div class='progress-bar progress-bar-green' data-ng-if="calcTotal(module.Items)/module_user.hours*100>=80 && calcTotal(module.Items)/module_user.hours*100 <=100" data-ng-style="{'width': calcTotal(module.Items)/module_user.hours*100}">
+                                        <span style="display:block;height:20px;width:300px;color:#000;font-size:12px;">{% raw %}{{module_user.User.family_name}}{% endraw %} {% raw %}{{module_user.User.given_name}}{% endraw %}&nbsp;~&nbsp;{% raw %}{{calcTotal(module.Items)}}{% endraw %} / {% raw %}{{module_user.hours}}{% endraw %} <span my-translator>hours</span>.&nbsp;&nbsp; {% raw %}{{calcTotal(module.Items)/module_user.hours*100 | number:0}}{% endraw %}% <span my-translator>Complete</span></span>
+                                    </div>
+
+                                    <div class='progress-bar progress-bar-higher' data-ng-if="calcTotal(module.Items)/module_user.hours*100>=101" data-ng-style="{'width': calcTotal(module.Items)/module_user.hours*100}">
+                                        <span style="display:block;height:20px;width:300px;color:#000;font-size:12px;">{% raw %}{{module_user.User.family_name}}{% endraw %} {% raw %}{{module_user.User.given_name}}{% endraw %}&nbsp;~&nbsp;{% raw %}{{calcTotal(module.Items)}}{% endraw %} / {% raw %}{{module_user.hours}}{% endraw %} <span my-translator>hours</span>.&nbsp;&nbsp; {% raw %}{{calcTotal(module.Items)/module_user.hours*100 | number:0}}{% endraw %}% <span my-translator>Complete</span></span>
+                                    </div>
+                                </div>
+
+                                <div class='progress' data-ng-if="module_user.hours == 0" data-ng-repeat="module_user in module.ModuleUsers">
+                                    <span style="display:block;height:20px;width:300px;color:#000;font-size:12px;">{% raw %}{{module_user.User.family_name}}{% endraw %} {% raw %}{{module_user.User.given_name}}{% endraw %}&nbsp;~&nbsp;{% raw %}{{calcTotal(module.Items)}}{% endraw %} / {% raw %}{{module_user.hours}}{% endraw %} <span my-translator>hours</span>. &nbsp;&nbsp; 0% <span my-translator>Complete</span></span>
+                                </div>-->
+                                <!--<span my-translator>Total Hours Spent:</span>&nbsp;&nbsp;<label>{% raw %}{{calcTotal(module.Items)}}{% endraw %} / <span data-ng-bind="module.ModuleUsers | sumByKey2"></span></label> &nbsp;&nbsp;&nbsp;&nbsp;
+                                    <span my-translator>Total Hours Remain:</span>&nbsp;&nbsp;<label>{% raw %}{{module_user.hours - calcTotal(module.Items)}}{% endraw %}</label> &nbsp;&nbsp;&nbsp;&nbsp;-->
+
+                                    <small data-ng-if="module.is_completed == true" class="badge pull-right bg-green"><span my-translator>Completed!</span></small>
+                                    <small data-ng-if="module.is_completed == false" class="badge pull-right bg-red"><span my-translator>Not Completed!!!</span></small>
+                                </div>
+
+                                <table class='tblItems table table-bordered table-striped' cellspacing='0' cellpadding='0' style='font-size:14px;'>
+                                    <thead>
+                                        <tr>
+                                            <th colspan='8'>
+                                                <div class='col-sm-12 col-md-12 col-lg-12'>
+                                                    <div class="col-sm-3 col-md-3 col-lg-3 form-group nomargin nopadding pull-right">
+                                                        <div class="col-sm-8 col-md-8 col-lg-8 nopadding pull-right">
+                                                            <input class='form-control' type='text' readonly='readonly' name='to_date' data-attr="{% raw %}{{module.id}}{% endraw %}" data-ng-model="module.to_date" my-date-picker-mod />                                                        </div>
+                                                        <label class="col-sm-3 col-md-3 col-lg-3 text-right pull-right" style="padding-top:5px;"><span my-translator>To</span></label>
+                                                    </div>
+
+                                                    <div class="col-sm-4 col-md-4 col-lg-4 form-group nomargin nopadding pull-right">
+                                                        <div class="col-sm-6 col-md-6 col-lg-6 nopadding pull-right">
+                                                            <input class='form-control pull-right' type='text' readonly='readonly' name='from_date' data-attr="{% raw %}{{module.id}}{% endraw %}" data-ng-model="module.from_date" my-date-picker-mod />
+                                                        </div>
+                                                        <label class="col-sm-6 col-md-6 col-lg-6 text-right pull-right" style="padding-top:5px;"><span my-translator>View Items From</span></label>
+                                                    </div>
+                                                </div>
+                                            </th>
+                                        </tr>
+                                        <tr>
+                                            <th></th>
+                                            <th><span my-translator>Worked Date</span></th>
+                                            <th><span my-translator>Creator</span></th>
+                                            <th><span my-translator>Name</span></th>
+                                            <th><span my-translator>Hours</span></th>
+                                            <th><span my-translator>Memo</span></th>
+                                            <th><span my-translator>Issue</span></th>
+                                            <th><span my-translator>Attachment</span></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr data-ng-repeat="item in module.Items" data-ng-if="module.Items.length > 0 && item.active == 1">
+                                            <td>
+                                                <a class="pointer" data-ng-click="delete_item(module.id, item.id, item.name)" title="Delete this item." style="color:red;"><i class="fa fa-remove"></i></a>
+                                            </td>
+                                            <td class='right_align'>
+                                                <input type='datetime' class='form-control' name='worked' title='Enter worked date' data-ng-model="item.worked" data-attr="{% raw %}{{module.id}}{% endraw %}" data-attr2="{% raw %}{{item.id}}{% endraw %}" style="width:100px;" readonly="readonly" my-date-picker-item />
+                                            </td>
+                                            <td data-ng-bind="item.User.username"></td>
+                                            <td>
+                                                <textarea name='name' rows='1' class='form-control blur' ng-model="item.name" module-id="{% raw %}{{module.id}}{% endraw %}" item-id="{% raw %}{{item.id}}{% endraw %}"></textarea>
+                                            </td>
+                                            <td>
+                                                <select data-attr="{% raw %}{{module.id}}{% endraw %}" data-attr2="{% raw %}{{item.id}}{% endraw %}" class="form-control" my-select-box>
+                                                    <option data-ng-repeat="mtxHour in mtxHours" value="{{mtxHour.id}}" data-ng-model="item.hours" data-ng-selected="mtxHour.id == item.hours">
+                                                        {% raw %}{{mtxHour.name}}{% endraw %}
+                                                    </option>
+                                                </select>
+                                            </td>
+                                            <td>
+                                                <textarea name='memo' rows='1' class='form-control blur' data-ng-model="item.memo" module-id="{% raw %}{{module.id}}{% endraw %}" item-id="{% raw %}{{item.id}}{% endraw %}"></textarea>
+                                            </td>
+                                            <td>
+                                                <a class='pointer' data-ng-if="item.Issues.length>0" data-toggle='tooltip' title='List issues for this item' data-ng-click="load_issues(item.id, item.name, module.id, false, false)">
+                                                    ( {% raw %}{{item.Issues.length}}{% endraw %} )
+                                                </a>
+                                                <a class='pointer' data-ng-if="item.Issues.length==0" data-toggle='tooltip' title='Add issue to this item' data-ng-click="load_issues(item.id, item.name, module.id, true, false)">
+                                                    ( {% raw %}{{item.Issues.length}}{% endraw %} )
+                                                </a>
+                                            </td>
+                                            <td>
+                                                <a class='pointer' data-ng-if="item.Attachments.length>0" data-toggle='tooltip' title='List attachments for this item' data-ng-click="load_attachments(item.id, item.name, module.id, false, false)">
+                                                    ( {% raw %}{{item.Attachments.length}}{% endraw %} )
+                                                </a>
+                                                <a class='pointer' data-ng-if="item.Attachments.length==0" data-toggle='tooltip' title='Add attachment to this item' data-ng-click="load_attachments(item.id, item.name, module.id, true, false)">
+                                                    ( {% raw %}{{item.Attachments.length}}{% endraw %} )
+                                                </a>
+                                            </td>
+                                        </tr>
+                                        <tr data-ng-if="module.Items.length == 0">
+                                            <td class='text-center' colspan='8'><span my-translator>No items record found.</span></td>
+                                        </tr>
+                                    </tbody>
+                                    <tfoot>
+                                        <tr>
+                                            <td colspan='4'><label class='pull-right'><span my-translator>Total Hours:</span></label></td>
+                                            <td class='total'><b data-ng-bind="module.Items | sumByKey:{{ session.user_id }}"></b></td>
+                                            <td colspan='3'>&nbsp;</td>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+                        </li>
+                    </ol>
+
+                    <span data-ng-if="modules.length == 0"><span my-translator>No modules record found.</span></span>
+                </div>
+            </div>
+        </div>
+    </form>
+
+    <modal visible="showModal" data-ng-model="element_id">
+        <div ngcd_module="html"></div>
+    </modal>
+
+</section>
+{% endif %}
+
+
+{% if layout == "default" %}
+<script src="/javascripts/controllers/project.js"></script>
+<script src="/javascripts/controllers/attachment.js"></script>
+<script src="/javascripts/controllers/issue.js"></script>
+<script src="/javascripts/controllers/item.js"></script>
+<script src="/javascripts/controllers/member.js"></script>
+<script src="/javascripts/controllers/module.js"></script>
+{% endif %}
+{% endblock %}

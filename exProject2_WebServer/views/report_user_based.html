@@ -1,0 +1,97 @@
+﻿{% extends 'z_layout.html' %}
+
+{% block content %}
+{% if layout == "default" %}
+<section class="content-header">
+    <h1>
+        <i class="fa fa-calendar"></i>&nbsp;&nbsp;<span my-translator>User Based Report</span>
+    </h1>
+</section>
+{% endif %}
+
+{% if layout == "default" %}
+<div class="row" data-ng-controller="report_user_based_controller" style="padding:0 10px 10px 10px;">
+    <section class="content">
+        <div class="row col-sm-12 col-md-12 col-lg-12" style="margin-bottom:15px;">
+            <div class="form-group col-sm-10 col-md-10 col-lg-10 nopadding nomargin">
+                <label class="col-sm-1 col-md-1 col-lg-1 nopadding"><span my-translator>Developer</span></label>
+                <div class="col-sm-8 col-md-8 col-lg-8 nopadding nomargin">
+                    <select class='form-control' data-ng-model="user_id" name="user_id">
+                        <option value="{% raw %}{{mtxUser.id}}{% endraw %}" data-ng-repeat="mtxUser in mtxUsers">{% raw %}{{mtxUser.family_name}}{% endraw %} {% raw %}{{mtxUser.given_name}}{% endraw %}</option>
+                    </select>
+                </div>
+
+                <div class="form-group col-sm-2 col-md-2 col-lg-2">
+                    <button type="button" class="btn btn-primary" data-ng-click="get()">
+                        <span data-ng-hide="loading"><span my-translator>View</span></span>
+
+                        <span data-ng-show="loading">
+                            <i class="fa fa-spinner fa-spin"></i>
+                            <span my-translator>Viewing</span>
+                        </span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class='row col-sm-12 col-md-12 col-lg-12 nopadding'>
+            <table class='tblItems table table-bordered table-striped' cellspacing='0' cellpadding='0' style='font-size:14px;'>
+                <thead>
+                    <tr>
+                        <th><span my-translator>Developer</span></th>
+                        <th><span my-translator>Project</span></th>
+                        <th><span my-translator>Total Modules</span></th>
+                        <th><span my-translator>Total Items</span></th>
+                        <th><span my-translator>Worked Hours</span></th>
+                        <th><span my-translator>PM Assigned Hours</span></th>
+                        <th><span my-translator>Completeness (%)</span></th>
+                        <th><span my-translator>Performances (%)</span></th>
+                        <th><span my-translator>Is Completed</span></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr data-ng-repeat="data in dataset">
+                        <td>
+                            <a class="pointer" data-ng-click="get_projects(data.user_id)" data-ng-bind="data.full_name"></a>
+                        </td>
+                        <td data-ng-bind="data.projects"></td>
+                        <td class="text-right">-</td>
+                        <td class="text-right">-</td>
+                        <td class="text-right">-</td>
+                        <td data-ng-bind="data.total_worked" class="text-right"></td>
+                        <td data-ng-bind="data.total_pm_assigned" class="text-right"></td>
+                        <td class="text-right">-</td>
+                        <td class="text-right">-</td>
+                    </tr>
+
+                    <tr id="project_{% raw %}{{data2.id}}{% endraw %}" data-ng-repeat="data2 in dataset2" class="project">
+                        <td colspan="2">
+                            <a class="pointer" data-ng-bind="data2.name" style="margin-left:30px;" add-project-modules user-id="{% raw %}{{data2.user_id}}{% endraw %}" project-id="{% raw %}{{data2.id}}{% endraw %}"></a>
+                        </td>
+                        <td data-ng-bind="data2.Modules.length" class="text-right"></td>
+                        <td data-ng-bind="data2.total_items" class="text-right">-</td>
+                        <td data-ng-bind="data2.total_worked" class="text-right">-</td>
+                        <td data-ng-bind="data2.total_pm_assigned" class="text-right">-</td>
+
+                        <td data-ng-if="data2.total_items=='-'" class="text-right">-</td>
+                        <td data-ng-if="data2.total_worked=='-'" class="text-right">-</td>
+                        <td data-ng-if="data2.total_pm_assigned=='-'" class="text-right">-</td>
+                        <td data-ng-if="data2.total_pm_assigned == null || data2.total_pm_assigned == 0" class="text-right"><small class='badge bg-red' title='0 hour are assigned by PM'>error</small></td>
+                        <td data-ng-if="data2.total_pm_assigned > 0" data-ng-bind="data2.total_worked/data2.total_pm_assigned*100 | number: 0" class="text-right"></td>
+                        <td data-ng-if="data2.total_pm_assigned == null || data2.total_pm_assigned == 0" class="text-right" class="text-right"><small class='badge bg-red' title='0 hour are assigned by PM'>error</small></td>
+                        <td data-ng-if="data2.total_pm_assigned > 0 && data2.total_worked/data2.total_pm_assigned*100 > 100" data-ng-bind="100-(data2.total_worked/data2.total_pm_assigned*100) | number: 0" class="text-right"></td>
+                        <td data-ng-if="data2.total_pm_assigned > 0 && data2.total_worked/data2.total_pm_assigned*100 < 100" data-ng-bind="data2.total_worked/data2.total_pm_assigned*100|number:0" class="text-right"></td>
+                        <td data-ng-if="data2.total_pm_assigned > 0 && data2.total_worked/data2.total_pm_assigned*100 == 100" class="text-right">-</td>
+                    </tr>
+
+                </tbody>
+            </table>
+        </div>
+    </section>
+</div>
+{% endif %}
+
+{% if layout == "default" %}
+<script src="/javascripts/controllers/report_user_based.js"></script>
+{% endif %}
+{% endblock %}

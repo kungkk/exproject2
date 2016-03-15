@@ -1,0 +1,62 @@
+﻿{% extends 'z_layout.html' %}
+
+{% block content %}
+
+{% if layout == "default" %}
+<div class="page-header">
+    <h2>
+        <small>
+            <span my-translator>Add New Member</span>
+        </small>
+    </h2>
+</div>
+{% endif %}
+
+<div class="row" data-ng-controller="member_controller" style="margin-top:20px;">
+    <form class="form-horizontal" name="frmMember" role="form" data-ng-attr-button='{{button}}' novalidate>
+        <div class="row col-sm-12 col-md-12 col-lg-12">
+            <div class="col-sm-12 col-md-12 col-lg-12 form-group">
+                <label class="col-sm-3 col-md-3 col-lg-3 text-right"><span my-translator>User</span></label>
+                <div class="col-sm-8 col-md-8 col-lg-8 nopadding">
+                    <select data-ng-model="user_id" name="user_id" class='form-control' required>
+                        <option value="{% raw %}{{mtxUser.id}}{% endraw %}" data-ng-repeat="mtxUser in mtxUsers">{% raw %}{{mtxUser.family_name}}{% endraw %} {% raw %}{{mtxUser.given_name}}{% endraw %}</option>
+                    </select>
+                    <span class="label label-danger" data-ng-show="submitted && frmMember.user_id.$error.required">
+                        <span my-translator>Please select a developer.</span>
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <div class="row col-sm-12 col-md-12 col-lg-12">
+            <div class="form-group">
+                <label class="col-sm-3 col-md-3 col-lg-3 text-right"><span my-translator>Project Leader</span></label>
+                <div class="col-sm-9 col-md-9 col-lg-9 nopadding">
+                    <input name="project_leader" data-ng-model="project_leader" type="checkbox">
+                </div>
+            </div>
+        </div>
+
+        <div class="row col-sm-12 col-md-12 col-lg-12">
+            <div class="form-group">
+                <label class="col-sm-3 col-md-3 col-lg-3 text-right">&nbsp;</label>
+                <div class="col-sm-9 col-md-9 col-lg-9 nopadding">
+                    <button type="button" class="btn btn-primary" data-ng-click="create(frmMember)">
+                        <span data-ng-hide="loading"><span my-translator>Create</span></span>
+
+                        <span data-ng-show="loading">
+                            <i class="fa fa-spinner fa-spin"></i>
+                            <span my-translator>Creating</span>
+                        </span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+
+{% if layout == "default" %}
+<script src="/javascripts/controllers/module.js"></script>
+{% endif %}
+{% endblock %}

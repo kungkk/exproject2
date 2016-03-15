@@ -1,0 +1,65 @@
+﻿{% extends 'z_layout.html' %}
+
+{% block content %}
+<section class="content-header">
+    <h1>
+        <i class="fa fa-puzzle-piece"></i>&nbsp;&nbsp;<span my-translator>Projects</span>
+    </h1>
+</section>
+
+<div class="row" data-ng-controller="project_controller" ngcd_project="html" style="padding:0 10px 10px 10px;"></div>
+<div class="row" data-ng-controller="projects_controller">
+    <section class="content" style="padding:10px;margin:0 20px 0 25px;">
+        <table datatable="ng" dt-options="dtOptions" dt-columns="dtColumnDefs" class="table table-striped table-bordered table-hover ng-table-responsive">
+            <thead>
+                <tr>
+                    <th rowspan='2'>
+                    </th>
+                    <th rowspan='2'><span my-translator>Code</span></th>
+                    <th rowspan='2'><span my-translator>Name</span></th>
+                    <th rowspan='2'><span my-translator>Modules</span></th>
+                    <th rowspan='2'><span my-translator>Members</span></th>
+                    <th colspan='3'><span my-translator>Planning</span></th>
+                    <th colspan='3'><span my-translator>Actual</span></th>
+                    <th rowspan='2'>&nbsp;</th>
+                </tr>
+                <tr>
+                    <th><span my-translator>Start</span></th>
+                    <th><span my-translator>End</span></th>
+                    <th><span my-translator>Duration</span><br /><span my-translator>(Days)</span></th>
+                    <th><span my-translator>Start</span></th>
+                    <th><span my-translator>End</span></th>
+                    <th><span my-translator>Duration</span><br /><span my-translator>(Days)</span></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr data-ng-repeat="project in projects">
+                    <td>
+                        <a class="pointer" data-ng-click="delete_project(project.id, project.name)" title="Delete this project." style="color:red;"><i class="fa fa-remove"></i></a>
+                    </td>
+                    <td data-ng-bind="project.code"></td>
+                    <td>
+                        <a href="/project/{% raw %}{{project.id}}{% endraw %}" data-ng-bind="project.name"></a>
+                    </td>
+                    <td data-ng-bind="project.Modules.length"></td>
+                    <td data-ng-bind="project.Members.length"></td>
+                    <td data-ng-bind="project.plan_started | date:'yyyy-MM-dd' : 'UTC'"></td>
+                    <td data-ng-bind="project.plan_ended | date:'yyyy-MM-dd' : 'UTC'"></td>
+                    <td data-ng-bind="project.plan_ended | getdays: project.plan_started:project.plan_ended"></td>
+                    <td data-ng-bind="project.started | date:'yyyy-MM-dd' : 'UTC'"></td>
+                    <td data-ng-bind="project.ended | date:'yyyy-MM-dd' : 'UTC'"></td>
+                    <td data-ng-bind="project.ended | getdays: project.started:project.ended"></td>
+                    <td>
+                        <a href="/history?project_id={% raw %}{{project.id}}{% endraw %}" title="History">
+                            <i class="fa fa-clock-o"></i>
+                        </a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+</div>
+
+<script src="/javascripts/controllers/project.js"></script>
+<script src="/javascripts/controllers/projects.js"></script>
+{% endblock %}

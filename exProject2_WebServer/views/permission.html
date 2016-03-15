@@ -1,0 +1,88 @@
+﻿{% extends 'z_layout.html' %}
+
+{% block content %}
+
+{% if layout == "default" %}
+<section class="content-header">
+    <h1>
+        <i class="fa fa-unlock-alt"></i>&nbsp;&nbsp;<span my-translator>Permission</span>
+    </h1>
+</section>
+{% endif %}
+
+{% if layout == "ajax" %}
+<section class="content" style="margin-left:10px;">
+    <form class="form-horizontal" name="frmPermission" role="form" data-ng-attr-button='{{button}}' novalidate>
+        <div class="row col-sm-12 col-md-12 col-lg-12 nopadding">
+            <div class="form-group col-sm-4 col-md-4 col-lg-4">
+                <label class="col-sm-12 col-md-12 col-lg-12 nopadding"><span my-translator>Name</span></label>
+                <div class="col-sm-12 col-md-12 col-lg-12 nopadding">
+                    <input type="text" name="name" class="form-control" data-ng-model="name" autocomplete="off" data-ng-pattern="validate_invalid_characters" placeholder="Name" title="Name" my-translator-attr="Name" required />
+                    <span class="label label-danger" data-ng-show="frmPermission.name.$error.pattern || submitted && frmPermission.name.$error.pattern">
+                        <span my-translator>Name contains invalid characters</span>
+                    </span>
+                    <span class="label label-danger" data-ng-show="submitted && frmPermission.name.$error.required">
+                        <span my-translator>Name must not be blank.</span>
+                    </span>
+                </div>
+            </div>
+
+            <div class="form-group col-sm-8 col-md-8 col-lg-8">
+                <label class="col-sm-12 col-md-12 col-lg-12">&nbsp;</label>
+                <div class="col-sm-12 col-md-12 col-lg-12">
+                    &nbsp;&nbsp;&nbsp;&nbsp;
+                    <button id="btnsubmit" type="submit" class="btn btn-primary" data-ng-click="create(frmPermission)">
+                        <span data-ng-hide="loading"><span my-translator>Create</span></span>
+
+                        <span data-ng-show="loading">
+                            <i class="fa fa-spinner fa-spin"></i>
+                            <span my-translator>Creating</span>
+                        </span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </form>
+</section>
+{% endif %}
+
+{% if layout == "default" %}
+<div class="row" data-ng-controller="permission_controller" style="margin-top:40px;">
+    <form class="form-horizontal" name="frmPermission" role="form" data-ng-attr-button='{{button}}' novalidate>
+        <div class="row col-sm-12 col-md-12 col-lg-12">
+            <div class="form-group">
+                <label class="col-sm-4 col-md-4 col-lg-4 text-right"><span my-translator>Name</span></label>
+                <div class="col-sm-3 col-md-3 col-lg-3">
+                    <input type="text" name="name" class="form-control" data-ng-model="name" data-ng-pattern="validate_invalid_characters" placeholder="" title="" required />
+                    <span class="label label-danger" data-ng-show="frmPermission.name.$error.pattern || submitted && frmPermission.name.$error.pattern">
+                        <span my-translator>Name contains invalid characters.</span>
+                    </span>
+                    <span class="label label-danger" data-ng-show="submitted && frmPermission.name.$error.required">
+                        <span my-translator>Name must not be blank.</span>
+                    </span>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-4 col-md-4 col-lg-4 text-right">&nbsp;</label>
+                <div class="col-sm-5 col-md-5 col-lg-5">
+                    <button id="btnsubmit" type="submit" class="btn btn-primary" data-ng-click="save(frmPermission)">
+                        <span data-ng-hide="loading"><span my-translator>Save</span></span>
+
+                        <span data-ng-show="loading">
+                            <i class="fa fa-spinner fa-spin"></i>
+                            <span my-translator>Saving</span>
+                        </span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+{% endif %}
+
+
+{% if layout == "default" %}
+<script src="/javascripts/controllers/permission.js"></script>
+{% endif %}
+{% endblock %}
