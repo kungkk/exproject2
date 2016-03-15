@@ -2,36 +2,37 @@
 var router = express.Router();
 
 
-/* GET API: /users/.json */
+/* GET API: /permissions/.json */
 router.get('/\.json', checkAuth, function (req, res) {
-    User.findAll({
+    Permission.findAll({
         include: [
-            //{ model: Creator },
-            //{ model: Modifier }
+            { model: Creator },
+            { model: Modifier }
         ],
         where: {
             active: true
-        }
+        },
+        order: [['name', 'ASC']]
     }).then(function (dataset) {
         //logger.info(_spaceLoop(ErrorLevel.INFO), JSON.stringify(dataset, null, '    '));
         res.json({ dataset: dataset });
         res.status(200);
-    });
+    });    
 });
 
 
-/* GET API: /users */
+/* GET API: /permissions */
 router.get('/', checkAuth, function (req, res) {
     res.render(app.locals.action_name);
 });
 
 
-/* DELETE API: /users */
+/* DELETE API: /permissions */
 router.delete('/', checkAuth, function (req, res) {
     var post = req.body;
     logger.info(_spaceLoop(ErrorLevel.INFO), post);
     
-    var sql = "UPDATE users SET active = 0, " +
+    var sql = "UPDATE permissions SET active = 0, " +
         "modified = " + get_db_datetime() + ", " +
         "modified_by = " + req.session.user_id + " " +
         "WHERE id IN (" + post.toString() + ")";

@@ -1,9 +1,12 @@
 ﻿var express = require('express');
 var router = express.Router();
 
-/* GET home page. */
+
+/* GET API: /signout */
 router.get('/', function (req, res) {
-    res.render('index');
+    delete req.session.username;
+    res.redirect('/');
 });
+
 
 module.exports = router;
