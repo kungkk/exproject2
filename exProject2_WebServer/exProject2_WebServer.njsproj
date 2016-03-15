@@ -902,6 +902,13 @@
     <Content Include="public\fonts\fontawesome-webfont.ttf" />
     <Content Include="public\fonts\fontawesome-webfont.woff" />
     <Content Include="public\fonts\fontawesome-webfont.woff2" />
+    <Content Include="public\images\avatar.png" />
+    <Content Include="public\images\jcc.ico" />
+    <Content Include="public\images\logo.png" />
+    <Content Include="public\images\sort_asc.png" />
+    <Content Include="public\images\sort_both.png" />
+    <Content Include="public\images\sort_desc.png" />
+    <Content Include="public\images\Thumbs.db" />
     <Content Include="public\javascripts\angularjs\angular-1.4.7\angular-animate.min.js.map" />
     <Content Include="public\javascripts\angularjs\angular-1.4.7\angular-aria.min.js.map" />
     <Content Include="public\javascripts\angularjs\angular-1.4.7\angular-cookies.min.js.map" />
@@ -971,6 +978,7 @@
     <Folder Include="db\" />
     <Folder Include="public\excel\" />
     <Folder Include="public\fonts\" />
+    <Folder Include="public\images\" />
     <Folder Include="public\javascripts\angularjs\" />
     <Folder Include="public\javascripts\angularjs\angular-1.4.7\" />
     <Folder Include="public\javascripts\angularjs\angular-1.4.7\i18n\" />
@@ -984,7 +992,6 @@
     <Folder Include="public\uploads\" />
     <Folder Include="sessions\" />
     <Folder Include="public\" />
-    <Folder Include="public\images\" />
     <Folder Include="public\javascripts\" />
     <Folder Include="public\stylesheets\" />
     <Folder Include="routes\" />
