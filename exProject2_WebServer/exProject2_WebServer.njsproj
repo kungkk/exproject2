@@ -33,6 +33,21 @@
     <Compile Include="app.js" />
     <Compile Include="db.js" />
     <Compile Include="bin\www" />
+    <Compile Include="models\attachments.js" />
+    <Compile Include="models\groups.js" />
+    <Compile Include="models\groups_permissions.js" />
+    <Compile Include="models\groups_users.js" />
+    <Compile Include="models\issues.js" />
+    <Compile Include="models\items.js" />
+    <Compile Include="models\members.js" />
+    <Compile Include="models\modules.js" />
+    <Compile Include="models\modules_users.js" />
+    <Compile Include="models\permissions.js" />
+    <Compile Include="models\plans.js" />
+    <Compile Include="models\projects.js" />
+    <Compile Include="models\sessions.js" />
+    <Compile Include="models\tasks.js" />
+    <Compile Include="models\users.js" />
     <Compile Include="routes\attachment.js" />
     <Compile Include="routes\attachments.js" />
     <Compile Include="routes\change_password.js" />
@@ -105,6 +120,8 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="bin\" />
+    <Folder Include="models\" />
+    <Folder Include="logs\" />
     <Folder Include="public\" />
     <Folder Include="public\images\" />
     <Folder Include="public\javascripts\" />
