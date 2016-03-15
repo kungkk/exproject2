@@ -122,6 +122,7 @@
     <Folder Include="bin\" />
     <Folder Include="models\" />
     <Folder Include="logs\" />
+    <Folder Include="db\" />
     <Folder Include="public\" />
     <Folder Include="public\images\" />
     <Folder Include="public\javascripts\" />
