@@ -1,0 +1,83 @@
+﻿{% extends 'z_layout.html' %}
+
+{% block content %}
+
+{% if layout == "default" %}
+<div class="page-header">
+    <h2>
+        <small>
+            <span my-translator>Add Item</span>
+        </small>
+    </h2>
+</div>
+{% endif %}
+
+<div class="row" data-ng-controller="item_controller" style="margin-top:20px;">
+    <form class="form-horizontal" name="frmItem" role="form" data-ng-attr-button='{{button}}' novalidate>
+        <div class="row col-sm-12 col-md-12 col-lg-12">
+            <div class="col-sm-12 col-md-12 col-lg-12 form-group">
+                <label class="col-sm-3 col-md-3 col-lg-3 text-right"><span my-translator>Worked</span></label>
+                <div class="col-sm-2 col-md-2 col-lg-2 nopadding">
+                    <input type="text" class="form-control pull-right" name="item_worked" title="Enter worked date" data-ng-model="item_worked" readonly="readonly" my-date-picker />
+                </div>
+            </div>
+        </div>    
+
+        <div class="row col-sm-12 col-md-12 col-lg-12">
+            <div class="form-group">
+                <label class="col-sm-3 col-md-3 col-lg-3 text-right"><span my-translator>Name</span></label>
+                <div class="col-sm-7 col-md-7 col-lg-7 nopadding">
+                    <textarea class="form-control" name="item_name" rows="2" data-ng-model="item_name" required></textarea>
+                    <span class="label label-danger" data-ng-show="frmItem.item_name.$error.pattern || submitted && frmItem.item_name.$error.pattern">
+                        <span my-translator>Item contains invalid characters</span>
+                    </span>
+                    <span class="label label-danger" data-ng-show="submitted && frmItem.item_name.$error.required">
+                        <span my-translator>Item must not be blank.</span>
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <div class="row col-sm-12 col-md-12 col-lg-12">
+            <div class="form-group">
+                <label class="col-sm-3 col-md-3 col-lg-3 text-right"><span my-translator>Hours</span></label>
+                <div class="col-sm-2 col-md-2 col-lg-2 nopadding">
+                    <select data-ng-model="item_hours" name="item_hours" class='form-control'>
+                        <option value="{% raw %}{{mtxHour}}{% endraw %}" data-ng-repeat="mtxHour in mtxHours">{% raw %}{{mtxHour}}{% endraw %}</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div class="row col-sm-12 col-md-12 col-lg-12">
+            <div class="form-group">
+                <label class="col-sm-3 col-md-3 col-lg-3 text-right"><span my-translator>Memo</span></label>
+                <div class="col-sm-7 col-md-7 col-lg-7 nopadding">
+                    <textarea class="form-control" name="item_memo" rows="2" data-ng-model="item_memo"></textarea>
+                </div>
+            </div>
+        </div>
+
+        <div class="row col-sm-12 col-md-12 col-lg-12">
+            <div class="form-group">
+                <label class="col-sm-3 col-md-3 col-lg-3 text-right">&nbsp;</label>
+                <div class="col-sm-9 col-md-9 col-lg-9 nopadding">
+                    <button type="button" class="btn btn-primary" data-ng-click="create(frmItem)">
+                        <span data-ng-hide="loading"><span my-translator>Create</span></span>
+
+                        <span data-ng-show="loading">
+                            <i class="fa fa-spinner fa-spin"></i>
+                            <span my-translator>Creating</span>
+                        </span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+
+{% if layout == "default" %}
+<script src="/javascripts/controllers/module.js"></script>
+{% endif %}
+{% endblock %}

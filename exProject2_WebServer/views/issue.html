@@ -1,0 +1,72 @@
+﻿{% extends 'z_layout.html' %}
+
+{% block content %}
+
+{% if layout == "default" %}
+<div class="page-header">
+    <h2>
+        <small>
+            <span my-translator>Add Issue</span>
+        </small>
+    </h2>
+</div>
+{% endif %}
+
+<div class="row" data-ng-controller="issue_controller" style="margin-top:20px;">
+    <form class="form-horizontal" name="frmIssue" role="form" data-ng-attr-button='{{button}}' novalidate>
+        <div class="row col-sm-12 col-md-12 col-lg-12">
+            <div class="col-sm-12 col-md-12 col-lg-12 form-group">
+                <label class="col-sm-3 col-md-3 col-lg-3 text-right"><span my-translator>Item</span>:</label>
+                <div class="col-sm-8 col-md-8 col-lg-8 nopadding">
+                    <span data-ng-bind="item_name"></span>
+                </div>
+            </div>
+        </div>    
+
+        <div class="row col-sm-12 col-md-12 col-lg-12">
+            <div class="form-group">
+                <label class="col-sm-3 col-md-3 col-lg-3 text-right"><span my-translator>Issue</span></label>
+                <div class="col-sm-7 col-md-7 col-lg-7 nopadding">
+                    <textarea class="form-control" name="issue_name" rows="2" data-ng-model="issue_name" data-ng-pattern="validate_invalid_characters" required></textarea>
+                    <span class="label label-danger" data-ng-show="frmIssue.issue_name.$error.pattern || submitted && frmIssue.issue_name.$error.pattern">
+                        <span my-translator>Issue contains invalid characters</span>
+                    </span>
+                    <span class="label label-danger" data-ng-show="submitted && frmIssue.issue_name.$error.required">
+                        <span my-translator>Issue must not be blank.</span>
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <div class="row col-sm-12 col-md-12 col-lg-12">
+            <div class="form-group">
+                <label class="col-sm-3 col-md-3 col-lg-3 text-right"><span my-translator>Description</span></label>
+                <div class="col-sm-7 col-md-7 col-lg-7 nopadding">
+                    <textarea class="form-control" name="description" rows="2" data-ng-model="description"></textarea>
+                </div>
+            </div>
+        </div>
+
+        <div class="row col-sm-12 col-md-12 col-lg-12">
+            <div class="form-group">
+                <label class="col-sm-3 col-md-3 col-lg-3 text-right">&nbsp;</label>
+                <div class="col-sm-9 col-md-9 col-lg-9 nopadding">
+                    <button type="button" class="btn btn-primary" data-ng-click="create(frmIssue)">
+                        <span data-ng-hide="loading"><span my-translator>Create</span></span>
+
+                        <span data-ng-show="loading">
+                            <i class="fa fa-spinner fa-spin"></i>
+                            <span my-translator>Creating</span>
+                        </span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+
+{% if layout == "default" %}
+<script src="/javascripts/controllers/issue.js"></script>
+{% endif %}
+{% endblock %}

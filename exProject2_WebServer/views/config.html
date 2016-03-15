@@ -1,0 +1,92 @@
+﻿<!-- remove the swig tag for rollback to old method -->
+{% extends 'z_layout.html' %}
+
+{% block content %}
+
+{% if layout == "default" %}
+<div class="page-header">
+    <h2>
+        <small>
+            <span my-translator>Configuration</span>
+        </small>
+    </h2>
+</div>
+{% endif %}
+
+<div class="row" data-ng-controller="config_controller">
+    <form class="form-horizontal" name="frmConfig" role="form" novalidate>
+        <table>
+            <tr>
+                <td>session_stores</td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>file</td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td></td>
+                <td>reapInterval</td>
+                <td><input type="text" name="reapInterval" class="form-control input-sm" data-ng-model="config.session_stores.file.reapInterval" placeholder="" title="" required /></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td></td>
+                <td>ttl</td>
+                <td><input type="text" name="ttl" class="form-control input-sm" data-ng-model="config.session_stores.file.ttl" placeholder="" title="" required /></td>
+            </tr>
+            <tr>
+                <td colspan="4">&nbsp;</td>
+            </tr>
+            <tr>
+                <td>url_address</td>
+                <td><input type="text" name="url_address" class="form-control input-sm" data-ng-model="config.url_address" placeholder="" title="" required /></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td colspan="4">&nbsp;</td>
+            </tr>
+            <tr>
+                <td>web</td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>ip</td>
+                <td><input type="text" name="ip" class="form-control input-sm" data-ng-model="config.web.ip" placeholder="" title="" required /></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>domain</td>
+                <td><input type="text" name="domain" class="form-control input-sm" data-ng-model="config.web.domain" placeholder="" title="" required /></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>port</td>
+                <td><input type="text" name="port" class="form-control input-sm" data-ng-model="config.web.port" placeholder="" title="" required /></td>
+                <td></td>
+            </tr>
+        </table>
+
+        <button type="submit" class="btn btn-primary" data-ng-click="update()">
+            <span data-ng-hide="loading"><span my-translator>Save</span></span>
+
+            <span data-ng-show="loading">
+                <i class="fa fa-spinner fa-spin"></i>
+                <span my-translator>Saving</span>
+            </span>
+        </button>
+    </form>
+</div>
+<script src="/javascripts/controllers/config.js"></script>
+{% endblock %}
