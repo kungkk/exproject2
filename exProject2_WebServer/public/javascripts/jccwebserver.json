@@ -1,0 +1,26 @@
+﻿var configs = {
+    "default": {
+        "testing": 84
+    },
+    "initial_get": {
+        "groups": true,
+        "issues":  true,
+        "permissions": true,
+        "plans": true,
+        "projects": true,
+        "tasks": true,
+        "users": true
+    },
+    "msg_prompt": {
+        "mode": "flash" // "flash" OR "alert"
+    },
+    "timeout": {
+        "flash_msg": {
+            "ms": 5000
+        }
+    },
+    "translator": {
+        "enable": false,
+        "default": "en"
+    }
+}

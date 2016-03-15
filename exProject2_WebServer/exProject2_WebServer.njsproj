@@ -816,6 +816,7 @@
     <Compile Include="public\javascripts\angularjs\angular-1.4.7\i18n\angular-locale_zh.js" />
     <Compile Include="public\javascripts\angularjs\angular-1.4.7\i18n\angular-locale_zu-za.js" />
     <Compile Include="public\javascripts\angularjs\angular-1.4.7\i18n\angular-locale_zu.js" />
+    <Compile Include="public\javascripts\app.js" />
     <Compile Include="public\javascripts\bootstrap\AdminLTE.js" />
     <Compile Include="public\javascripts\bootstrap\bootstrap-3.3.5.min.js" />
     <Compile Include="public\javascripts\charts\highcharts\highcharts.4.1.9.min.js" />
@@ -916,6 +917,7 @@
     <Content Include="public\javascripts\angularjs\angular-1.4.7\errors.json" />
     <Content Include="public\javascripts\angularjs\angular-1.4.7\version.json" />
     <Content Include="public\javascripts\angularjs\angular-1.4.7\version.txt" />
+    <Content Include="public\javascripts\jccwebserver.json" />
     <Content Include="public\stylesheets\AdminLTE.css" />
     <Content Include="public\stylesheets\bootstrap-3.3.5.min.css" />
     <Content Include="public\stylesheets\font-awesome-4.3.0.min.css" />
