@@ -1,0 +1,24 @@
+﻿{
+    "appenders": [
+        {
+            "type": "console"
+        },
+        {
+            "type": "dateFile",
+            "filename": "logs/jccwebserver.log",
+            "pattern": "_yyyy-MM-dd",
+            "alwaysIncludePattern": false,
+            "layout": {
+                "type": "pattern",
+                "pattern": "%d{ISO8601} %m"
+            },
+            "category": "logFile"
+        }
+    ],
+    "levels": {
+        "[all]": "TRACE",
+        "logFile": "TRACE",
+        "category2": "WARN"
+    },
+    "replaceConsole": true
+}

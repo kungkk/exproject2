@@ -1,0 +1,77 @@
+﻿{
+    "smtp": {
+        "gmail": {
+            "email": "jccsoftware.pg@gmail.com",
+            "password": "jccSoft1"
+        }
+    },
+    "session_stores": {
+        "file": {
+            "reapInterval": 3600,
+            "ttl": 86400
+        }
+    },
+    "url_address": "ip",
+    "web": {
+        "ip": "127.0.0.1",
+        "domain": "exproject2.jcc",
+        "port": 8800
+    },
+    "websocket": {
+        "webserver": {
+            "host": "127.0.0.1",
+            "port": 9000
+        }
+    },
+    "dbms": "sqlite",
+    "db_sqlite_config": {
+        "server": "localhost",
+        "storage": "./db/exprojectlite2012.sqlite"
+    },
+    "db_mssql_config": {
+        "user": "sa",
+        "password": "fgas147",
+        "server": "localhost",
+        "database": "spclite2"
+    },
+    "db_oracle_config": {
+        "user": "kungkk",
+        "password": "fgas147",
+        "connectString": "localhost/XE"
+    },
+    "actions": [
+        "attachment",
+        "attachments",
+        "change_password",
+        "config",
+        "group",
+        "groups",
+        "history",
+        "index",
+        "issue",
+        "issues",
+        "item",
+        "items",
+        "member",
+        "module",
+        "modules",
+        "permission",
+        "permissions",
+        "plan",
+        "plans",
+        "project",
+        "projects",
+        "report_issues",
+        "report_monthly",
+        "report_project_based",
+        "report_user_based",
+        "report_weekly",
+        "signin",
+        "signout",
+        "task",
+        "user",
+        "users",
+        "exceljs",
+        "sendmail"
+    ]
+}
