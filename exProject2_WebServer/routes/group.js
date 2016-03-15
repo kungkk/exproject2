@@ -203,16 +203,15 @@ router.post('/:id/permissions', checkAuth, function (req, res) {
             //logger.info(_spaceLoop(ErrorLevel.INFO), sub_sql);
             sql = sql + sub_sql;
         }
+
+        logger.info(_spaceLoop(ErrorLevel.INFO), sub_sql);
+        db.query(sub_sql, function (err, recordset) {
+        });
     }
 
-    // standard code cannot works properly in sqlite with ";"
-    logger.info(_spaceLoop(ErrorLevel.INFO), sql);
-    db.query(sql, function (err, recordset) {
-        if (err) res.sendStatus(400)
-        else res.sendStatus(200); // equivalent to res.status(200).send('OK')
-
-        logger.fatal(_spaceLoop(ErrorLevel.FATAL) + 'http_status_code:' + res.statusCode);
-    });
+    setTimeout(function () {
+        res.sendStatus(200);
+    }, 2000);
 });
 
 
@@ -246,14 +245,23 @@ router.post('/:id/users', checkAuth, function (req, res) {
             //logger.info(_spaceLoop(ErrorLevel.INFO), sub_sql);
             sql = sql + sub_sql;
         }
+
+        logger.info(_spaceLoop(ErrorLevel.INFO), sub_sql);
+        db.query(sub_sql, function (err, recordset) {
+        });
     }
+
+    setTimeout(function () {
+        res.sendStatus(200);
+    }, 2000);
+
     //logger.info(_spaceLoop(ErrorLevel.INFO), sql);
-    db.query(sql, function (err, recordset) {
-        if (err) res.sendStatus(400)
-        else res.sendStatus(200); // equivalent to res.status(200).send('OK')
+    //db.query(sql, function (err, recordset) {
+    //    if (err) res.sendStatus(400)
+    //    else res.sendStatus(200); // equivalent to res.status(200).send('OK')
         
-        logger.fatal(_spaceLoop(ErrorLevel.FATAL) + 'http_status_code:' + res.statusCode);
-    });
+    //    logger.fatal(_spaceLoop(ErrorLevel.FATAL) + 'http_status_code:' + res.statusCode);
+    //});
 });
 
 
