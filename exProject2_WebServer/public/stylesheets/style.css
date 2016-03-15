@@ -1,0 +1,119 @@
+﻿* { padding: 0; margin: 0; }
+/*body {
+    background-color: #eee;
+    font-family: sans-serif, Helvetica, Arial;
+    xfont-size: 13px;
+    min-height: 100% !important;
+}*/
+
+html, body {
+    font-family: "Source Sans Pro",sans-serif;
+}
+
+.content {
+   min-height: 100% !important;
+   padding:20px 10px 0 30px;
+}
+.wrapper {
+    margin-top:0 !important;
+    min-height: 100% !important;
+}
+
+section {
+    min-height: 100% !important;
+}
+
+.table tr th, .table tr td {
+    padding:5px !important;
+}
+
+.nopadding {
+     padding: 0;
+}
+
+
+table thead tr th, table tfoot tr td {
+    xbackground-color: #3c8dbc;
+    background-color: #eee;
+}
+
+.alert {
+    position:absolute;
+    top: 2px;
+    width: 95%;
+    z-index: 9999;
+}
+
+.label {
+    xpadding: 5px;
+    position:absolute;
+    z-index: 999999;
+}
+
+.nomargin {
+    margin: 0;
+}
+
+.padding_sm {
+    padding: 3px 0 3px 20px;
+}
+
+
+ol, ul {
+    margin-top: -10px;
+    margin-left: 20px;
+}
+
+.pointer {
+    cursor: pointer;
+}
+
+.fa {
+    font-size: 18px !important;
+}
+
+.modal-dialog {
+    width:80%;
+}
+
+#ui-datepicker-div {
+    z-index: 999999 !important;
+}
+
+.content h3 {
+    margin:0;
+    padding:0;
+}
+
+.modal-open .modal {
+    overflow-x:unset !important;
+    overflow-y:unset !important;
+}
+
+#messages {
+    text-align:center;
+    font-weight: bold;
+    position:fixed;
+    top:0;
+    left:0;
+    z-index: 99999999;
+}
+
+
+.progress-bar-higher {
+	background: red;
+}
+
+.progress {
+    background-color: #bbb;
+    margin-bottom:5px !important;
+}
+
+.is_completed {
+    background-color: #c5ffb7;
+}
+
+
+.is_overdue {
+    background-color: #fea0a0;
+}
