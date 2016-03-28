@@ -14,13 +14,20 @@
             <div class="form-group">
                 <label class="col-sm-5 col-md-5 col-lg-5 text-right"><span my-translator>Username</span></label>
                 <div class="col-sm-5 col-md-5 col-lg-5">
-                    <input type="text" name="username" class="form-control" data-ng-model="username" autocomplete="off" data-ng-pattern="validate_invalid_characters" placeholder="" title="" my-translator-attr="Username" required />
+                    <input type="email" name="email" class="form-control input-sm" data-ng-model="email" placeholder="" my-translator-attr="Email" required />
+                    <span class="label label-danger" data-ng-show="frmSignIn.email.$error.email || submitted && frmSignIn.email.$error.email">
+                        <span my-translator>Email is in invalid format.</span>
+                    </span>
+                    <span class="label label-danger" data-ng-show="submitted && frmSignIn.email.$error.required">
+                        <span my-translator>Email must not be blank.</span>
+                    </span>
+                    <!--<input type="text" name="username" class="form-control" data-ng-model="username" autocomplete="off" data-ng-pattern="validate_invalid_characters" placeholder="" title="" my-translator-attr="Username" required />
                     <span class="label label-danger" data-ng-show="submitted && frmSignIn.username.$error.pattern">
                         <span my-translator>Username contains invalid characters.</span>
                     </span>
                     <span class="label label-danger" data-ng-show="submitted && frmSignIn.username.$error.required">
                         <span my-translator>Username must not be blank.</span>
-                    </span>
+                    </span>-->
                 </div>
             </div>
 
