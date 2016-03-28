@@ -263,7 +263,6 @@ if (config['url_address'] == "ip") domain_name = config['web']['host'];
 app.set('domain_name', domain_name);
 app.locals.domain_name = app.get('domain_name');
 
-
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 //app.set('view engine', 'jade');

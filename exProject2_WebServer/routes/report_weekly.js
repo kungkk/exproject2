@@ -15,9 +15,9 @@ var moment = require('moment');
 
 var started;
 var ended;
-var to;
-var cc;
-var bcc;
+to = "";
+cc = "";
+bcc = "";
 
 var excel_header = function (req, worksheet, worksheet_name) {
     worksheet.getCell("A1").value = "Developer";
@@ -171,16 +171,20 @@ var where_clause_builder = function (req) {
 
 
 var send_email_variables = function (req) {
+    to = "";
+    cc = "";
+    bcc = "";
+
     var sql = "SELECT * FROM attributes WHERE table_name = 'users' AND key_id = " + req.session.user_id;
     sequelize.query(sql, {
         type: sequelize.QueryTypes.SELECT
     }).then(function (dataset) {
-        //logger.info(_spaceLoop(ErrorLevel.INFO), JSON.stringify(dataset, null, '    '));
+        logger.info(_spaceLoop(ErrorLevel.INFO), JSON.stringify(dataset, null, '    '));
 
         for (i = 0; i < dataset.length; i++) {
             //logger.info(_spaceLoop(ErrorLevel.INFO), JSON.stringify(dataset[i], null, '    '));
             
-            //console.log(dataset[i]['key_name']);
+            console.log(dataset[i]['key_name']);
 
             switch (dataset[i]['key_name']) {
                 case 'to':
@@ -194,6 +198,10 @@ var send_email_variables = function (req) {
                     break;
             }
         }
+
+        console.log(to);
+        console.log(cc);
+        console.log(bcc);
     });
 }
 
@@ -419,6 +427,8 @@ router.get('/email', checkAuth, function (req, res) {
     var arrWhere = where_clause_builder(req);
     
     var filepath = __dirname.replace("routes", "public\\uploads\\");
+    
+    send_email_variables(req);
 
     Item.findAll({
         include: [
@@ -431,6 +441,14 @@ router.get('/email', checkAuth, function (req, res) {
         
         var strAttachments = "";
         var arrAttachments;
+        
+        if (strAttachments == "") {
+            var week_id = "W" + req.query.year + req.query.week;
+            var filename = req.session.given_name + "_" + req.session.family_name + "_" + week_id + ".xlsx";
+            strAttachments = '{ "filename": "' + filename + '", "path": "excel" }';
+        }
+        
+
         for (var i = 0; i < dataset.length; i++) {
             logger.info(_spaceLoop(ErrorLevel.INFO), JSON.stringify(dataset[i]['Attachments'], null, '    '));
             for (var j = 0; j < dataset[i]['Attachments'].length; j++) {
@@ -442,15 +460,12 @@ router.get('/email', checkAuth, function (req, res) {
                 }
             }
         }
-
+        
         if (strAttachments != "") {
-            var week_id = "W" + req.query.year + req.query.week;
-            var filename = req.session.given_name + "_" + req.session.family_name + "_" + week_id + ".xlsx";
-            strAttachments = strAttachments + ', { "filename": "' + filename + '", "path": "excel" }';
-
             strAttachments = '[ ' + strAttachments + ' ]';
             arrAttachments = JSON.parse(strAttachments);
         }
+
         //console.log(arrAttachments);
         //console.log(arrAttachments.length);
         
@@ -465,7 +480,12 @@ router.get('/email', checkAuth, function (req, res) {
         }
         //console.log(arrAttachments);
         
-        send_email_variables(req);
+        //send_email_variables(req);
+        console.log('here');
+        console.log(to);
+        console.log(cc);
+        console.log(bcc);
+
         
         // create reusable transporter object using SMTP transport
         var transporter = nodemailer.createTransport({
@@ -494,10 +514,10 @@ router.get('/email', checkAuth, function (req, res) {
         var mailOptions = {
             from: 'JCC Software Penang <' + config.smtp.gmail.email + '>', // sender address
             //to: 'kungkk@yahoo.com, kkk@jccsoftware.com', // list of receivers
-            to: 'kungkk77@gmail.com',
-            //to: to,
-            //cc: cc,
-            //bcc: bcc,
+            //to: 'kungkk77@gmail.com',
+            to: to,
+            cc: cc,
+            bcc: bcc,
             subject: subject,
             //attachments: [
             //    {

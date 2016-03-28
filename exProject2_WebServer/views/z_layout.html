@@ -14,32 +14,32 @@
         {% block head %}
 
         {% if config['url_address'] == 'name' %}
-            <link rel='stylesheet' href='http://css1.exproject2.jcc:8000/stylesheets/bootstrap-3.3.5.min.css' />
-            <link rel='stylesheet' href='http://css2.exproject2.jcc:8000/stylesheets/font-awesome-4.3.0.min.css' />
-            <link rel='stylesheet' href='http://css2.exproject2.jcc:8000/stylesheets/jquery-ui-1.11.4.min.css' />
-            <link rel='stylesheet' href='http://css2.exproject2.jcc:8000/stylesheets/jquery.datetimepicker.css' />
-            <link rel='stylesheet' href='http://css2.exproject2.jcc:8000/stylesheets/jquery.dataTables-1.10.9.min.css' />
-            <link rel='stylesheet' href='http://css2.exproject2.jcc:8000/stylesheets/AdminLTE.css' />
-            <link rel='stylesheet' href='http://css2.exproject2.jcc:8000/stylesheets/style.css' />
+            <link rel='stylesheet' href='http://css1.exproject2.jcc:{{ port }}/stylesheets/bootstrap-3.3.5.min.css' />
+            <link rel='stylesheet' href='http://css2.exproject2.jcc:{{ port }}/stylesheets/font-awesome-4.3.0.min.css' />
+            <link rel='stylesheet' href='http://css2.exproject2.jcc:{{ port }}/stylesheets/jquery-ui-1.11.4.min.css' />
+            <link rel='stylesheet' href='http://css2.exproject2.jcc:{{ port }}/stylesheets/jquery.datetimepicker.css' />
+            <link rel='stylesheet' href='http://css2.exproject2.jcc:{{ port }}/stylesheets/jquery.dataTables-1.10.9.min.css' />
+            <link rel='stylesheet' href='http://css2.exproject2.jcc:{{ port }}/stylesheets/AdminLTE.css' />
+            <link rel='stylesheet' href='http://css2.exproject2.jcc:{{ port }}/stylesheets/style.css' />
 
-            <script src="http://js1.exproject2.jcc:8000/javascripts/jquery/jquery-2.1.4.min.js"></script>
-            <script src="http://js1.exproject2.jcc:8000/javascripts/jquery/jquery-ui-1.11.4.min.js"></script>
-            <script src="http://js1.exproject2.jcc:8000/javascripts/bootstrap/bootstrap-3.3.5.min.js"></script>
+            <script src="http://js1.exproject2.jcc:{{ port }}/javascripts/jquery/jquery-2.1.4.min.js"></script>
+            <script src="http://js1.exproject2.jcc:{{ port }}/javascripts/jquery/jquery-ui-1.11.4.min.js"></script>
+            <script src="http://js1.exproject2.jcc:{{ port }}/javascripts/bootstrap/bootstrap-3.3.5.min.js"></script>
 
-            <script src="http://js1.exproject2.jcc:8000/javascripts/angularjs/angular-1.4.7/angular.min.js"></script>
-            <script src="http://js1.exproject2.jcc:8000/javascripts/angularjs/angular-1.4.7/angular-cookies.min.js"></script>
-            <script src="http://js1.exproject2.jcc:8000/javascripts/angularjs/angular-1.4.7/angular-route.min.js"></script>
+            <script src="http://js1.exproject2.jcc:{{ port }}/javascripts/angularjs/angular-1.4.7/angular.min.js"></script>
+            <script src="http://js1.exproject2.jcc:{{ port }}/javascripts/angularjs/angular-1.4.7/angular-cookies.min.js"></script>
+            <script src="http://js1.exproject2.jcc:{{ port }}/javascripts/angularjs/angular-1.4.7/angular-route.min.js"></script>
         
-            <script src="http://js2.exproject2.jcc:8000/javascripts/dataTables/jquery.dataTables-1.10.9.min.js"></script>
-            <script src="http://js2.exproject2.jcc:8000/javascripts/dataTables/angular-datatables-0.5.0.min.js"></script>
-            <script src="http://js2.exproject2.jcc:8000/javascripts/dataTables/dataTables.columnFilter.js"></script>
-            <script src="http://js2.exproject2.jcc:8000/javascripts/dataTables/angular-datatables.columnfilter-0.4.3.min.js"></script>
-            <script src="http://js2.exproject2.jcc:8000/javascripts/charts/highcharts/highcharts.4.1.9.min.js"></script>
+            <script src="http://js2.exproject2.jcc:{{ port }}/javascripts/dataTables/jquery.dataTables-1.10.9.min.js"></script>
+            <script src="http://js2.exproject2.jcc:{{ port }}/javascripts/dataTables/angular-datatables-0.5.0.min.js"></script>
+            <script src="http://js2.exproject2.jcc:{{ port }}/javascripts/dataTables/dataTables.columnFilter.js"></script>
+            <script src="http://js2.exproject2.jcc:{{ port }}/javascripts/dataTables/angular-datatables.columnfilter-0.4.3.min.js"></script>
+            <script src="http://js2.exproject2.jcc:{{ port }}/javascripts/charts/highcharts/highcharts.4.1.9.min.js"></script>
 
-            <!--<script src="http://js2.exproject2.jcc:8000/javascripts/bootstrap/AdminLTE.js"></script>-->
+            <!--<script src="http://js2.exproject2.jcc:{{ port }}/javascripts/bootstrap/AdminLTE.js"></script>-->
 
-            <script src="http://js2.exproject2.jcc:8000/javascripts/jccwebserver.json"></script>
-            <script src="http://js2.exproject2.jcc:8000/javascripts/app.js"></script>
+            <script src="http://js2.exproject2.jcc:{{ port }}/javascripts/jccwebserver.json"></script>
+            <script src="http://js2.exproject2.jcc:{{ port }}/javascripts/app.js"></script>
         {% endif %}
 
         {% if config['url_address'] == 'ip' %}
