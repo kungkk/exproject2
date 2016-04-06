@@ -788,7 +788,7 @@ app.directive('myDatePicker', function () {
                     if (element[0].name == "items_filter_from_date") scope.items_filter_from_date = dateText;
                     if (element[0].name == "items_filter_to_date") scope.items_filter_to_date = dateText;
 
-                    if (element[0].name == "worked") scope.worked = dateText;
+                    if (element[0].name == "item_worked") scope.item_worked = dateText;
                     
                     if (new Date(scope.module_plan_started) > new Date(scope.module_plan_ended)) scope.valid_time = true;
                     else scope.valid_time = false;

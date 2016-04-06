@@ -52,7 +52,7 @@
             $rootScope.$broadcast('on_tasks_json', true);
             
             $scope.project_id = "";
-            $scope.plan_id = "";
+            //$scope.plan_id = "";
             $scope.module_id = "";
             $scope.started = "";
             $scope.ended = "";
