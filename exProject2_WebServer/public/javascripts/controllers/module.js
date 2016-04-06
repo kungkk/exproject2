@@ -101,15 +101,21 @@
 
     $scope.$on('on_module_json', function (event, args) {
         $scope.module_name = args.name;
-        $scope.module_plan_started = args.plan_started.substring(0, 10);
-        $scope.module_plan_ended = args.plan_ended.substring(0, 10);
-        $scope.module_started = args.started.substring(0, 10);
-        $scope.module_ended = args.ended.substring(0, 10);
-        //$scope.module_plan_started = $filter('date')(args.plan_started, 'yyyy-MM-dd');
-        //$scope.module_plan_ended = $filter('date')(args.plan_ended, 'yyyy-MM-dd');
-        //$scope.module_started = $filter('date')(args.started, 'yyyy-MM-dd');
-        //$scope.module_ended = $filter('date')(args.ended, 'yyyy-MM-dd');
+        
+        if (args.plan_started !== null) $scope.module_plan_started = args.plan_started.substring(0, 10);
+        else $scope.module_plan_started = null;
+
+        if (args.plan_ended !== null) $scope.module_plan_ended = args.plan_ended.substring(0, 10);
+        else $scope.module_plan_ended = null;
+
+        if (args.started !== null) $scope.module_started = args.started.substring(0, 10);
+        else $scope.module_started = null;
+
+        if (args.ended !== null) $scope.module_ended = args.ended.substring(0, 10);
+        else $scope.module_ended = null;
+
         $scope.module_note = args.note;
+
         $scope.module_is_completed = false;
         if (args.is_completed == 1) $scope.module_is_completed = true;
         

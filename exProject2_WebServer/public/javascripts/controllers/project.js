@@ -483,10 +483,19 @@
                     $scope.module_hidden_id = data.dataset[0].id;
                     $scope.modal_title = "Edit Module - " + data.dataset[0].name;
                     $scope.module_name = data.dataset[0].name;
-                    $scope.module_plan_started = data.dataset[0].plan_started.substring(0, 10);
-                    $scope.module_plan_ended = data.dataset[0].plan_ended.substring(0, 10);
-                    $scope.module_started = data.dataset[0].started.substring(0, 10);
-                    $scope.module_ended = data.dataset[0].ended.substring(0, 10);
+                    
+                    if (data.dataset[0].plan_started !== null) $scope.module_plan_started = data.dataset[0].plan_started.substring(0, 10);
+                    else $scope.module_plan_started = null;
+
+                    if (data.dataset[0].plan_ended !== null) $scope.module_plan_ended = data.dataset[0].plan_ended.substring(0, 10);
+                    else $scope.module_plan_ended = null;
+
+                    if (data.dataset[0].started !== null) $scope.module_started = data.dataset[0].started.substring(0, 10);
+                    else $scope.module_started = null;
+
+                    if (data.dataset[0].ended !== null) $scope.module_ended = data.dataset[0].ended.substring(0, 10);
+                    else $scope.module_ended = null;
+
                     $scope.module_note = data.dataset[0].note;
 
                     $scope.module_is_completed = false;
