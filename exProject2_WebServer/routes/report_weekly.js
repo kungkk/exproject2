@@ -199,9 +199,9 @@ var send_email_variables = function (req) {
             }
         }
 
-        console.log(to);
-        console.log(cc);
-        console.log(bcc);
+        //console.log(to);
+        //console.log(cc);
+        //console.log(bcc);
     });
 }
 
@@ -480,13 +480,6 @@ router.get('/email', checkAuth, function (req, res) {
         }
         //console.log(arrAttachments);
         
-        //send_email_variables(req);
-        console.log('here');
-        console.log(to);
-        console.log(cc);
-        console.log(bcc);
-
-        
         // create reusable transporter object using SMTP transport
         var transporter = nodemailer.createTransport({
             service: 'Gmail',
@@ -504,7 +497,6 @@ router.get('/email', checkAuth, function (req, res) {
         //var filename = req.session.given_name + "_" + req.session.family_name + "_" + week_id + ".xlsx";
         //filepath = filepath + filename;
         
-        
         // NB! No need to recreate the transporter object. You can use
         // the same transporter object for all e-mails
         
@@ -512,7 +504,7 @@ router.get('/email', checkAuth, function (req, res) {
         
         // setup e-mail data with unicode symbols
         var mailOptions = {
-            from: 'JCC Software Penang <' + config.smtp.gmail.email + '>', // sender address
+            from: 'JCC Software <' + config.smtp.gmail.email + '>', // sender address
             //to: 'kungkk@yahoo.com, kkk@jccsoftware.com', // list of receivers
             //to: 'kungkk77@gmail.com',
             to: to,
