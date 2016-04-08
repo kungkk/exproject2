@@ -1,0 +1,101 @@
+﻿{% extends 'z_layout.html' %}
+
+{% block content %}
+<section class="content-header">
+    <h1>
+        <i class="fa fa-calendar"></i>&nbsp;&nbsp;<span my-translator>Monthly Plans</span>
+    </h1>
+</section>
+
+<div class="row" data-ng-controller="plans2_controller">
+    <section class="content">
+        <div class="row col-sm-12 col-md-12 col-lg-12">
+            <div class="col-sm-4 col-md-4 col-lg-4"></div>
+            <div class="col-sm-2 col-md-2 col-lg-2">
+                Year &nbsp;
+                <span data-ng-bind="years" style="font-weight:bold;font-size:30px;"></span>
+                <!--<input type="text" name="years" class="form-control" data-ng-model="years" autocomplete="off" placeholder="Years" title="Years" my-translator-attr="Years" disabled="disabled" />-->
+            </div>
+            <div class="col-sm-4 col-md-4 col-lg-4"></div>         
+        </div>
+        <div class="row col-sm-12 col-md-12 col-lg-12">
+            <div class="my_calendar_aleft" data-ng-click="prev()">
+                <img src="/images/prev.png" />
+            </div>
+            <table class="my_calendar">
+                <tr>
+                    <td>
+                        <a data-ng-click="onclick(01)">January
+                            <small>1</small>
+                        </a>
+                    </td>
+                    <td>
+                        <a data-ng-click="onclick(02)">February
+                            <small>2</small>
+                        </a>
+                    </td>
+                    <td>
+                        <a data-ng-click="onclick(03)">March
+                            <small>3</small>
+                        </a>
+                    </td>
+                    <td>
+                        <a data-ng-click="onclick(04)">April
+                            <small>4</small>
+                        </a> 
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <a data-ng-click="onclick(05)">May
+                            <small>5</small>
+                        </a>
+                    </td>
+                    <td>
+                        <a data-ng-click="onclick(06)">June
+                            <small>6</small>
+                        </a>  
+                    </td>
+                    <td>
+                        <a data-ng-click="onclick(07)">July
+                            <small>7</small>
+                        </a>
+                    </td>
+                    <td>
+                        <a data-ng-click="onclick(08)">August
+                            <small>8</small>
+                        </a> 
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <a data-ng-click="onclick(09)">September
+                            <small>9</small>
+                        </a>
+                    </td>
+                    <td>
+                        <a data-ng-click="onclick(10)">October
+                            <small>10</small>
+                        </a>
+                    </td>
+                    <td>
+                        <a data-ng-click="onclick(11)">November
+                            <small>11</small>
+                        </a>
+                    </td>
+                    <td>
+                        <a data-ng-click="onclick(12)">December
+                            <small>12</small>
+                        </a>
+                    </td>
+                </tr>
+            </table>  
+            <div class="my_calendar_aright" data-ng-click="next()">
+                <img src="/images/next.png" />
+            </div>     
+        </div>
+    </section>
+</div>
+
+<script src="/javascripts/controllers/plans2.js"></script>
+{% endblock %}

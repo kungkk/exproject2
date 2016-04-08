@@ -117,3 +117,55 @@ ol, ul {
 .is_overdue {
     background-color: #fea0a0;
 }
+
+.my_calendar {
+    float:left;
+}
+
+.my_calendar tr td {
+    border: 1px solid #888;
+    background-color: #fff;
+    text-align: center;
+}
+
+.my_calendar tr td a {
+    position: relative;
+    color: #140065;
+    font-size: 30px;
+    font-weight:bold;
+    display:block;
+    padding:40px 30px 40px 30px;
+    width:100%;
+}
+
+.my_calendar tr td a:hover {
+    background-color: #cbe1ff;
+    cursor: pointer;
+}
+
+.my_calendar tr td a small {
+    font-size: 14px;
+    position: absolute;
+    bottom: 0;
+    right: 10px;
+}
+
+.my_calendar_aleft, .my_calendar_aright {
+    position:relative;
+    background-color: #bbb;
+    float: left;
+    border: 1px solid #888;
+    height:373px;
+    width:30px;
+}
+
+.my_calendar_aleft:hover, .my_calendar_aright:hover {
+    background-color: #ccc;
+    cursor: pointer;
+}
+
+.my_calendar_aleft img, .my_calendar_aright img {
+    position:absolute;
+    top:49%;
+    left: 8px;
+}
