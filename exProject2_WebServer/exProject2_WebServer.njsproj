@@ -835,7 +835,9 @@
     <Compile Include="public\javascripts\controllers\module.js" />
     <Compile Include="public\javascripts\controllers\permission.js" />
     <Compile Include="public\javascripts\controllers\permissions.js" />
+    <Compile Include="public\javascripts\controllers\plan2.js" />
     <Compile Include="public\javascripts\controllers\plan.js" />
+    <Compile Include="public\javascripts\controllers\plans2.js" />
     <Compile Include="public\javascripts\controllers\plans.js" />
     <Compile Include="public\javascripts\controllers\project.js" />
     <Compile Include="public\javascripts\controllers\projects.js" />
@@ -875,7 +877,9 @@
     <Compile Include="routes\modules.js" />
     <Compile Include="routes\permission.js" />
     <Compile Include="routes\permissions.js" />
+    <Compile Include="routes\plan2.js" />
     <Compile Include="routes\plan.js" />
+    <Compile Include="routes\plans2.js" />
     <Compile Include="routes\plans.js" />
     <Compile Include="routes\project.js" />
     <Compile Include="routes\projects.js" />
@@ -956,7 +960,9 @@
     <Content Include="views\module.html" />
     <Content Include="views\permission.html" />
     <Content Include="views\permissions.html" />
+    <Content Include="views\plan2.html" />
     <Content Include="views\plan.html" />
+    <Content Include="views\plans2.html" />
     <Content Include="views\plans.html" />
     <Content Include="views\project.html" />
     <Content Include="views\projects.html" />
