@@ -270,7 +270,7 @@ app.controller("plan_tasks_controller", function ($filter, $http, $location, myF
     });
 
     $scope.$watch('tasks', function (newValue, oldValue) {
-        if (typeof newValue !== "undefined") {
+        if (isEmpty(newValue) == false) {
             for (var i = 0; i < newValue.length; i++) {
                 newValue[i].started = $filter('date')(newValue[i].started, 'yyyy-MM-dd');
                 
@@ -398,4 +398,8 @@ app.directive('mySelectBox', function () {
         }
     }
 });
+
+function isEmpty(str) {
+    return (!str || 0 === str.length);
+}
 

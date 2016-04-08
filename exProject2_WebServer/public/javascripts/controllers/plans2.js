@@ -32,7 +32,7 @@
             cache: false,
             headers: { 'X-Requested-With' : 'XMLHttpRequest' }
         }).success(function (data, status, headers, config) {
-            window.location.href = "/plan/" + data[0].id;
+            window.location.href = "/plan2/" + data.dataset[0].id;
         }).error(function (data, status, headers, config) {
         }).finally(function () {
         });

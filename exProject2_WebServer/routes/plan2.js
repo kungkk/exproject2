@@ -8,9 +8,51 @@ var sql_builder = function (id) {
     return "SELECT * FROM " + table + " WHERE id = " + id + " AND active = 1";
 }
 
+
+
+
+/* GET API: /plan/###/.json */
+router.get('/:id\/\.json', function (req, res) {
+    Plan.findAll({
+        where: {
+            id: req.params.id,
+            active: true
+        }
+    }).then(function (dataset) {
+        logger.info(_spaceLoop(ErrorLevel.INFO), JSON.stringify(dataset, null, '    '));
+        
+        res.json({ dataset: dataset });
+        res.status(200);
+    }); 
+});
+
+
+/* GET API: /plan/###/tasks/.json */
+router.get('/:id\/tasks/\.json', function (req, res) {
+    Task.findAll({
+        include: [
+            {
+                model: Module,
+                include: [
+                    { model: Project }
+                ]
+            },
+        ],
+        where: {
+            plan_id: req.params.id,
+            active: true
+        }
+    }).then(function (dataset) {
+        logger.info(_spaceLoop(ErrorLevel.INFO), JSON.stringify(dataset, null, '    '));
+        
+        res.json({ dataset: dataset });
+        res.status(200);
+    });
+});
+
 /* GET API: /plan2/:year/:month/\.json */
 //router.get('/:year/:month/\.json', checkAuth, function (req, res) {
-router.get('/:year/:month/\.json',  function (req, res) {
+router.get('/:year/:month/\.json', function (req, res) {
     Plan.findAll({
         where: {
             user_id: req.session.user_id,
@@ -44,7 +86,7 @@ router.get('/:year/:month/\.json',  function (req, res) {
                         
                         res.json({ dataset: dataset });
                         res.status(200);
-                    });                    
+                    });
                 }
                 
                 logger.fatal(_spaceLoop(ErrorLevel.FATAL) + 'http_status_code:' + res.statusCode);
@@ -61,48 +103,8 @@ router.get('/:year/:month/\.json',  function (req, res) {
 });
 
 
-/* GET API: /plan/###/.json */
-router.get('/:id\/\.json', checkAuth, function (req, res) {
-    Plan.findAll({
-        where: {
-            id: req.params.id,
-            active: true
-        }
-    }).then(function (dataset) {
-        logger.info(_spaceLoop(ErrorLevel.INFO), JSON.stringify(dataset, null, '    '));
-        
-        res.json({ dataset: dataset });
-        res.status(200);
-    }); 
-});
-
-
-/* GET API: /plan/###/tasks/.json */
-router.get('/:id\/tasks/\.json', checkAuth, function (req, res) {
-    Task.findAll({
-        include: [
-            {
-                model: Module,
-                include: [
-                    { model: Project }
-                ]
-            },
-        ],
-        where: {
-            plan_id: req.params.id,
-            active: true
-        }
-    }).then(function (dataset) {
-        logger.info(_spaceLoop(ErrorLevel.INFO), JSON.stringify(dataset, null, '    '));
-        
-        res.json({ dataset: dataset });
-        res.status(200);
-    });
-});
-
-
 /* GET API: /plan/ */
-router.get('/', checkAuth, function (req, res) {
+router.get('/', function (req, res) {
     res.locals.button = 'create';
     res.locals.layout = 'default';
     if (req.xhr == true) res.locals.layout = 'ajax';
@@ -111,7 +113,7 @@ router.get('/', checkAuth, function (req, res) {
 
 
 /* GET API: /plan/### */
-router.get('/:id', checkAuth, function (req, res) {
+router.get('/:id', function (req, res) {
     res.locals.button = 'save';
     res.locals.layout = 'default';
     
@@ -138,7 +140,7 @@ router.get('/:id', checkAuth, function (req, res) {
 
 
 /* POST API: /plan/ */
-router.post('/', checkAuth, function (req, res) {
+router.post('/', function (req, res) {
     var post = req.body;
     logger.info(_spaceLoop(ErrorLevel.INFO), post);    
     
