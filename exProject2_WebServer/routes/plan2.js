@@ -8,19 +8,55 @@ var sql_builder = function (id) {
     return "SELECT * FROM " + table + " WHERE id = " + id + " AND active = 1";
 }
 
-/* GET API: /plan/###/.json */
-router.get('/:year/:month/\.json', checkAuth, function (req, res) {
+/* GET API: /plan2/:year/:month/\.json */
+//router.get('/:year/:month/\.json', checkAuth, function (req, res) {
+router.get('/:year/:month/\.json',  function (req, res) {
     Plan.findAll({
         where: {
+            user_id: req.session.user_id,
             year: req.params.year,
             month: req.params.month,
             active: true
         }
     }).then(function (dataset) {
-        logger.info(_spaceLoop(ErrorLevel.INFO), JSON.stringify(dataset, null, '    '));
-        
-        res.json({ dataset: dataset });
-        res.status(200);
+        if (dataset.length == 0) {
+            sql = "INSERT INTO " + table + " (user_id, year, month, created_by, modified_by) VALUES (" +
+                req.session.user_id + ", " +
+                req.params.year + ", " +
+                req.params.month + ", " +
+                req.session.user_id + ", " +
+                req.session.user_id + ")";
+            logger.info(_spaceLoop(ErrorLevel.INFO), sql);
+            db.query(sql, function (err, recordset) {
+                if (err) {
+                    res.sendStatus(400)
+                }
+                else {
+                    Plan.findAll({
+                        where: {
+                            user_id: req.session.user_id,
+                            year: req.params.year,
+                            month: req.params.month,
+                            active: true
+                        }
+                    }).then(function (dataset) {
+                        logger.info(_spaceLoop(ErrorLevel.INFO), JSON.stringify(dataset, null, '    '));
+                        
+                        res.json({ dataset: dataset });
+                        res.status(200);
+                    });                    
+                }
+                
+                logger.fatal(_spaceLoop(ErrorLevel.FATAL) + 'http_status_code:' + res.statusCode);
+            });
+
+        }
+        else {
+            logger.info(_spaceLoop(ErrorLevel.INFO), JSON.stringify(dataset, null, '    '));
+            
+            res.json({ dataset: dataset });
+            res.status(200);
+        }
     });
 });
 
