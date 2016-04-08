@@ -909,6 +909,8 @@
     <Content Include="public\images\avatar.png" />
     <Content Include="public\images\jcc.ico" />
     <Content Include="public\images\logo.png" />
+    <Content Include="public\images\next.png" />
+    <Content Include="public\images\prev.png" />
     <Content Include="public\images\sort_asc.png" />
     <Content Include="public\images\sort_both.png" />
     <Content Include="public\images\sort_desc.png" />
