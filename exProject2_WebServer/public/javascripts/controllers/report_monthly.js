@@ -54,14 +54,14 @@
 
             if (data.dataset.length > 0) {
                 $scope.report_monthly = data.dataset;
-
+                console.debug($scope.report_monthly.length);
                 $scope.categories = [];
                 $scope.hours = [];
                 $scope.dataset = [];
                 $scope.plans = [];
                 $scope.worked = [];
                 $scope.new = 0;
-                
+
                 for (var i = 0; i < $scope.report_monthly.length; i++) {
                     if (typeof $scope.report_monthly[i + 1] != 'undefined') {
                         if ($scope.report_monthly[i].status == "planed") {
@@ -88,45 +88,14 @@
                             }
                         }
                     }
+                    else {
+                        if ($scope.report_monthly[i].status == "planed") { 
+                            $scope.dataset.push($scope.report_monthly[i]);
+                            $scope.dataset.push({ "project_id": $scope.report_monthly[i].project_id, "project_code": $scope.report_monthly[i].project_code, "project_name": $scope.report_monthly[i].project_name, "module_id": $scope.report_monthly[i].module_id, "module_name": $scope.report_monthly[i].module_name, "started": $scope.report_monthly[i].started, "ended": $scope.report_monthly[i].ended, "hours": 0, "status": "worked" });
+                        }
+                    }
                 }
-                
-                
-                //for (var i = 0; i < $scope.report_monthly.length; i++) {
-                //    if (typeof $scope.report_monthly[i + 1] != 'undefined') {
-                //        if ($scope.report_monthly[i].status == "planed") {
-                //            if ($scope.report_monthly[i + 1].status == "worked") {
-                //                if ($scope.report_monthly[i].project_id == $scope.report_monthly[i + 1].project_id && $scope.report_monthly[i].module_id == $scope.report_monthly[i + 1].module_id) {
-                //                    $scope.dataset.push($scope.report_monthly[i]);
-                //                    $scope.dataset.push($scope.report_monthly[i + 1]);
-                //                    $scope.new = i + 2;
-                //                }
-                //            }
-                //            else { 
-                //                $scope.dataset.push($scope.report_monthly[i]);
-                //                $scope.dataset.push({ "project_id": $scope.report_monthly[i].project_id, "project_code": $scope.report_monthly[i].project_code, "project_name": $scope.report_monthly[i].project_name, "module_id": $scope.report_monthly[i].module_id, "module_name": $scope.report_monthly[i].module_name, "started": $scope.report_monthly[i].started, "ended": $scope.report_monthly[i].ended, "hours": 0, "status": "worked" });
-                //            }
-                //        }
-                //        else {
-                //            if ($scope.report_monthly[$scope.new].status == "worked") {
-                //                $scope.dataset.push({ "project_id": $scope.report_monthly[$scope.new].project_id, "project_code": $scope.report_monthly[$scope.new].project_code, "project_name": $scope.report_monthly[$scope.new].project_name, "module_id": $scope.report_monthly[$scope.new].module_id, "module_name": $scope.report_monthly[$scope.new].module_name, "started": $scope.report_monthly[$scope.new].started, "ended": $scope.report_monthly[$scope.new].ended, "hours": 0, "status": "planed" });
-                //                $scope.dataset.push($scope.report_monthly[$scope.new]);
-                //                $scope.new = $scope.new + 1;
-                //            }
-                //        }
-                //    }
-                //    else {
-                //        if ($scope.report_monthly[i].status == "planed") {
-                //            $scope.dataset.push($scope.report_monthly[i]);
-                //            $scope.dataset.push({ "project_id": $scope.report_monthly[i].project_id, "project_code": $scope.report_monthly[i].project_code, "project_name": $scope.report_monthly[i].project_name, "module_id": $scope.report_monthly[i].module_id, "module_name": $scope.report_monthly[i].module_name, "started": $scope.report_monthly[i].started, "ended": $scope.report_monthly[i].ended, "hours": 0, "status": "worked" });
-                //        }
-
-                //        if ($scope.report_monthly[i].status == "worked") {
-                //            $scope.dataset.push({ "project_id": $scope.report_monthly[i].project_id, "project_code": $scope.report_monthly[i].project_code, "project_name": $scope.report_monthly[i].project_name, "module_id": $scope.report_monthly[i].module_id, "module_name": $scope.report_monthly[i].module_name, "started": $scope.report_monthly[i].started, "ended": $scope.report_monthly[i].ended, "hours": 0, "status": "planed" });
-                //            $scope.dataset.push($scope.report_monthly[i]);
-                //        }
-                //    }
-                //}
-                
+                console.debug($scope.dataset.length);
                 for (var i = 0; i < $scope.dataset.length; i++) {
                     if ((i % 2) == 1) {
                         

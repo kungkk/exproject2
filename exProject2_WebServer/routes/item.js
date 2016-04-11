@@ -94,7 +94,7 @@ router.post('/', checkAuth, function (req, res) {
         req.query.module_id + ", " +
         req.session.user_id + ", " +
         "'" + post.name + "', " +
-        "'" + post.worked + " " + time_started + "', " +
+        "'" + post.worked + time_started + "', " +
         "'" + post.memo + "', " +
         post.hours + ", " +
         req.session.user_id + ", " +
@@ -115,7 +115,7 @@ router.put('/:id', checkAuth, function (req, res) {
     logger.info(_spaceLoop(ErrorLevel.INFO), post);
     
     var sql = "UPDATE " + table + " SET name = '" + post.name + "', " +
-        "worked = '" + post.worked + " " + time_started + "', " +
+        "worked = '" + post.worked + time_started + "', " +
         "memo = '" + post.memo + "', " +
         "hours = " + post.hours + ", " +
         "modified = " + get_db_datetime() + ", " +
