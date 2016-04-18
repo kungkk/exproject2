@@ -1,6 +1,4 @@
-﻿# @link https://github.com/nodesource/distributions
-
-FROM    ubuntu:14.04.4
+﻿FROM    ubuntu:14.04.4
 
 RUN	apt-get install -y wget curl
 RUN	curl -sL https://deb.nodesource.com/setup_0.12 | sudo -E bash -
