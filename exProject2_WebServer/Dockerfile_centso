@@ -1,5 +1,5 @@
 FROM    centos:7
-
+MAINTAINER "kkk" <kkk@jccsoftware.com>
 RUN	apt-get install -y wget curl
 RUN	curl -sL https://deb.nodesource.com/setup_0.12 | sudo -E bash -
 RUN	apt-get install -y nodejs
