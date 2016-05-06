@@ -54,7 +54,6 @@
 
             if (data.dataset.length > 0) {
                 $scope.report_monthly = data.dataset;
-                console.debug($scope.report_monthly.length);
                 $scope.categories = [];
                 $scope.hours = [];
                 $scope.dataset = [];
@@ -95,7 +94,7 @@
                         }
                     }
                 }
-                console.debug($scope.dataset.length);
+
                 for (var i = 0; i < $scope.dataset.length; i++) {
                     if ((i % 2) == 1) {
                         
