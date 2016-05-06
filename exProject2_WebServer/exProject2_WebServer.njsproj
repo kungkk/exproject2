@@ -894,6 +894,7 @@
     <Compile Include="routes\task.js" />
     <Compile Include="routes\user.js" />
     <Compile Include="routes\users.js" />
+    <Content Include="Dockerfile" />
     <Content Include="jccwebserver" />
     <Content Include="jccwebserver.json" />
     <Content Include="log4js.json" />
