@@ -57,7 +57,7 @@ router.post('/', checkAuth, function (req, res) {
                 "modified_by = " + req.session.user_id + " " +
                 "WHERE table_name = '" + req.query.table_name + "' " +
                 "AND key_id = " + req.query.key_id + " " +
-                "AND key_name = '" + req.query.key_id + "'";
+                "AND key_name = '" + req.query.key_name + "'";
             logger.info(_spaceLoop(ErrorLevel.INFO), sql);
             db.query(sql, function (err, recordset) {
                 if (err) {
