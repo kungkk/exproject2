@@ -848,6 +848,7 @@
     <Compile Include="public\javascripts\controllers\report_monthly.js" />
     <Compile Include="public\javascripts\controllers\report_project_based.js" />
     <Compile Include="public\javascripts\controllers\report_user_based.js" />
+    <Compile Include="public\javascripts\controllers\report_support.js" />
     <Compile Include="public\javascripts\controllers\report_weekly.js" />
     <Compile Include="public\javascripts\controllers\signin.js" />
     <Compile Include="public\javascripts\controllers\task.js" />
@@ -892,6 +893,7 @@
     <Compile Include="routes\report_monthly.js" />
     <Compile Include="routes\report_project_based.js" />
     <Compile Include="routes\report_user_based.js" />
+    <Compile Include="routes\report_support.js" />
     <Compile Include="routes\report_weekly.js" />
     <Compile Include="routes\sendmail.js" />
     <Compile Include="routes\signin.js" />
@@ -980,6 +982,7 @@
     <Content Include="views\report_monthly.html" />
     <Content Include="views\report_project_based.html" />
     <Content Include="views\report_user_based.html" />
+    <Content Include="views\report_support.html" />
     <Content Include="views\report_weekly.html" />
     <Content Include="views\signin.html" />
     <Content Include="views\task.html" />

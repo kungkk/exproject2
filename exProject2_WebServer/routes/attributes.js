@@ -25,7 +25,7 @@ var where_clause_builder = function (req) {
 
 
 /* GET API: /attributes/.json */
-router.get('/\.json', function (req, res) {
+router.get('/\.json', checkAuth, function (req, res) {
     var arrWhere = where_clause_builder(req);
     logger.info(_spaceLoop(ErrorLevel.INFO), JSON.stringify(arrWhere, null, '    '));
 
@@ -44,7 +44,7 @@ router.get('/\.json', function (req, res) {
 
 
 /* GET API: /attributes */
-router.get('/', function (req, res) {
+router.get('/', checkAuth, function (req, res) {
     res.render(app.locals.action_name);
 });
 
