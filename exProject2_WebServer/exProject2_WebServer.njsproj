@@ -33,6 +33,7 @@
     <Compile Include="app.js" />
     <Compile Include="db.js" />
     <Compile Include="bin\www" />
+    <Compile Include="models\attributes.js" />
     <Compile Include="models\attachments.js" />
     <Compile Include="models\groups.js" />
     <Compile Include="models\groups_permissions.js" />
@@ -862,6 +863,7 @@
     <Compile Include="public\javascripts\jquery\jquery-ui-1.11.4.min.js" />
     <Compile Include="public\javascripts\jquery\jquery.datetimepicker-2.4.5.js" />
     <Compile Include="routes\attachment.js" />
+    <Compile Include="routes\attributes.js" />
     <Compile Include="routes\attachments.js" />
     <Compile Include="routes\change_password.js" />
     <Compile Include="routes\config.js" />
@@ -874,6 +876,7 @@
     <Compile Include="routes\issues.js" />
     <Compile Include="routes\item.js" />
     <Compile Include="routes\items.js" />
+    <Compile Include="routes\attribute.js" />
     <Compile Include="routes\member.js" />
     <Compile Include="routes\module.js" />
     <Compile Include="routes\modules.js" />
