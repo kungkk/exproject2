@@ -25,10 +25,11 @@ var where_clause_builder = function (req) {
 
 
 /* GET API: /attributes/.json */
-router.get('/\.json', checkAuth, function (req, res) {
+router.get('/\.json', function (req, res) {
     var arrWhere = where_clause_builder(req);
 
     Attribute.findAll({
+        attributes: ['table_name', 'key_id'],
         where: arrWhere
     }).then(function (dataset) {
         logger.info(_spaceLoop(ErrorLevel.INFO), JSON.stringify(dataset, null, '    '));
@@ -40,7 +41,7 @@ router.get('/\.json', checkAuth, function (req, res) {
 
 
 /* GET API: /attributes */
-router.get('/', checkAuth, function (req, res) {
+router.get('/', function (req, res) {
     res.render(app.locals.action_name);
 });
 

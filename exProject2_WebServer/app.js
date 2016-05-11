@@ -142,7 +142,7 @@ checkAuth = function (req, res, next) {
         db.query(sql, function (err, recordset) {
             if (err) logger.error(_spaceLoop(ErrorLevel.ERROR) + err['message']);
             
-            //logger.fatal(_spaceLoop(ErrorLevel.FATAL), 'record:' + recordset.length);
+            logger.fatal(_spaceLoop(ErrorLevel.FATAL), 'record:' + recordset.length);
             if (recordset.length > 0) {
                 next();
             }
@@ -246,6 +246,8 @@ Attachment = sequelize.import("./models/attachments");
 Issue = sequelize.import("./models/issues");
 
 Task = sequelize.import("./models/tasks");
+
+Attribute = sequelize.import("./models/attributes");
 //#endregion
 
 
