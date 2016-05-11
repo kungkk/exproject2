@@ -32,6 +32,18 @@
         }).finally(function () {
         });
         // #endregion
+
+
+        $http({
+            url: '/attributes?_=' + myFactory.date_time_now(),
+            method: "GET",
+            cache: false,
+            headers: { 'X-Requested-With' : 'XMLHttpRequest', 'Accept' : 'text/html' }
+        }).success(function (data, status, headers, config) {
+            $scope.html2 = data;
+        }).error(function (data, status, headers, config) {
+        }).finally(function () {
+        });
     }
     
     // #region POST API: /user
@@ -125,6 +137,19 @@ app.directive('ngcdUser', function ($compile) {
         link: function (scope, element, attrs) {
             scope.$watch(attrs.ngcdUser, function (html) {
                 element.html(html);
+                $compile(element.contents())(scope);
+            });
+        },
+    };
+});
+
+app.directive('ngcdAttributes', function ($compile) {
+    return {
+        restrict: 'A', // only matches attribute name
+        replace: true,
+        link: function (scope, element, attrs) {
+            scope.$watch(attrs.ngcdAttributes, function (html2) {
+                element.html(html2);
                 $compile(element.contents())(scope);
             });
         },
