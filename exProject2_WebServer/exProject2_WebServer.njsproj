@@ -949,8 +949,8 @@
     <Content Include="public\stylesheets\jquery.datetimepicker.css" />
     <Content Include="public\stylesheets\style.css" />
     <Content Include="README.md" />
-    <Content Include="views\attributes.html" />
     <Content Include="views\attribute.html" />
+    <Content Include="views\attributes.html" />
     <Content Include="views\attachment.html" />
     <Content Include="views\attachments.html" />
     <Content Include="views\change_password.html" />

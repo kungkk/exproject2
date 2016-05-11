@@ -1,0 +1,93 @@
+﻿{% extends 'z_layout.html' %}
+
+{% block content %}
+{% if layout == "default" %}
+<section class="content-header">
+    <h1>
+        <i class="fa fa-calendar"></i>&nbsp;&nbsp;<span my-translator>Attributes</span>
+    </h1>
+</section>
+{% endif %}
+
+
+{% if layout == "ajax" %}
+<div class="row" style="padding:0 20px 0 0;">
+    <form class="form-horizontal" name="frmAttributes" role="form" data-ng-attr-button='{{button}}' novalidate>
+        <div class="row col-sm-12 col-md-12 col-lg-12">
+            <div class="form-group">
+                <label class="col-sm-5 col-md-5 col-lg-5 text-right"><span my-translator>Username</span></label>
+                <div class="col-sm-3 col-md-3 col-lg-3 nopadding" data-ng-if="id == session_user_id">
+                    <input type="text" name="username" class="form-control input-sm" data-ng-model="username" autocomplete="off" data-ng-pattern="validate_invalid_characters" placeholder="" title="" my-translator-attr="Username" required />
+                    <span class="label label-danger" data-ng-show="frmUser.username.$error.pattern || submitted && frmUser.username.$error.pattern">
+                        <span my-translator>Username contains invalid characters.</span>
+                    </span>
+                    <span class="label label-danger" data-ng-show="submitted && frmUser.username.$error.required">
+                        <span my-translator>Username must not be blank.</span>
+                    </span>
+                </div>
+                <div class="col-sm-3 col-md-3 col-lg-3 nopadding" data-ng-if="id != session_user_id">
+                    <span data-ng-bind="username"></span>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-5 col-md-5 col-lg-5 text-right"><span my-translator>Email</span></label>
+                <div class="col-sm-3 col-md-3 col-lg-3 nopadding" data-ng-if="id == session_user_id">
+                    <input type="email" name="email" class="form-control input-sm" data-ng-model="email" placeholder="" my-translator-attr="Email" required />
+                    <span class="label label-danger" data-ng-show="frmUser.email.$error.email || submitted && frmUser.email.$error.email">
+                        <span my-translator>Email is in invalid format.</span>
+                    </span>
+                    <span class="label label-danger" data-ng-show="submitted && frmUser.email.$error.required">
+                        <span my-translator>Email must not be blank.</span>
+                    </span>
+                </div>
+                <div class="col-sm-3 col-md-3 col-lg-3 nopadding" data-ng-if="id != session_user_id">
+                    <span data-ng-bind="email"></span>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-5 col-md-5 col-lg-5 text-right"><span my-translator>Family Name</span></label>
+                <div class="col-sm-3 col-md-3 col-lg-3 nopadding" data-ng-if="id == session_user_id">
+                    <input type="text" name="family_name" class="form-control input-sm" data-ng-model="family_name" autocomplete="off" data-ng-pattern="validate_invalid_characters" placeholder="" title="" my-translator-attr="Family Name" />
+                    <span class="label label-danger" data-ng-show="frmUser.family_name.$error.pattern || submitted && frmUser.family_name.$error.pattern">
+                        <span my-translator>Family Name contains invalid characters.</span>
+                    </span>
+                </div>
+                <div class="col-sm-3 col-md-3 col-lg-3 nopadding" data-ng-if="id != session_user_id">
+                    <span data-ng-bind="family_name"></span>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-5 col-md-5 col-lg-5 text-right"><span my-translator>Given Name</span></label>
+                <div class="col-sm-3 col-md-3 col-lg-3 nopadding" data-ng-if="id == session_user_id">
+                    <input type="text" name="given_name" class="form-control input-sm" data-ng-model="given_name" autocomplete="off" data-ng-pattern="validate_invalid_characters" placeholder="" title="" my-translator-attr="Given Name" />
+                    <span class="label label-danger" data-ng-show="frmUser.given_name.$error.pattern || submitted && frmUser.given_name.$error.pattern">
+                        <span my-translator>Given Name contains invalid characters.</span>
+                    </span>
+                </div>
+                <div class="col-sm-3 col-md-3 col-lg-3 nopadding" data-ng-if="id != session_user_id">
+                    <span data-ng-bind="given_name"></span>
+                </div>
+            </div>
+
+            <div class="form-group" data-ng-if="id == session_user_id">
+                <label class="col-sm-5 col-md-5 col-lg-5 text-right">&nbsp;</label>
+                <div class="col-sm-5 col-md-5 col-lg-5 nopadding">
+                    <button type="submit" class="btn btn-primary" data-ng-click="save(frmUser)" data-ng-disabled="frmChangePassword.current_password.$error.required && frmChangePassword.confirm_password.$error.unique">
+                        <span data-ng-hide="loading"><span my-translator>Save</span></span>
+
+                        <span data-ng-show="loading">
+                            <i class="fa fa-spinner fa-spin"></i>
+                            <span my-translator>Saving</span>
+                        </span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+{% endif %}
+
+{% endblock %}
