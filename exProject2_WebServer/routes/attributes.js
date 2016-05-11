@@ -8,6 +8,7 @@ var where_clause_builder = function (req) {
         return { id: -1 };
     }
     else {
+        
         for (var param in req.query) {
             switch (param) {
                 case 'table_name':
@@ -16,8 +17,7 @@ var where_clause_builder = function (req) {
                     break;
             }
         }
-        arrWhere['active'] = true;
-        
+        //arrWhere['active'] = true;
         //logger.info(_spaceLoop(ErrorLevel.INFO), JSON.stringify(arrWhere, null, '    '));
         return arrWhere;
     }
@@ -27,15 +27,19 @@ var where_clause_builder = function (req) {
 /* GET API: /attributes/.json */
 router.get('/\.json', checkAuth, function (req, res) {
     var arrWhere = where_clause_builder(req);
-
+    logger.info(_spaceLoop(ErrorLevel.INFO), JSON.stringify(arrWhere, null, '    '));
+    
+    
     Attribute.findAll({
-        where: arrWhere
+        //where: arrWhere
     }).then(function (dataset) {
+        console.log(dataset);
         logger.info(_spaceLoop(ErrorLevel.INFO), JSON.stringify(dataset, null, '    '));
             
         res.json({ dataset: dataset });
         res.status(200);
     });
+     
 });
 
 

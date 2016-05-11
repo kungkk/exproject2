@@ -243,9 +243,11 @@ ModuleUser = sequelize.import("./models/modules_users");
 
 Item = sequelize.import("./models/items");
 Attachment = sequelize.import("./models/attachments");
+
 Issue = sequelize.import("./models/issues");
 
 Task = sequelize.import("./models/tasks");
+Attribute = sequelize.import("./models/attributes");
 //#endregion
 
 
