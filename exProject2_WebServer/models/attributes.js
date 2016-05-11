@@ -4,21 +4,25 @@
 Model = function (sequelize, DataTypes) {
 
     Attribute = sequelize.define('Attribute', {
+        id: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+            primaryKey: true,
+        },
         table_name: {
             type: DataTypes.STRING,
-            allowNull: false,
+            allowNull: false
         },
         key_id: {
             type: DataTypes.INTEGER,
-            allowNull: false,
+            allowNull: false
         },
         key_name: {
             type: DataTypes.STRING,
-            allowNull: false,
+            allowNull: false
         },
         key_value: {
-            type: DataTypes.STRING,
-            allowNull: false,
+            type: DataTypes.STRING
         },
     }, {
         // @link http://docs.sequelizejs.com/en/latest/docs/models-definition/#configuration

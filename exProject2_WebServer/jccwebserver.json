@@ -42,8 +42,8 @@
     "actions": [
         "attachment",
         "attachments",
-		"attribute",
-		"attributes",
+        "attribute",
+        "attributes",
         "change_password",
         "config",
         "group",
