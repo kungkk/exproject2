@@ -55,9 +55,9 @@ router.post('/', checkAuth, function (req, res) {
             sql = "UPDATE " + table + " SET key_value = '" + req.query.key_value + "', " +
                 "modified = " + get_db_datetime() + ", " +
                 "modified_by = " + req.session.user_id + " " +
-                "WHERE table_name = '" + req.query.table_name + "', " +
-                "key_id = " + req.query.key_id + ", " +
-                "key_name = '" + req.query.key_name + "'";
+                "WHERE table_name = '" + req.query.table_name + "' " +
+                "AND key_id = " + req.query.key_id + " " +
+                "AND key_name = '" + req.query.key_id + "'";
             logger.info(_spaceLoop(ErrorLevel.INFO), sql);
             db.query(sql, function (err, recordset) {
                 if (err) {
