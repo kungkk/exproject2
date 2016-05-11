@@ -821,7 +821,9 @@
     <Compile Include="public\javascripts\bootstrap\AdminLTE.js" />
     <Compile Include="public\javascripts\bootstrap\bootstrap-3.3.5.min.js" />
     <Compile Include="public\javascripts\charts\highcharts\highcharts.4.1.9.min.js" />
+    <Compile Include="public\javascripts\controllers\attribute.js" />
     <Compile Include="public\javascripts\controllers\attachment.js" />
+    <Compile Include="public\javascripts\controllers\attributes.js" />
     <Compile Include="public\javascripts\controllers\attachments.js" />
     <Compile Include="public\javascripts\controllers\change_password.js" />
     <Compile Include="public\javascripts\controllers\config.js" />
@@ -950,6 +952,8 @@
     <Content Include="public\stylesheets\jquery.datetimepicker.css" />
     <Content Include="public\stylesheets\style.css" />
     <Content Include="README.md" />
+    <Content Include="views\attributes.html" />
+    <Content Include="views\attribute.html" />
     <Content Include="views\attachment.html" />
     <Content Include="views\attachments.html" />
     <Content Include="views\change_password.html" />

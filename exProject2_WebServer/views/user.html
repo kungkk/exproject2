@@ -155,7 +155,7 @@
 
             <div class="form-group" data-ng-if="id == session_user_id">
                 <label class="col-sm-5 col-md-5 col-lg-5 text-right">&nbsp;</label>
-                <div class="col-sm-5 col-md-5 col-lg-5 nopadding_left">
+                <div class="col-sm-5 col-md-5 col-lg-5 nopadding">
                     <button type="submit" class="btn btn-primary" data-ng-click="save(frmUser)" data-ng-disabled="frmChangePassword.current_password.$error.required && frmChangePassword.confirm_password.$error.unique">
                         <span data-ng-hide="loading"><span my-translator>Save</span></span>
 
@@ -169,10 +169,12 @@
         </div>
     </form>
 </div>
+<div class="row" data-ng-controller="attributes_controller" ngcd_attributes="html"></div>
 {% endif %}
 
 
 {% if layout == "default" %}
 <script src="/javascripts/controllers/user.js"></script>
+<script src="/javascripts/controllers/attributes.js"></script>
 {% endif %}
 {% endblock %}
