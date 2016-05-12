@@ -260,6 +260,9 @@
                                     <span data-ng-bind="module.ModuleUsers.length"></span>
                                     <i class="fa fa-users"></i>
                                 </a>
+
+                                <a class='fa fa-gear pull-right pointer' data-toggle='tooltip' title='Click to set support email receivers' data-ng-click="load_attributes(module.id, module.name, false)" style="margin-right:10px;"></a>
+
                                 <h4>
                                     <a class="pointer" data-ng-click="delete_module(module.id, module.name)" title="Delete this item." style="color:red;"><i class="fa fa-remove"></i></a>
                                     &nbsp;
@@ -315,7 +318,7 @@
                                 <table class='tblItems table table-bordered table-striped' cellspacing='0' cellpadding='0' style='font-size:14px;'>
                                     <thead>
                                         <tr>
-                                            <th colspan='8'>
+                                            <th colspan='9'>
                                                 <div class='col-sm-12 col-md-12 col-lg-12'>
                                                     <div class="col-sm-3 col-md-3 col-lg-3 form-group nomargin nopadding pull-right">
                                                         <div class="col-sm-8 col-md-8 col-lg-8 nopadding pull-right">
@@ -341,6 +344,7 @@
                                             <th><span my-translator>Memo</span></th>
                                             <th><span my-translator>Issue</span></th>
                                             <th><span my-translator>Attachment</span></th>
+                                            <th><span my-translator>Send Email</span></th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -381,16 +385,19 @@
                                                     ( {% raw %}{{item.Attachments.length}}{% endraw %} )
                                                 </a>
                                             </td>
+                                            <td>
+                                                <a class='pointer' data-toggle='tooltip' title='Send Email' data-ng-click="load_report_support(module.id, item.id, item.name, false)"><span my-translator>Send</span></a>
+                                            </td>
                                         </tr>
                                         <tr data-ng-if="module.Items.length == 0">
-                                            <td class='text-center' colspan='8'><span my-translator>No items record found.</span></td>
+                                            <td class='text-center' colspan='9'><span my-translator>No items record found.</span></td>
                                         </tr>
                                     </tbody>
                                     <tfoot>
                                         <tr>
                                             <td colspan='4'><label class='pull-right'><span my-translator>Total Hours:</span></label></td>
                                             <td class='total'><b data-ng-bind="module.Items | sumByKey:{{ session.user_id }}"></b></td>
-                                            <td colspan='3'>&nbsp;</td>
+                                            <td colspan='4'>&nbsp;</td>
                                         </tr>
                                     </tfoot>
                                 </table>
@@ -415,6 +422,7 @@
 {% if layout == "default" %}
 <script src="/javascripts/controllers/project.js"></script>
 <script src="/javascripts/controllers/attachment.js"></script>
+<!--<script src="/javascripts/controllers/attributes.js"></script>-->
 <script src="/javascripts/controllers/issue.js"></script>
 <script src="/javascripts/controllers/item.js"></script>
 <script src="/javascripts/controllers/member.js"></script>

@@ -1,9 +1,18 @@
 ﻿app.controller("project_controller", function ($filter, $http, $location, myFactory, $rootScope, $scope) {
+    $rootScope.table_name = "modules";
     $scope.button = angular.element('form').attr('data-ng-attr-button');
     $scope.show_issue = false;
     $scope.show_attachment = false;
     $scope.show_module = true;
     $scope.module_status = "0";
+    
+    $scope.attributes = [{ id: 1, table_name: $rootScope.table_name, key_id: $rootScope.session_user_id, key_name: 'to', key_value: '' },
+                         { id: 2, table_name: $rootScope.table_name, key_id: $rootScope.session_user_id, key_name: 'cc', key_value: '' },
+                         { id: 3, table_name: $rootScope.table_name, key_id: $rootScope.session_user_id, key_name: 'bcc', key_value: '' }];
+    
+    $scope.attributes.sort(function (a, b) {
+        return a.id - b.id;
+    });
     
     var currx = new Date();
     var today = currx.getFullYear() + "-" + n(currx.getMonth() + 1) + "-" + n(currx.getDate());
@@ -401,7 +410,6 @@
                 $scope.modal_title = "List Attachments for - " + item_name;
                 
                 for (var i = 0; i < $scope.modules.length; i++) {
-                    console.debug('module: ' + $scope.modules[i].id + ' == ' + module_id);
                     if ($scope.modules[i].id == module_id) {
                         for (var j = 0; j < $scope.modules[i].Items.length; j++) {
                             if ($scope.modules[i].Items[j].id == item_id) {
@@ -424,6 +432,47 @@
         }).error(function (data, status, headers, config) {
         }).finally(function () {
         });
+    };
+    
+    $scope.load_attributes = function (module_id, module_name, signal) {
+        
+        for (var k = 0; k < $scope.attributes.length; k++) {
+                $scope.attributes[k].key_value = '';
+        }
+
+        $http({
+            url: '/attributes?_=' + myFactory.date_time_now(),
+            method: "GET",
+            cache: false,
+            headers: { 'X-Requested-With' : 'XMLHttpRequest', 'Accept' : 'text/html' }
+        }).success(function (data, status, headers, config) {
+            $scope.html = data;
+            $scope.module_id = module_id;
+            $scope.modal_title = "Set receiver's email for - " + module_name;
+            if (signal == false) $scope.showModal = !$scope.showModal;
+
+            $http({
+                url: '/attributes/.json?table_name=' + $rootScope.table_name + '&key_id=' + module_id + '&_=' + myFactory.date_time_now(),
+                method: "GET",
+                cache: false,
+                headers: { 'X-Requested-With' : 'XMLHttpRequest', 'Accept' : 'text/html' }
+            }).success(function (data, status, headers, config) {
+                if (data.dataset.length > 0) {
+                    for (var i = 0; i < data.dataset.length; i++) {
+                        for (var j = 0; j < $scope.attributes.length; j++) {
+                            
+                            if (data.dataset[i].key_name == $scope.attributes[j].key_name) {
+                                $scope.attributes[j].key_value = data.dataset[i].key_value;
+                            }
+                        }
+                    }
+                }
+            }).error(function (data, status, headers, config) {
+            }).finally(function () {
+            });
+        }).error(function (data, status, headers, config) {
+        }).finally(function () {
+        }); 
     };
     
     $scope.load_item = function (module_id) {
@@ -554,6 +603,23 @@
 
             $scope.show_issue = false;
             $scope.show_attachment = false;
+        }).error(function (data, status, headers, config) {
+        }).finally(function () {
+        });
+    };
+    
+    
+    $scope.load_report_support = function (module_id, item_id, item_name, signal) {
+        $http({
+            url: '/report_support/?module_id=' + module_id + '&item_id=' + item_id + '&_=' + myFactory.date_time_now(),
+            method: "GET",
+            cache: false,
+            headers: { 'X-Requested-With' : 'XMLHttpRequest', 'Accept' : 'text/html' }
+        }).success(function (data, status, headers, config) {
+            $scope.html = data;
+            $scope.module_id = module_id;
+            $scope.modal_title = "Send Email";
+            if (signal == false) $scope.showModal = !$scope.showModal;
         }).error(function (data, status, headers, config) {
         }).finally(function () {
         });
@@ -745,8 +811,35 @@
             }
         }).error(function (data, status, headers, config) {
         }).finally(function () {
+        });    
+    };
+    
+    
+    $scope.blur = function (key_name) {
+        console.debug($scope.attributes);
+        $scope.$watch('attributes', function () {
+            var url = '/attribute?table_name=' + $rootScope.table_name + '&key_id=' + $scope.module_id + '&key_name=&key_value=&_=' + myFactory.date_time_now();
+            for (var i = 0; i < $scope.attributes.length; i++) {
+                if ($scope.attributes[i].key_name == key_name) {
+                    url = '/attribute?table_name=' + $rootScope.table_name + '&key_id=' + $scope.module_id + '&key_name=' + $scope.attributes[i].key_name + '&key_value=' + $scope.attributes[i].key_value + '&_=' + myFactory.date_time_now();
+                }
+            }
+            
+            $http({
+                url: url,
+                method: "POST",
+                cache: false,
+                data: [],
+                headers: { 'X-Requested-With' : 'XMLHttpRequest' }
+            }).success(function (data, status, headers, config) {
+                myFactory.response_behavior(status, "POST", "attribute");
+            }).error(function (data, status, headers, config) {
+                myFactory.response_behavior(status, "POST", "attribute", data);
+            }).finally(function () {
+                $scope.loading = false;
+                $scope.submitted = false;
+            });
         });
-        
     };
 
     $scope.$watch('modules', function (newValue, oldValue) {
