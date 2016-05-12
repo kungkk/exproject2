@@ -12,7 +12,7 @@ app.run(function ($http, myFactory, $rootScope) {
     $rootScope.table_name = "";
     
     //  @link: http://stackoverflow.com/questions/576196/regular-expression-allow-letters-numbers-and-spaces-with-at-least-one-letter
-    $rootScope.validate_invalid_characters = "^[a-zA-Z0-9 _-]*$";
+    $rootScope.validate_invalid_characters = "^[a-zA-Z0-9 \.;@_-]*$";
     $rootScope.validate_int_decimal_only = "^[0-9]*(\.[0-9]{1,5})?$";
     
     $rootScope.validate_invalid_characters_and_allow_null = "^[(null)0-9]*(\.[0-9]{1,5})?$";

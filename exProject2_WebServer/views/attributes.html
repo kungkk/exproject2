@@ -17,9 +17,9 @@
             <div class="form-group">
                 <label class="col-sm-5 col-md-5 col-lg-5 text-right"><span my-translator>To</span></label>
                 <div class="col-sm-3 col-md-3 col-lg-3 nopadding">
-                    <input type="text" name="to" class="form-control input-sm" data-ng-model="attributes[0].key_value" placeholder="" data-ng-blur="blur(attributes[0].key_name)" my-translator-attr="To" />
-                    <span class="label label-danger" data-ng-show="frmUser.attributes[0].key_value.$error.to || submitted && frmUser.attributes[0].key_value.$error.to">
-                        <span my-translator>Email is in invalid format.</span>
+                    <input type="text" name="to" class="form-control input-sm" data-ng-model="attributes[0].key_value" data-ng-pattern="validate_invalid_characters" placeholder="" data-ng-blur="blur(frmAttributes, attributes[0].key_name)" my-translator-attr="To" />
+                    <span class="label label-danger" data-ng-show="frmAttributes.to.$error.pattern || submitted && frmAttributes.to.$error.pattern">
+                        <span my-translator>TO contains invalid characters.</span>
                     </span>
                 </div>
             </div>
@@ -27,9 +27,9 @@
             <div class="form-group">
                 <label class="col-sm-5 col-md-5 col-lg-5 text-right"><span my-translator>CC</span></label>
                 <div class="col-sm-3 col-md-3 col-lg-3 nopadding">
-                    <input type="text" name="cc" class="form-control input-sm" data-ng-model="attributes[1].key_value" placeholder="" data-ng-blur="blur(attributes[1].key_name)" my-translator-attr="CC" />
-                    <span class="label label-danger" data-ng-show="frmUser.attributes[1].key_value.$error.cc || submitted && frmUser.attributes[1].key_value.$error.cc">
-                        <span my-translator>CC is in invalid format.</span>
+                    <input type="text" name="cc" class="form-control input-sm" data-ng-model="attributes[1].key_value" data-ng-pattern="validate_invalid_characters" placeholder="" data-ng-blur="blur(frmAttributes, attributes[1].key_name)" my-translator-attr="CC" />
+                    <span class="label label-danger" data-ng-show="frmAttributes.cc.$error.pattern || submitted && frmAttributes.cc.$error.pattern">
+                        <span my-translator>CC contains invalid characters.</span>
                     </span>
                 </div>
             </div>
@@ -37,9 +37,9 @@
             <div class="form-group">
                 <label class="col-sm-5 col-md-5 col-lg-5 text-right"><span my-translator>BCC</span></label>
                 <div class="col-sm-3 col-md-3 col-lg-3 nopadding">
-                    <input type="text" name="bcc" class="form-control input-sm" data-ng-model="attributes[2].key_value" placeholder="" data-ng-blur="blur(attributes[2].key_name)" my-translator-attr="BCC" />
-                    <span class="label label-danger" data-ng-show="frmUser.attributes[2].key_value.$error.bcc || submitted && frmUser.attributes[2].key_value.$error.bcc">
-                        <span my-translator>BCC is in invalid format.</span>
+                    <input type="text" name="bcc" class="form-control input-sm" data-ng-model="attributes[2].key_value" data-ng-pattern="validate_invalid_characters" placeholder="" data-ng-blur="blur(frmAttributes, attributes[2].key_name)" my-translator-attr="BCC" />
+                    <span class="label label-danger" data-ng-show="frmAttributes.bcc.$error.pattern || submitted && frmAttributes.bcc.$error.pattern">
+                        <span my-translator>BCC contains invalid characters.</span>
                     </span>
                 </div>
             </div>

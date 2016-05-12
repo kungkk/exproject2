@@ -479,9 +479,6 @@
     };
     
     $scope.load_item = function (module_id) {
-        //var curr = new Date();
-        //var today = curr.getFullYear() + "-" + n(curr.getMonth() + 1) + "-" + n(curr.getDay());
-
         $http({
             url: '/item/?module_id=' + module_id + '&_=' + myFactory.date_time_now(),
             method: "GET",
@@ -624,8 +621,6 @@
             $scope.modal_title = "Send Email";
             if (signal == false) $scope.showModal = !$scope.showModal;
 
-
-
             $http({
                 url: '/report_support/.json?module_id='+module_id+'&_=' + myFactory.date_time_now(),
                 method: "GET",
@@ -672,7 +667,14 @@
     
     
     $scope.send = function (form) {
-        console.debug($scope.bcc);
+        $scope.loading4 = true;
+        $scope.submitted = true;
+        
+        if (form.$invalid) {
+            $scope.loading4 = false;
+            return;
+        }
+
         var data = {
             to: $scope.to,
             cc: $scope.cc,
@@ -692,7 +694,7 @@
         }).error(function (data, status, headers, config) {
             myFactory.response_behavior(status, "POST", "attribute", data);
         }).finally(function () {
-            $scope.loading = false;
+            $scope.loading4 = false;
             $scope.submitted = false;
         });
     };
@@ -889,8 +891,12 @@
     };
     
     
-    $scope.blur = function (key_name) {
-        console.debug($scope.attributes);
+    $scope.blur = function (form, key_name) {
+        $scope.submitted = true;
+        if (form.$invalid) {
+            return;
+        }
+
         $scope.$watch('attributes', function () {
             var url = '/attribute?table_name=' + $rootScope.table_name + '&key_id=' + $scope.module_id + '&key_name=&key_value=&_=' + myFactory.date_time_now();
             for (var i = 0; i < $scope.attributes.length; i++) {
@@ -910,7 +916,6 @@
             }).error(function (data, status, headers, config) {
                 myFactory.response_behavior(status, "POST", "attribute", data);
             }).finally(function () {
-                $scope.loading = false;
                 $scope.submitted = false;
             });
         });
