@@ -39,7 +39,7 @@ var send_email_variables = function (req) {
     cc = "";
     bcc = "";
 
-    var sql = "SELECT * FROM attributes WHERE table_name = 'users' AND key_id = " + req.session.user_id;
+    var sql = "SELECT * FROM attributes WHERE table_name = 'modules' AND key_id = " + req.query.module_id;
     sequelize.query(sql, {
         type: sequelize.QueryTypes.SELECT
     }).then(function (dataset) {
@@ -72,82 +72,84 @@ var send_email_variables = function (req) {
 
 /* GET API: /report_support/.json?item_id=### */
 router.get('/\.json', checkAuth, function (req, res) {
-    var arrWhere = where_clause_builder(req);
-    
-    Item.findAll({
-        include: [
-            {
-                model: Module,
-                include: [
-                    { model: Project }
-                ]
+    if (req.query.item_id != undefined) {
+        var arrWhere = where_clause_builder(req);
+
+        Item.findAll({
+            include: [
+                {
+                    model: Module,
+                    include: [
+                        { model: Project }
+                    ]
+                }
+            ],
+            where: arrWhere
+        }).then(function (dataset) {
+            //logger.info(_spaceLoop(ErrorLevel.INFO), JSON.stringify(dataset, null, '    '));
+            
+            res.json({ dataset: dataset });
+            res.status(200);
+        });
+    }
+
+    if (req.query.module_id != undefined) {
+        Attribute.findAll({
+            where: {
+                table_name: 'modules',
+                key_id: req.query.module_id
             }
-        ],
-        where: arrWhere
-    }).then(function (dataset) {
-        //logger.info(_spaceLoop(ErrorLevel.INFO), JSON.stringify(dataset, null, '    '));
-        
-        res.json({ dataset: dataset });
-        res.status(200);
-    });
+        }).then(function (dataset) {
+            //logger.info(_spaceLoop(ErrorLevel.INFO), JSON.stringify(dataset, null, '    '));
+            
+            res.json({ dataset: dataset });
+            res.status(200);
+        });        
+    }
 });
 
 
-/* GET API: /report_support/email?year=###&week=###&user_id=### */
+/* GET API: /report_support/email?item_id=### */
 router.get('/email', checkAuth, function (req, res) {
-    var arrWhere = where_clause_builder(req);
+    var post = req.body;
     
-    var filepath = __dirname.replace("routes", "public\\uploads\\");
-    
-    send_email_variables(req);
-
-    Item.findAll({
-        include: [
-            { model: Attachment }
-        ],
-        where: arrWhere,
-        order: [['worked', 'ASC']]
-    }).then(function (dataset) {
-        logger.info(_spaceLoop(ErrorLevel.INFO), JSON.stringify(dataset, null, '    '));
+    // create reusable transporter object using SMTP transport
+    var transporter = nodemailer.createTransport({
+        service: 'Gmail',
+        auth: {
+            user: config.smtp.gmail.email,
+            pass: config.smtp.gmail.password
+        },
+        tls: {
+            rejectUnauthorized: false
+        }
+    });
         
-        // create reusable transporter object using SMTP transport
-        var transporter = nodemailer.createTransport({
-            service: 'Gmail',
-            auth: {
-                user: config.smtp.gmail.email,
-                pass: config.smtp.gmail.password
-            },
-            tls: {
-                rejectUnauthorized: false
-            }
-        });
+    // NB! No need to recreate the transporter object. You can use
+    // the same transporter object for all e-mails
         
-        // NB! No need to recreate the transporter object. You can use
-        // the same transporter object for all e-mails
+    var subject = 'Support Report ' + req.session.given_name + ', ' + req.session.family_name + ' W' + req.query.year + req.query.week;
         
-        var subject = 'Support Report ' + req.session.given_name + ', ' + req.session.family_name + ' W' + req.query.year + req.query.week;
+    // setup e-mail data with unicode symbols
+    var mailOptions = {
+        from: 'JCC Software <' + config.smtp.gmail.email + '>', // sender address
+        to: post.to,
+        cc: post.cc,
+        bcc: post.bcc,
+        subject: post.subject,
+        html: post.body
+    };
         
-        // setup e-mail data with unicode symbols
-        var mailOptions = {
-            from: 'JCC Software <' + config.smtp.gmail.email + '>', // sender address
-            to: to,
-            cc: cc,
-            bcc: bcc,
-            subject: subject,
-            html: '<b>Support Report</b>' // html body
-        };
-        
-        // send mail with defined transport object
-        transporter.sendMail(mailOptions, function (error, info) {
-            if (error) {
-                logger.error(error);
-            } else {
-                logger.info(_spaceLoop(ErrorLevel.INFO), 'Message sent: ' + info.response);
-                res.status(200);
-                res.end();
-            }
-        });
-    });    
+    // send mail with defined transport object
+    transporter.sendMail(mailOptions, function (error, info) {
+        if (error) {
+            logger.error(error);
+        } else {
+            logger.info(_spaceLoop(ErrorLevel.INFO), 'Message sent: ' + info.response);
+            res.status(200);
+            res.end();
+        }
+    });
 });
 
 
