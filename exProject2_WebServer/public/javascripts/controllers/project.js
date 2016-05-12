@@ -611,7 +611,7 @@
     
     $scope.load_report_support = function (module_id, item_id, item_name, signal) {
         $http({
-            url: '/report_support/?module_id=' + module_id + '&item_id=' + item_id + '&_=' + myFactory.date_time_now(),
+            url: '/report_support?_=' + myFactory.date_time_now(),
             method: "GET",
             cache: false,
             headers: { 'X-Requested-With' : 'XMLHttpRequest', 'Accept' : 'text/html' }
@@ -620,6 +620,29 @@
             $scope.module_id = module_id;
             $scope.modal_title = "Send Email";
             if (signal == false) $scope.showModal = !$scope.showModal;
+
+
+
+            $http({
+                url: '/report_support?module_id='+module_id+'&_=' + myFactory.date_time_now(),
+                method: "GET",
+                cache: false,
+                headers: { 'X-Requested-With' : 'XMLHttpRequest', 'Accept' : 'text/html' }
+            }).success(function (data, status, headers, config) {
+                
+            }).error(function (data, status, headers, config) {
+            }).finally(function () {
+            });
+
+            $http({
+                url: '/report_support?item_id=' + item_id + '&_=' + myFactory.date_time_now(),
+                method: "GET",
+                cache: false,
+                headers: { 'X-Requested-With' : 'XMLHttpRequest', 'Accept' : 'text/html' }
+            }).success(function (data, status, headers, config) {
+            }).error(function (data, status, headers, config) {
+            }).finally(function () {
+            });
         }).error(function (data, status, headers, config) {
         }).finally(function () {
         });
