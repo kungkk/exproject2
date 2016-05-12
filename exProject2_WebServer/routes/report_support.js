@@ -109,8 +109,8 @@ router.get('/\.json', checkAuth, function (req, res) {
 });
 
 
-/* GET API: /report_support/email?item_id=### */
-router.get('/email', checkAuth, function (req, res) {
+/* POST API: /report_support/email?item_id=### */
+router.post('/email', checkAuth, function (req, res) {
     var post = req.body;
     
     // create reusable transporter object using SMTP transport

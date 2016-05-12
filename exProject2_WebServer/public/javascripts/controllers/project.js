@@ -5,6 +5,9 @@
     $scope.show_attachment = false;
     $scope.show_module = true;
     $scope.module_status = "0";
+    $scope.to = "";
+    $scope.cc = "";
+    $scope.bcc = "";
     
     $scope.attributes = [{ id: 1, table_name: $rootScope.table_name, key_id: $rootScope.session_user_id, key_name: 'to', key_value: '' },
                          { id: 2, table_name: $rootScope.table_name, key_id: $rootScope.session_user_id, key_name: 'cc', key_value: '' },
@@ -624,22 +627,41 @@
 
 
             $http({
-                url: '/report_support?module_id='+module_id+'&_=' + myFactory.date_time_now(),
+                url: '/report_support/.json?module_id='+module_id+'&_=' + myFactory.date_time_now(),
                 method: "GET",
                 cache: false,
                 headers: { 'X-Requested-With' : 'XMLHttpRequest', 'Accept' : 'text/html' }
             }).success(function (data, status, headers, config) {
-                
+                console.debug(data);
+                for (var i=0; i<data.dataset.length; i++) {
+                    if (data.dataset[i].key_name == "to") $scope.to = data.dataset[i].key_value;
+                    if (data.dataset[i].key_name == "cc") $scope.cc = data.dataset[i].key_value;
+                    if (data.dataset[i].key_name == "bcc") $scope.bcc = data.dataset[i].key_value;
+                }
             }).error(function (data, status, headers, config) {
             }).finally(function () {
             });
 
             $http({
-                url: '/report_support?item_id=' + item_id + '&_=' + myFactory.date_time_now(),
+                url: '/report_support/.json?item_id=' + item_id + '&_=' + myFactory.date_time_now(),
                 method: "GET",
                 cache: false,
                 headers: { 'X-Requested-With' : 'XMLHttpRequest', 'Accept' : 'text/html' }
             }).success(function (data, status, headers, config) {
+                var curr = new Date();
+                var today = curr.getFullYear() + "-" + n(curr.getMonth() + 1) + "-" + n(curr.getDay());
+                $scope.subject = "Service Report - [ " + data.dataset[0].name + " ] - " + today;
+                $scope.body = "Dear Sir/Madam," + 
+                              "<br/><br/>" +
+                              "As per your company requested, our staffs come over to your side to support you, to handle your any IT issue. " +
+                              "So that we're wishing you to signed our attendance for this day." + 
+                              "<br/><br/>" + 
+                              "Thank you." +
+                              "<br/><br/><br/>" + 
+                              "________________________" +
+                              "<br/>" + 
+                              "(Name:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;)";
+
             }).error(function (data, status, headers, config) {
             }).finally(function () {
             });
@@ -647,6 +669,35 @@
         }).finally(function () {
         });
     };
+    
+    
+    $scope.send = function (form) {
+        console.debug($scope.bcc);
+        var data = {
+            to: $scope.to,
+            cc: $scope.cc,
+            bcc: $scope.bcc,
+            subject: $scope.subject,
+            body: $scope.body
+        };
+
+        $http({
+            url: '/report_support/email?_=' + myFactory.date_time_now(),
+            method: "POST",
+            cache: false,
+            data: data,
+            headers: { 'X-Requested-With' : 'XMLHttpRequest' }
+        }).success(function (data, status, headers, config) {
+            myFactory.response_behavior(status, "POST", "attribute");
+        }).error(function (data, status, headers, config) {
+            myFactory.response_behavior(status, "POST", "attribute", data);
+        }).finally(function () {
+            $scope.loading = false;
+            $scope.submitted = false;
+        });
+    };
+    
+    
 
     // #region listen_plural_json
     $scope.$on('on_modules_json', function (event, args) {
