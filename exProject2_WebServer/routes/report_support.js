@@ -5,7 +5,6 @@ var router = express.Router();
 var nodemailer = require('nodemailer');
 
 
-
 var started;
 var ended;
 to = "";
