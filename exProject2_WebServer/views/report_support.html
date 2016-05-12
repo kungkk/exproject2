@@ -4,145 +4,82 @@
 {% if layout == "default" %}
 <section class="content-header">
     <h1>
-        <i class="fa fa-calendar"></i>&nbsp;&nbsp;<span my-translator>Weekly Report</span>
+        <i class="fa fa-calendar"></i>&nbsp;&nbsp;<span my-translator>Send Email</span>
     </h1>
 </section>
 {% endif %}
 
-{% if layout == "default" %}
-<div class="row" data-ng-controller="report_weekly_controller" style="padding:0 10px 10px 10px;">
-    <section class="content">
-        <div class="row col-sm-12 col-md-12 col-lg-12 nopadding help-block">
-            <span my-translator>Preview, Generate and Email Weekly Report for:</span>
-        </div>
-        <div class="row col-sm-12 col-md-12 col-lg-12 nopadding">
-            <div class="col-sm-2 col-md-2 col-lg-2 nopadding">
-                <div class='input-group'>
-                    <div class='input-group-addon'><span my-translator>Year</span> &nbsp;&nbsp;</div>
-                    <input type="text" name="year" class="form-control" data-ng-model="year" placeholder="Year" title="Year" my-translator-attr="Year" required />
+{% if layout == "ajax" %}
+<div class="row" style="padding:0 10px 10px 10px;">
+    <form class="form-horizontal" name="frmReportSupport" role="form" data-ng-attr-button='{{button}}' novalidate>
+        <div class="row col-sm-12 col-md-12 col-lg-12">
+            <div class="col-sm-12 col-md-12 col-lg-12 form-group">
+                <label class="col-sm-3 col-md-3 col-lg-3 text-right"><span my-translator>To</span></label>
+                <div class="col-sm-7 col-md-7 col-lg-7 nopadding">
+                    <input type="text" name="to" class="form-control" data-ng-model="to" placeholder="" title="" my-translator-attr="To" />
+                    <span class="label label-danger" data-ng-show="submitted && frmReportSupport.to.$error.required">
+                        <span my-translator>To must not be blank.</span>
+                    </span>
                 </div>
             </div>
-            <div class="col-sm-2 col-md-2 col-lg-2 nopadding">
-                <div class='input-group'>
-                    <div class='input-group-addon'><span my-translator>Week</span></div>
-                    <input type="text" name="week" class="form-control" data-ng-model="week" placeholder="Week" title="Week" my-translator-attr="Week" required my-date-picker />
+        </div>
+
+        <div class="row col-sm-12 col-md-12 col-lg-12">
+            <div class="col-sm-12 col-md-12 col-lg-12 form-group">
+                <label class="col-sm-3 col-md-3 col-lg-3 text-right"><span my-translator>CC</span></label>
+                <div class="col-sm-7 col-md-7 col-lg-7 nopadding">
+                    <input type="text" name="cc" class="form-control" data-ng-model="cc" placeholder="" title="" my-translator-attr="CC" />
                 </div>
             </div>
-            <div class="col-sm-3 col-md-3 col-lg-3 nopadding">
-                <div class='input-group'>
-                    <div class='input-group-addon'><span my-translator>User</span></div>
-                    <select class='form-control' data-ng-model="user_id" name="user_id">
-                        <option value="{% raw %}{{mtxUser.id}}{% endraw %}" data-ng-repeat="mtxUser in mtxUsers">{% raw %}{{mtxUser.family_name}}{% endraw %} {% raw %}{{mtxUser.given_name}}{% endraw %}</option>
-                    </select>
+        </div>
+
+        <div class="row col-sm-12 col-md-12 col-lg-12">
+            <div class="col-sm-12 col-md-12 col-lg-12 form-group">
+                <label class="col-sm-3 col-md-3 col-lg-3 text-right"><span my-translator>BCC</span></label>
+                <div class="col-sm-7 col-md-7 col-lg-7 nopadding">
+                    <input type="text" name="bcc" class="form-control" data-ng-model="bcc" placeholder="" title="" my-translator-attr="BCC" />
                 </div>
-            </div>          
-        </div>
-
-        <div class="row col-sm-12 col-md-12 col-lg-12 nopadding" style="margin-top:10px;">
-            <button type="button" class="btn btn-primary" data-ng-click="get()">
-                <span data-ng-hide="loading"><span my-translator>Preview</span></span>
-
-                <span data-ng-show="loading">
-                    <i class="fa fa-spinner fa-spin"></i>
-                    <span my-translator>Previewing</span>
-                </span>
-            </button>
-
-            <button type="button" class="btn btn-primary" data-ng-click="chart()">
-                <span my-translator>Pie Chart</span></span>
-            </button>
-
-            <button type="button" class="btn btn-primary" data-ng-click="generate_report(null)" data-ng-disabled="user_id !== session_user_id">
-                <span my-translator>Generate Report Only</span></span>
-            </button>
-
-            <button type="button" class="btn btn-primary" data-ng-click="generate_report('email')" data-ng-disabled="user_id !== session_user_id">
-                <span my-translator>Generate & Email Report</span></span>
-            </button>
-        </div>
-
-        <div class='row col-sm-12 col-md-12 col-lg-12 nopadding' style="margin-top:30px;" data-ng-show="show_preview">
-            <table class='tblItems table table-bordered table-striped' cellspacing='0' cellpadding='0' style='font-size:14px;'>
-                <thead>
-                    <tr>
-                        <th style="width:10%;"><span my-translator>Worked Date</span></th>
-                        <th><span my-translator>Project Name</span></th>
-                        <th><span my-translator>Module Name</span></th>
-                        <th><span my-translator>Item</span></th>
-                        <th><span my-translator>Hours</span></th>
-                        <th><span my-translator>Memo</span></th>
-                        <th><span my-translator>Issues</span></th>
-                        <th><span my-translator>Attachments</span></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr data-ng-repeat="data in dataset" data-ng-if="dataset.length > 0 && data.user_id == user_id && data.active == 1">
-                        <td data-ng-if="data.user_id==session_user_id" class='right_align'>
-                            <input type='datetime' class='form-control' name='worked' title='Enter worked date' data-ng-model="data.worked" module-id="{% raw %}{{data.Module.id}}{% endraw %}" item-id="{% raw %}{{data.id}}{% endraw %}" style="width:100px;" my-date-picker-item />
-                        </td>
-                        <td data-ng-if="data.user_id!=session_user_id" class='right_align' data-ng-bind="data.worked | date:'yyyy-MM-dd' : 'UTC'"></td>
-
-                        <td data-ng-bind="data.Module.Project.name"></td>
-
-                        <td data-ng-bind="data.Module.name"></td>
-
-                        <td data-ng-if="data.user_id==session_user_id">
-                            <textarea name='name' rows='1' class='form-control blur' ng-model="data.name" module-id="{% raw %}{{data.Module.id}}{% endraw %}" item-id="{% raw %}{{data.id}}{% endraw %}"></textarea>
-                        </td>
-                        <td data-ng-if="data.user_id!=session_user_id" data-ng-bind="data.name"></td>
-
-                        <td data-ng-if="data.user_id==session_user_id">
-                            <select module-id="{% raw %}{{data.Module.id}}{% endraw %}" item-id="{% raw %}{{data.id}}{% endraw %}" class="form-control" style="width:75px;" my-select-box>
-                                <option data-ng-repeat="mtxHour in mtxHours" value="{{mtxHour.id}}" data-ng-model="data.hours" data-ng-selected="mtxHour.id == data.hours">
-                                    {% raw %}{{mtxHour.name}}{% endraw %}
-                                </option>
-                            </select>
-                        </td>
-                        <td data-ng-if="data.user_id!=session_user_id" class="right_align" data-ng-bind="data.hours"></td>
-
-                        <td data-ng-if="data.user_id==session_user_id">
-                            <textarea name='memo' rows='1' class='form-control blur' ng-model="data.memo" module-id="{% raw %}{{data.Module.id}}{% endraw %}" item-id="{% raw %}{{data.id}}{% endraw %}"></textarea>
-                        </td>
-                        <td data-ng-if="data.user_id!=session_user_id" data-ng-bind="data.memo"></td>
-
-                        <td>
-                            <a data-ng-if="data.Issues.length == 0" class="pointer" data-ng-click="load_issues(data.module_id, data.id, data.name, 'add', false)">( {% raw %}{{data.Issues.length}}{% endraw %} )</a>
-                            <a data-ng-if="data.Issues.length > 0" class="pointer" data-ng-click="load_issues(data.module_id, data.id, data.name, 'list', false)">( {% raw %}{{data.Issues.length}}{% endraw %} )</a>
-                        </td>
-                        <td>
-                            <a data-ng-if="data.Attachments.length == 0" class="pointer" data-ng-click="load_attachments(data.module_id, data.id, data.name, 'add', false)">( {% raw %}{{data.Attachments.length}}{% endraw %} )</a>
-                            <a data-ng-if="data.Attachments.length > 0" class="pointer" data-ng-click="load_attachments(data.module_id, data.id, data.name, 'list', false)">( {% raw %}{{data.Attachments.length}}{% endraw %} )</a>
-                        </td>
-                    </tr>
-                    <tr data-ng-if="dataset.length == 0">
-                        <td class='text-center' colspan='8'><span my-translator>No items record found.</span></td>
-                    </tr>
-                </tbody>
-                <tfoot>
-                    <tr>
-                        <td colspan='4'><label class='pull-right'><span my-translator>Total Hours:</span></label></td>
-                        <td class='total'><b data-ng-bind="dataset | sumByKey: user_id"></b></td>
-                        <td colspan="3">&nbsp;</td>
-                    </tr>
-                </tfoot>
-            </table>
-        </div>
-
-        <div class='row col-sm-12 col-md-12 col-lg-12 nopadding' style="margin-top:20px;" data-ng-show="show_chart">
-            <div style='background-color:#fff;width:99.9%;' my-chart>
             </div>
         </div>
-    </section>
 
-    <modal visible="showModal" data-ng-model="element_id">
-        <div ngcd_element="html"></div>
-    </modal>
+        <div class="row col-sm-12 col-md-12 col-lg-12">
+            <div class="col-sm-12 col-md-12 col-lg-12 form-group">
+                <label class="col-sm-3 col-md-3 col-lg-3 text-right"><span my-translator>Subject</span></label>
+                <div class="col-sm-7 col-md-7 col-lg-7 nopadding">
+                    <input type="text" name="subject" class="form-control" data-ng-model="subject" placeholder="" title="" my-translator-attr="Subject" />
+                </div>
+            </div>
+        </div>
+
+        <div class="row col-sm-12 col-md-12 col-lg-12">
+            <div class="form-group">
+                <label class="col-sm-3 col-md-3 col-lg-3 text-right"><span my-translator>Note</span></label>
+                <div class="col-sm-7 col-md-7 col-lg-7 nopadding">
+                    <textarea class="form-control" name="email_body" rows="10" data-ng-model="email_body"></textarea>
+                </div>
+            </div>
+        </div>
+
+        <div class="row col-sm-12 col-md-12 col-lg-12">
+            <div class="form-group">
+                <label class="col-sm-3 col-md-3 col-lg-3 text-right">&nbsp;</label>
+                <div class="col-sm-9 col-md-9 col-lg-9 nopadding">
+                    <button type="button" class="btn btn-primary" data-ng-click="send(frmReportSupport)">
+                        <span data-ng-hide="loading"><span my-translator>Send</span></span>
+
+                        <span data-ng-show="loading">
+                            <i class="fa fa-spinner fa-spin"></i>
+                            <span my-translator>Sending</span>
+                        </span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </form>
 </div>
 {% endif %}
 
-{% if layout == "default" %}
-<script src="/javascripts/controllers/report_weekly.js"></script>
-<script src="/javascripts/controllers/attachment.js"></script>
-<script src="/javascripts/controllers/issue.js"></script>
+{% if layout == "ajax" %}
+<script src="/javascripts/controllers/report_support.js"></script>
 {% endif %}
 {% endblock %}

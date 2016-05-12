@@ -9,6 +9,7 @@ app.run(function ($http, myFactory, $rootScope) {
     $rootScope.messages = "";
     $rootScope.title = "";
     $rootScope.header_title = "";
+    $rootScope.table_name = "";
     
     //  @link: http://stackoverflow.com/questions/576196/regular-expression-allow-letters-numbers-and-spaces-with-at-least-one-letter
     $rootScope.validate_invalid_characters = "^[a-zA-Z0-9 _-]*$";

@@ -69,16 +69,30 @@
         //    $scope.loading = false;
         //    return;
         //}
+        var plan_started = '';
+        if ($scope.module_plan_started== null || $scope.module_plan_started == '') plan_started = '';
+
+        var plan_ended = '';
+        if ($scope.module_plan_ended== null || $scope.module_plan_ended == '') plan_ended = '';
+
+        var started = '';
+        if ($scope.module_started == null || $scope.module_started == '') started = '';
+
+        var ended = '';
+        if ($scope.module_ended == null || $scope.module_ended == '') ended = '';
         
+        var note = '';
+        if ($scope.module_note == null || $scope.module_note == '') note = '';
+
         var data = {
             name: $scope.module_name,
-            plan_started: $scope.module_plan_started,
-            plan_ended: $scope.module_plan_ended,
-            started: $scope.module_started,
-            ended: $scope.module_ended,
+            plan_started: plan_started,
+            plan_ended: plan_ended,
+            started: started,
+            ended: ended,
             is_completed: $scope.module_is_completed,
             is_endless: $scope.module_is_endless,
-            note: $scope.module_note
+            note: note
         };
         
         $http({

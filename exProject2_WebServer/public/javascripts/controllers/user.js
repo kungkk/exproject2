@@ -1,4 +1,5 @@
 ﻿app.controller("user_controller", function ($http, $location, myFactory, $rootScope, $scope) {
+    $rootScope.table_name = "users";
     $scope.button = angular.element('form').attr('data-ng-attr-button');
 
     if ($scope.button !== 'save') {
