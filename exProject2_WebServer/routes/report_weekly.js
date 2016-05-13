@@ -245,7 +245,8 @@ var monthly_plan_query = function (req) {
     //var m = d.getMonth()    
     
     y = req.query.year;
-    m = new Date().getMonth();
+    //m = new Date().getMonth();
+    m = req.query.month;
     var firstDayOfMonth = new Date(y, m, 1);
     m++;
     var lastDayOfMonth = new Date(y, m, 0);
@@ -253,7 +254,7 @@ var monthly_plan_query = function (req) {
     console.log(dateFormat(firstDayOfMonth, "yyyy-mm-dd"));
     console.log(dateFormat(lastDayOfMonth, "yyyy-mm-dd"));
     
-    
+    logger.info(_spaceLoop(ErrorLevel.INFO), 'monthly');
     var SQLPlan = "SELECT id FROM plans WHERE user_id = " + req.query.user_id + " " +
                   "AND year = " + req.query.year + " " +
                   "AND month = " + m;
@@ -274,6 +275,7 @@ var monthly_plan_query = function (req) {
                "AND i.module_id = m.id " +
                "AND m.is_endless = 0 " +
                "AND m.project_id = p.id";
+    logger.info(_spaceLoop(ErrorLevel.INFO), SQLB);
     //console.log(SQLB);
     //res.status(200);
     
@@ -386,7 +388,7 @@ router.get('/\.xlsx_old', checkAuth, function (req, res) {
 });
 
 
-/* GET API: /report_weekly/.xlsx?year=###&week=###&user_id=### */
+/* GET API: /report_weekly/.xlsx?year=###&month=###&week=###&user_id=### */
 router.get('/\.xlsx', checkAuth, function (req, res) {
     var arrWhere = where_clause_builder(req);
     
@@ -544,7 +546,7 @@ router.get('/charts/\.json', checkAuth, function (req, res) {
 });
 
 
-/* GET API: /report_weekly/email?year=###&week=###&user_id=### */
+/* GET API: /report_weekly/email?year=###&month=###&week=###&user_id=### */
 router.get('/email', checkAuth, function (req, res) {
     var arrWhere = where_clause_builder(req);
     
