@@ -21,6 +21,7 @@
     }
     
     $scope.year = year.toString();
+    $scope.month = currentTime.getMonth();
     $scope.week = week;
     $scope.user_id = $rootScope.session_user_id;
     $scope.show_preview = true;
@@ -150,7 +151,7 @@
     
     $scope.generate_report = function (mode) {
         $http({
-            url: '/report_weekly/.xlsx?year=' + $scope.year + '&week=' + $scope.week + '&user_id=' + $scope.user_id + '&_=' + myFactory.date_time_now(),
+            url: '/report_weekly/.xlsx?year=' + $scope.year + '&week=' + $scope.week + '&month=' + $scope.month + '&user_id=' + $scope.user_id + '&_=' + myFactory.date_time_now(),
             method: "GET",
             cache: false,
             headers: { 'X-Requested-With' : 'XMLHttpRequest' }
@@ -452,10 +453,12 @@ app.directive('myDatePicker', function () {
                 onSelect: function (dateText, inst) {
                     var week = $.datepicker.iso8601Week(new Date(dateText));
                     var date = new Date(dateText);
+                    var month = date.getMonth();
                     var year = date.getFullYear();
                     element[0].value = week;
                     scope.year = year;
                     scope.week = week;
+                    scope.month = month;
                     
                     scope.$apply();
                 }

@@ -67,6 +67,21 @@ var excel_header = function (req, worksheet, worksheet_name) {
             worksheet.getCell("E5").font = { bold: true };
             worksheet.getCell("F5").font = { bold: true };
             break;
+        case "monthly plan":
+            worksheet.getCell("A5").value = "Project";
+            worksheet.getCell("B5").value = "Module";
+            worksheet.getCell("C5").value = "Plan Hours";
+            worksheet.getCell("D5").value = "Worked Hours";
+            worksheet.getCell("E5").value = "Completeness (%)";
+            worksheet.getCell("F5").value = "Performance (%)";
+            
+            worksheet.getCell("A5").font = { bold: true };
+            worksheet.getCell("B5").font = { bold: true };
+            worksheet.getCell("C5").font = { bold: true };
+            worksheet.getCell("D5").font = { bold: true };
+            worksheet.getCell("E5").font = { bold: true };
+            worksheet.getCell("F5").font = { bold: true };
+            break;
     }
     
     // width size formatting
@@ -76,6 +91,7 @@ var excel_header = function (req, worksheet, worksheet_name) {
     var colD = worksheet.getColumn(4);
     var colE = worksheet.getColumn(5);
     var colF = worksheet.getColumn(6);
+    var colG = worksheet.getColumn(7);
     switch (worksheet_name) {
         case "weekly":
             colA.width = 15;
@@ -90,6 +106,14 @@ var excel_header = function (req, worksheet, worksheet_name) {
             colB.width = 50;
             colC.width = 32;
             colD.width = 50;
+            colE.width = 32;
+            colF.width = 32;
+            break;
+        case "monthly plan":
+            colA.width = 15;
+            colB.width = 50;
+            colC.width = 20;
+            colD.width = 20;
             colE.width = 32;
             colF.width = 32;
             break;
@@ -129,6 +153,39 @@ var excel_data = function (req, worksheet, worksheet_name, dataset) {
                 rowValues[4] = dataset[i]['issue_description'];
                 rowValues[5] = dataset[i]['due_date'];
                 rowValues[6] = dataset[i]['created'];
+                worksheet.addRow(rowValues);
+                nRow++;
+            }
+            break;
+        case "monthly plan":
+            for (var i = 0; i < dataset.length; i++) {
+                var rowValues = [];
+                
+                
+                if (dataset[i]['status'] == "planed") {
+                    if (dataset[i]['module_id'] == dataset[i + 1]['module_id']) {
+                        if (dataset[i + 1]['status'] == "worked") {
+                            rowValues[1] = dataset[i]['project_name'];
+                            rowValues[2] = dataset[i]['module_name'];
+                            rowValues[3] = dataset[i]['hours'];
+                            rowValues[4] = dataset[i + 1]['hours'];
+                        }
+                    }
+                    else {
+                        rowValues[1] = dataset[i]['project_name'];
+                        rowValues[2] = dataset[i]['module_name'];
+                        rowValues[3] = dataset[i]['hours'];
+                        rowValues[4] = 0;
+                    }
+                }
+                else { 
+                
+                }
+                
+                //rowValues[3] = dataset[i]['hours'];
+                //rowValues[4] = '';
+                rowValues[5] = '';
+                rowValues[6] = '';
                 worksheet.addRow(rowValues);
                 nRow++;
             }
@@ -429,8 +486,8 @@ router.get('/\.xlsx', checkAuth, function (req, res) {
         excel_data(req, worksheet, "weekly", dataset);
         
         var projects = GroupBy(dataset, "project_id");
-        console.log("projects:" + JSON.stringify(projects));
-        logger.info(_spaceLoop(ErrorLevel.INFO), JSON.stringify(projects, null, '    '));
+        
+        //logger.info(_spaceLoop(ErrorLevel.INFO), JSON.stringify(projects, null, '    '));
         
         for (var project_id in projects) {
             logger.info(_spaceLoop(ErrorLevel.INFO), 'project_id:' + project_id);
@@ -450,9 +507,9 @@ router.get('/\.xlsx', checkAuth, function (req, res) {
             sequelize.query(sql, {
                 type: sequelize.QueryTypes.SELECT
             }).then(function (dataset) {
-                logger.info(_spaceLoop(ErrorLevel.INFO), JSON.stringify(dataset, null, '    '));
+                //logger.info(_spaceLoop(ErrorLevel.INFO), JSON.stringify(dataset, null, '    '));
 
-                logger.info(_spaceLoop(ErrorLevel.INFO), 'project_name:' + dataset[0]['project_name']);
+                //logger.info(_spaceLoop(ErrorLevel.INFO), 'project_name:' + dataset[0]['project_name']);
 
                 sheet = workbook.addWorksheet(dataset[0]['project_name']);
                 worksheet = workbook.getWorksheet(dataset[0]['project_name']);
