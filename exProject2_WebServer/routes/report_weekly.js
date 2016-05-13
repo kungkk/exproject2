@@ -13,6 +13,10 @@ var nodemailer = require('nodemailer');
 // @link http://momentjs.com
 var moment = require('moment');
 
+// link: https://www.npmjs.com/package/dateformat
+var dateFormat = require('dateformat');
+
+
 var started;
 var ended;
 to = "";
@@ -65,6 +69,7 @@ var excel_header = function (req, worksheet, worksheet_name) {
             break;
     }
     
+    // width size formatting
     var colA = worksheet.getColumn(1);
     var colB = worksheet.getColumn(2);
     var colC = worksheet.getColumn(3);
@@ -137,7 +142,7 @@ var where_clause_builder = function (req) {
     var year;
     var week = "01";
     var string;
-
+    
     if (Object.keys(req.query).length === 0) {
         return { id: -1 };
     }
@@ -174,18 +179,18 @@ var send_email_variables = function (req) {
     to = "";
     cc = "";
     bcc = "";
-
+    
     var sql = "SELECT * FROM attributes WHERE table_name = 'users' AND key_id = " + req.session.user_id;
     sequelize.query(sql, {
         type: sequelize.QueryTypes.SELECT
     }).then(function (dataset) {
         logger.info(_spaceLoop(ErrorLevel.INFO), JSON.stringify(dataset, null, '    '));
-
+        
         for (i = 0; i < dataset.length; i++) {
             //logger.info(_spaceLoop(ErrorLevel.INFO), JSON.stringify(dataset[i], null, '    '));
             
             console.log(dataset[i]['key_name']);
-
+            
             switch (dataset[i]['key_name']) {
                 case 'to':
                     to = dataset[i]['key_value'];
@@ -231,6 +236,74 @@ router.get('/\.json', checkAuth, function (req, res) {
     });
 });
 
+
+var monthly_plan_query = function (req) {
+    // link: http://stackoverflow.com/questions/13571700/get-first-and-last-date-of-current-month-with-javascript-or-jquery
+    // link: https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Date
+    
+    //var d = new Date();
+    //var m = d.getMonth()    
+    
+    y = req.query.year;
+    m = new Date().getMonth();
+    var firstDayOfMonth = new Date(y, m, 1);
+    m++;
+    var lastDayOfMonth = new Date(y, m, 0);
+    
+    console.log(dateFormat(firstDayOfMonth, "yyyy-mm-dd"));
+    console.log(dateFormat(lastDayOfMonth, "yyyy-mm-dd"));
+    
+    
+    var SQLPlan = "SELECT id FROM plans WHERE user_id = " + req.query.user_id + " " +
+                  "AND year = " + req.query.year + " " +
+                  "AND month = " + m;
+    
+    var SQLA = "SELECT p.id project_id, p.code project_code, p.name project_name, m.id module_id, m.name module_name, t.started, t.ended, t.hours, 'planed' status " +
+               "FROM tasks t, modules m, projects p " +
+               "WHERE t.plan_id IN (" + SQLPlan + ") " +
+               "AND t.module_id = m.id " +
+               "AND m.is_endless = 0 " +
+               "AND m.project_id = p.id";
+    logger.info(_spaceLoop(ErrorLevel.INFO), SQLA);
+    // ????
+    var SQLB = "SELECT p.id project_id, p.code project_code, p.name project_name, m.id module_id, m.name module_name, null started, null ended, i.hours, 'worked' status " +
+               "FROM items i, modules m, projects p " +
+               "WHERE i.user_id = " + req.query.user_id + " " +
+               "AND i.worked >= '" + dateFormat(firstDayOfMonth, "yyyy-mm-dd") + time_started + "' " +
+               "AND i.worked <= '" + dateFormat(lastDayOfMonth, "yyyy-mm-dd") + time_ended + "' " +
+               "AND i.module_id = m.id " +
+               "AND m.is_endless = 0 " +
+               "AND m.project_id = p.id";
+    //console.log(SQLB);
+    //res.status(200);
+    
+    SQLB = "SELECT x.project_id, x.project_code, x.project_name, x.module_id, x.module_name, x.started, x.ended, SUM(x.hours) hours, x.status " +
+           "FROM (" + SQLB + ") x " +
+           "GROUP BY x.project_id, x.project_name, x.module_id, x.module_name, x.started, x.ended, x.status";
+    
+    var sql = "SELECT a.project_id, a.project_code, a.project_name, a.module_id, a.module_name, a.started, a.ended, a.hours, a.status " +
+              "FROM (" + SQLA + " UNION ALL " + SQLB + ") a " +
+              "WHERE a.hours > 0 " +
+              "ORDER BY a.project_name DESC, a.module_name, a.status";
+    //logger.info(_spaceLoop(ErrorLevel.INFO), sql);
+    return sql;
+}
+
+
+// @link http://stackoverflow.com/questions/10919241/json-data-group-by
+function GroupBy(myjson, attr) {
+    var sum = {};
+    
+    myjson.forEach(function (obj) {
+        if (typeof sum[obj[attr]] == 'undefined') {
+            sum[obj[attr]] = 1;
+        }
+        else {
+            sum[obj[attr]]++;
+        }
+    });
+    return sum;
+}
 
 /* GET API: /report_weekly/.xlsx?year=###&week=###&user_id=### */
 router.get('/\.xlsx_old', checkAuth, function (req, res) {
@@ -297,12 +370,12 @@ router.get('/\.xlsx_old', checkAuth, function (req, res) {
         var filepath = __dirname.replace("routes", "public\\excel\\");
         var filename = req.session.given_name + "_" + req.session.family_name + "_W" + req.query.year + req.query.week + ".xlsx";
         filepath = filepath + filename;
-
+        
         //res.setHeader('Content-Type', 'application/vnd.openxmlformats');
         //res.setHeader("Content-Disposition", "attachment; filename=" + "report_weekly.xlsx");
         //res.end(output, 'binary');
         
-
+        
         var fs = require('fs');
         var wstream = fs.createWriteStream(filepath);
         wstream.write(output, 'binary');
@@ -316,7 +389,7 @@ router.get('/\.xlsx_old', checkAuth, function (req, res) {
 /* GET API: /report_weekly/.xlsx?year=###&week=###&user_id=### */
 router.get('/\.xlsx', checkAuth, function (req, res) {
     var arrWhere = where_clause_builder(req);
-
+    
     // @link http://stackoverflow.com/questions/31839074/overwrite-an-excel-file-with-nodejs    
     var filepath = __dirname.replace("routes", "public\\excel\\");
     var week_id = "W" + req.query.year + req.query.week;
@@ -335,7 +408,8 @@ router.get('/\.xlsx', checkAuth, function (req, res) {
     var worksheet = workbook.getWorksheet(week_id);
     
     // #region Weekly Report Worksheet
-    var sql = "SELECT i.worked datetime, p.name project_name, m.name module_name, i.name item_name, i.hours, i.memo " + 
+    //var sql = "SELECT i.worked datetime, p.name project_name, m.name module_name, i.name item_name, i.hours, i.memo " + 
+    var sql = "SELECT i.worked datetime, m.project_id, p.name project_name, m.name module_name, i.name item_name, i.hours, i.memo " + 
         "FROM items i, modules m, projects p " + 
         "WHERE i.user_id = " + req.query.user_id + " " +
         "AND i.worked BETWEEN '" + started + "' AND '" + ended + "' " +
@@ -345,14 +419,50 @@ router.get('/\.xlsx', checkAuth, function (req, res) {
         "AND m.project_id = p.id " +
         "AND m.active = p.active " +
         "ORDER BY i.worked";
-    logger.info(_spaceLoop(ErrorLevel.INFO), sql);
+    //logger.info(_spaceLoop(ErrorLevel.INFO), sql);
     sequelize.query(sql, {
         type: sequelize.QueryTypes.SELECT
     }).then(function (dataset) {
-        logger.info(_spaceLoop(ErrorLevel.INFO), JSON.stringify(dataset, null, '    '));
+        //logger.info(_spaceLoop(ErrorLevel.INFO), JSON.stringify(dataset, null, '    '));
         
         excel_header(req, worksheet, "weekly");
         excel_data(req, worksheet, "weekly", dataset);
+        
+        var projects = GroupBy(dataset, "project_id");
+        console.log("projects:" + JSON.stringify(projects));
+        logger.info(_spaceLoop(ErrorLevel.INFO), JSON.stringify(projects, null, '    '));
+        
+        for (var project_id in projects) {
+            logger.info(_spaceLoop(ErrorLevel.INFO), 'project_id:' + project_id);
+        
+            sql = "SELECT i.worked datetime, m.project_id, p.name project_name, m.name module_name, i.name item_name, i.hours, i.memo " + 
+                "FROM items i, modules m, projects p " + 
+                "WHERE i.user_id = " + req.query.user_id + " " +
+                "AND i.worked BETWEEN '" + started + "' AND '" + ended + "' " +
+                "AND i.active = 1 " +
+                "AND i.module_id = m.id " +
+                "AND i.active = m.active " +
+                "AND m.project_id = " + project_id + " " +
+                "AND m.project_id = p.id " +
+                "AND m.active = p.active " +
+                "ORDER BY i.worked";
+            //logger.info(_spaceLoop(ErrorLevel.INFO), sql);
+            sequelize.query(sql, {
+                type: sequelize.QueryTypes.SELECT
+            }).then(function (dataset) {
+                logger.info(_spaceLoop(ErrorLevel.INFO), JSON.stringify(dataset, null, '    '));
+
+                logger.info(_spaceLoop(ErrorLevel.INFO), 'project_name:' + dataset[0]['project_name']);
+
+                sheet = workbook.addWorksheet(dataset[0]['project_name']);
+                worksheet = workbook.getWorksheet(dataset[0]['project_name']);
+                
+                excel_header(req, worksheet, dataset[0]['project_name']);
+                excel_data(req, worksheet, dataset[0]['project_name'], dataset);
+
+            });
+        }
+        
         
         // #region Unsolve Issues Worksheet
         sql = "SELECT i.name item_name, s.name issue_name, s.description issue_description, s.due_date, s.created " +
@@ -366,7 +476,7 @@ router.get('/\.xlsx', checkAuth, function (req, res) {
         sequelize.query(sql, {
             type: sequelize.QueryTypes.SELECT
         }).then(function (dataset) {
-            logger.info(_spaceLoop(ErrorLevel.INFO), JSON.stringify(dataset, null, '    '));
+            //logger.info(_spaceLoop(ErrorLevel.INFO), JSON.stringify(dataset, null, '    '));
             
             // Issues Worksheet
             sheet = workbook.addWorksheet("issues");
@@ -375,23 +485,35 @@ router.get('/\.xlsx', checkAuth, function (req, res) {
             excel_header(req, worksheet, "issues");
             excel_data(req, worksheet, "issues", dataset);
             
-            worksheet.commit(); // Need to commit the changes to the worksheet
-            workbook.commit(); // Finish the workb
-
-            res.status(200).send(filename);
-
+            // original location
+            //worksheet.commit(); // Need to commit the changes to the worksheet
+            //workbook.commit(); // Finish the workb
             
-            //setTimeout(function () {
-            //    var fs = require('fs');
-            //    fs.readFile(filepath, function (err, data) {
-            //        if (err) throw err; // Fail if the file can't be read.
-                    
-            //        res.setHeader('Content-Type', 'application/vnd.openxmlformats');
-            //        res.setHeader("Content-Disposition", "attachment; filename=" + filename);
-            //        res.end(data, 'binary');
-
-            //    });
-            //}, 1000);
+            //////////////////////////////////////////////
+            // Monthly Plan Worksheet
+            sql = monthly_plan_query(req);
+            sequelize.query(sql, {
+                type: sequelize.QueryTypes.SELECT
+            }).then(function (dataset) {
+                logger.info(_spaceLoop(ErrorLevel.INFO), JSON.stringify(dataset, null, '    '));
+            
+                sheet = workbook.addWorksheet("monthly plan");
+                worksheet = workbook.getWorksheet("monthly plan");
+            
+                excel_header(req, worksheet, "monthly plan");
+                excel_data(req, worksheet, "monthly plan", dataset);
+            
+                // new location
+                worksheet.commit(); // Need to commit the changes to the worksheet
+                workbook.commit(); // Finish the workb
+            });
+            
+            // new location
+            //worksheet.commit(); // Need to commit the changes to the worksheet
+            //workbook.commit(); // Finish the workb
+            
+            
+            res.status(200).send(filename);
         });
         // #endregion
     });
@@ -429,7 +551,7 @@ router.get('/email', checkAuth, function (req, res) {
     var filepath = __dirname.replace("routes", "public\\uploads\\");
     
     send_email_variables(req);
-
+    
     Item.findAll({
         include: [
             { model: Attachment }
@@ -448,7 +570,7 @@ router.get('/email', checkAuth, function (req, res) {
             strAttachments = '{ "filename": "' + filename + '", "path": "excel" }';
         }
         
-
+        
         for (var i = 0; i < dataset.length; i++) {
             logger.info(_spaceLoop(ErrorLevel.INFO), JSON.stringify(dataset[i]['Attachments'], null, '    '));
             for (var j = 0; j < dataset[i]['Attachments'].length; j++) {
@@ -465,7 +587,7 @@ router.get('/email', checkAuth, function (req, res) {
             strAttachments = '[ ' + strAttachments + ' ]';
             arrAttachments = JSON.parse(strAttachments);
         }
-
+        
         //console.log(arrAttachments);
         //console.log(arrAttachments.length);
         
@@ -532,7 +654,7 @@ router.get('/email', checkAuth, function (req, res) {
                 res.end();
             }
         });
-    });    
+    });
 });
 
 
