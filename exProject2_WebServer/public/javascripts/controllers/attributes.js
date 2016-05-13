@@ -44,9 +44,8 @@
 
     if ($rootScope.table_name == "users") $scope.get_view();
 
-    $scope.blur = function (key_name) {
+    $scope.blur = function (form, key_name) {
         $scope.$watch('attributes', function () {
-            console.debug($scope.attributes);
             var url = '/attribute?table_name='+ $rootScope.table_name+'&key_id=' + $rootScope.session_user_id + '&key_name=&key_value=&_=' + myFactory.date_time_now();
             for (var i = 0; i < $scope.attributes.length; i++) {
                 if ($scope.attributes[i].key_name == key_name) { 
