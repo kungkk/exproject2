@@ -458,7 +458,7 @@ app.directive('myDatePicker', function () {
                     element[0].value = week;
                     scope.year = year;
                     scope.week = week;
-                    scope.month = month;
+                    scope.month = month+1;
                     
                     scope.$apply();
                 }
