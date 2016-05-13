@@ -303,7 +303,7 @@ var monthly_plan_query = function (req) {
     
     y = req.query.year;
     //m = new Date().getMonth();
-    m = req.query.month;
+    m = req.query.month - 1;
     var firstDayOfMonth = new Date(y, m, 1);
     m++;
     var lastDayOfMonth = new Date(y, m, 0);
