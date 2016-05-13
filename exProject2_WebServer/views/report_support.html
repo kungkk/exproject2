@@ -16,7 +16,10 @@
             <div class="col-sm-12 col-md-12 col-lg-12 form-group">
                 <label class="col-sm-3 col-md-3 col-lg-3 text-right"><span my-translator>To</span></label>
                 <div class="col-sm-7 col-md-7 col-lg-7 nopadding">
-                    <input type="text" name="to" class="form-control" data-ng-model="to" placeholder="" title="" my-translator-attr="To" />
+                    <input type="text" name="to" class="form-control" data-ng-model="to" data-ng-pattern="validate_invalid_characters" placeholder="" title="" my-translator-attr="To" required />
+                    <span class="label label-danger" data-ng-show="frmReportSupport.to.$error.pattern || submitted && frmReportSupport.to.$error.pattern">
+                        <span my-translator>To contains invalid characters.</span>
+                    </span>
                     <span class="label label-danger" data-ng-show="submitted && frmReportSupport.to.$error.required">
                         <span my-translator>To must not be blank.</span>
                     </span>
@@ -28,7 +31,10 @@
             <div class="col-sm-12 col-md-12 col-lg-12 form-group">
                 <label class="col-sm-3 col-md-3 col-lg-3 text-right"><span my-translator>CC</span></label>
                 <div class="col-sm-7 col-md-7 col-lg-7 nopadding">
-                    <input type="text" name="cc" class="form-control" data-ng-model="cc" placeholder="" title="" my-translator-attr="CC" />
+                    <input type="text" name="cc" class="form-control" data-ng-model="cc" data-ng-pattern="validate_invalid_characters" placeholder="" title="" my-translator-attr="CC" />
+                    <span class="label label-danger" data-ng-show="frmReportSupport.cc.$error.pattern || submitted && frmReportSupport.cc.$error.pattern">
+                        <span my-translator>CC contains invalid characters.</span>
+                    </span>
                 </div>
             </div>
         </div>
@@ -37,7 +43,10 @@
             <div class="col-sm-12 col-md-12 col-lg-12 form-group">
                 <label class="col-sm-3 col-md-3 col-lg-3 text-right"><span my-translator>BCC</span></label>
                 <div class="col-sm-7 col-md-7 col-lg-7 nopadding">
-                    <input type="text" name="bcc" class="form-control" data-ng-model="bcc" placeholder="" title="" my-translator-attr="BCC" />
+                    <input type="text" name="bcc" class="form-control" data-ng-model="bcc" data-ng-pattern="validate_invalid_characters" placeholder="" title="" my-translator-attr="BCC" />
+                    <span class="label label-danger" data-ng-show="frmReportSupport.bcc.$error.pattern || submitted && frmReportSupport.bcc.$error.pattern">
+                        <span my-translator>BCC contains invalid characters.</span>
+                    </span>
                 </div>
             </div>
         </div>
@@ -65,9 +74,9 @@
                 <label class="col-sm-3 col-md-3 col-lg-3 text-right">&nbsp;</label>
                 <div class="col-sm-9 col-md-9 col-lg-9 nopadding">
                     <button type="button" class="btn btn-primary" data-ng-click="send(frmReportSupport)">
-                        <span data-ng-hide="loading"><span my-translator>Send</span></span>
+                        <span data-ng-hide="loading4"><span my-translator>Send</span></span>
 
-                        <span data-ng-show="loading">
+                        <span data-ng-show="loading4">
                             <i class="fa fa-spinner fa-spin"></i>
                             <span my-translator>Sending</span>
                         </span>
