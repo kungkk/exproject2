@@ -141,7 +141,7 @@ var excel_header = function (req, worksheet, worksheet_name) {
 }
 
 
-var excel_data = function (req, worksheet, worksheet_name, dataset) {
+var excel_data = function (req, worksheet, worksheet_name, dataset, total_hours) {
     var strCell;
     var strLastCell;
     
@@ -302,9 +302,9 @@ var excel_data = function (req, worksheet, worksheet_name, dataset) {
             worksheet.getCell("D" + cRow).value = { formula: "SUM(D6:D" + cLastRow + ")" };
             worksheet.getCell("D" + cRow).font = { bold: true };
             
-            
-            worksheet.getCell("B" + parseInt(cRow + 2)).value = "First day until now:";
+            worksheet.getCell("B" + parseInt(cRow + 2)).value = "First day until now: " + total_hours;
             worksheet.getCell("B" + parseInt(cRow + 2)).font = { bold: true };
+
             break;
     }
 }
@@ -646,15 +646,21 @@ router.get('/\.xlsx', checkAuth, function (req, res) {
                 }).then(function (dsHours) {
                     logger.info(_spaceLoop(ErrorLevel.INFO), JSON.stringify(dsHours, null, '    '));
                     logger.info(_spaceLoop(ErrorLevel.INFO), 'total_hours:' + dsHours[0]['hours']);
+                    
+                    // new location
+                    sheet = workbook.addWorksheet(dataset[0]['project_name']);
+                    worksheet = workbook.getWorksheet(dataset[0]['project_name']);
+                    
+                    excel_header(req, worksheet, dataset[0]['project_name']);
+                    excel_data(req, worksheet, dataset[0]['project_name'], dataset, dsHours[0]['hours']);
                 });
-
-
-                sheet = workbook.addWorksheet(dataset[0]['project_name']);
-                worksheet = workbook.getWorksheet(dataset[0]['project_name']);
                 
-                excel_header(req, worksheet, dataset[0]['project_name']);
-                excel_data(req, worksheet, dataset[0]['project_name'], dataset);
-
+                // original location
+                //sheet = workbook.addWorksheet(dataset[0]['project_name']);
+                //worksheet = workbook.getWorksheet(dataset[0]['project_name']);
+                
+                //excel_header(req, worksheet, dataset[0]['project_name']);
+                //excel_data(req, worksheet, dataset[0]['project_name'], dataset);
             });
         }
         
