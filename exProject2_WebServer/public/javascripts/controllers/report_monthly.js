@@ -57,18 +57,15 @@
                 $scope.categories = [];
                 $scope.hours = [];
                 $scope.dataset = [];
-                $scope.plans = [];
-                $scope.worked = [];
-                $scope.new = 0;
 
                 for (var i = 0; i < $scope.report_monthly.length; i++) {
-                    if (typeof $scope.report_monthly[i + 1] != 'undefined') {
+                    if (typeof $scope.report_monthly[i + 1] !== 'undefined') {
                         if ($scope.report_monthly[i].status == "planed") {
                             if ($scope.report_monthly[i + 1].status == "worked") {
                                 if ($scope.report_monthly[i].project_id == $scope.report_monthly[i + 1].project_id && $scope.report_monthly[i].module_id == $scope.report_monthly[i + 1].module_id) {
                                     $scope.dataset.push($scope.report_monthly[i]);
                                     $scope.dataset.push($scope.report_monthly[i + 1]);
-                                    $scope.new = i + 2;
+                                    i = i + 1;
                                 }
                                 else {
                                     $scope.dataset.push($scope.report_monthly[i]);
@@ -81,18 +78,22 @@
                             }
                         }
                         else {
-                            if ($scope.report_monthly[i + 1].status == "worked") {
-                                $scope.dataset.push({ "project_id": $scope.report_monthly[i].project_id, "project_code": $scope.report_monthly[$scope.new].project_code, "project_name": $scope.report_monthly[$scope.new].project_name, "module_id": $scope.report_monthly[$scope.new].module_id, "module_name": $scope.report_monthly[$scope.new].module_name, "started": $scope.report_monthly[$scope.new].started, "ended": $scope.report_monthly[$scope.new].ended, "hours": 0, "status": "planed" });
-                                $scope.dataset.push($scope.report_monthly[$scope.new]);
+                            if ($scope.report_monthly[i].status == "worked") {
+                                $scope.dataset.push({ "project_id": $scope.report_monthly[i].project_id, "project_code": $scope.report_monthly[i].project_code, "project_name": $scope.report_monthly[i].project_name, "module_id": $scope.report_monthly[i].module_id, "module_name": $scope.report_monthly[i].module_name, "started": $scope.report_monthly[i].started, "ended": $scope.report_monthly[i].ended, "hours": 0, "status": "planed" });
+                                $scope.dataset.push($scope.report_monthly[i]);
                             }
                         }
                     }
                     else {
-                        if ($scope.report_monthly[i].status == "planed") { 
+                        if ($scope.report_monthly[i].status == "planed") {
                             $scope.dataset.push($scope.report_monthly[i]);
                             $scope.dataset.push({ "project_id": $scope.report_monthly[i].project_id, "project_code": $scope.report_monthly[i].project_code, "project_name": $scope.report_monthly[i].project_name, "module_id": $scope.report_monthly[i].module_id, "module_name": $scope.report_monthly[i].module_name, "started": $scope.report_monthly[i].started, "ended": $scope.report_monthly[i].ended, "hours": 0, "status": "worked" });
                         }
-                    }
+                        else {
+                            $scope.dataset.push({ "project_id": $scope.report_monthly[i].project_id, "project_code": $scope.report_monthly[i].project_code, "project_name": $scope.report_monthly[i].project_name, "module_id": $scope.report_monthly[i].module_id, "module_name": $scope.report_monthly[i].module_name, "started": $scope.report_monthly[i].started, "ended": $scope.report_monthly[i].ended, "hours": 0, "status": "planed" });
+                            $scope.dataset.push($scope.report_monthly[i]);
+                        }
+                    }                
                 }
 
                 for (var i = 0; i < $scope.dataset.length; i++) {

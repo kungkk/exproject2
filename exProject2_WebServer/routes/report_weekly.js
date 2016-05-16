@@ -82,6 +82,19 @@ var excel_header = function (req, worksheet, worksheet_name) {
             worksheet.getCell("E5").font = { bold: true };
             worksheet.getCell("F5").font = { bold: true };
             break;
+        default:
+            worksheet.getCell("A5").value = "Module Name";
+            worksheet.getCell("B5").value = "Items";
+            worksheet.getCell("C5").value = "DateTime";
+            worksheet.getCell("D5").value = "Hours";
+            worksheet.getCell("E5").value = "Memo";
+            
+            worksheet.getCell("A5").font = { bold: true };
+            worksheet.getCell("B5").font = { bold: true };
+            worksheet.getCell("C5").font = { bold: true };
+            worksheet.getCell("D5").font = { bold: true };
+            worksheet.getCell("E5").font = { bold: true };
+            break;
     }
     
     // width size formatting
@@ -114,8 +127,15 @@ var excel_header = function (req, worksheet, worksheet_name) {
             colB.width = 50;
             colC.width = 20;
             colD.width = 20;
-            colE.width = 32;
-            colF.width = 32;
+            colE.width = 18;
+            colF.width = 18;
+            break;
+        default:
+            colA.width = 15;
+            colB.width = 50;
+            colC.width = 20;
+            colD.width = 20;
+            colE.width = 18;
             break;
     }
 }
@@ -123,6 +143,8 @@ var excel_header = function (req, worksheet, worksheet_name) {
 
 var excel_data = function (req, worksheet, worksheet_name, dataset) {
     var strCell;
+    var strLastCell;
+    
     var nRow = 6;
     switch (worksheet_name) {
         case "weekly":
@@ -141,7 +163,7 @@ var excel_data = function (req, worksheet, worksheet_name, dataset) {
             strCell = "E" + nRow;
             nRow--;
             strLastCell = "E" + nRow;
-            worksheet.getCell(strCell).value = { formula: "SUM(E6:" + strLastCell + ")", result: 40 };
+            worksheet.getCell(strCell).value = { formula: "SUM(E6:" + strLastCell + ")" };
             worksheet.getCell(strCell).font = { bold: true };
             break;
         case "issues":
@@ -158,37 +180,131 @@ var excel_data = function (req, worksheet, worksheet_name, dataset) {
             }
             break;
         case "monthly plan":
+            var arrMonthlyPlan = [];
+ 
+            worksheet.getRow(5).border = { bottom: { style: 'thin' } };
+
             for (var i = 0; i < dataset.length; i++) {
                 var rowValues = [];
-                
-                
-                if (dataset[i]['status'] == "planed") {
-                    if (dataset[i]['module_id'] == dataset[i + 1]['module_id']) {
-                        if (dataset[i + 1]['status'] == "worked") {
-                            rowValues[1] = dataset[i]['project_name'];
-                            rowValues[2] = dataset[i]['module_name'];
-                            rowValues[3] = dataset[i]['hours'];
-                            rowValues[4] = dataset[i + 1]['hours'];
+
+                if (typeof dataset[i + 1] !== 'undefined') {
+                    if (dataset[i].status == "planed") {
+                        if (dataset[i + 1].status == "worked") {
+                            if (dataset[i].project_id == dataset[i + 1].project_id && dataset[i].module_id == dataset[i + 1].module_id) {
+                                arrMonthlyPlan.push(dataset[i]);
+                                arrMonthlyPlan.push(dataset[i + 1]);
+                                i = i + 1;
+                            }
+                            else {
+                                arrMonthlyPlan.push(dataset[i]);
+                                arrMonthlyPlan.push({ "project_id": dataset[i].project_id, "project_code": dataset[i].project_code, "project_name": dataset[i].project_name, "module_id": dataset[i].module_id, "module_name": dataset[i].module_name, "started": dataset[i].started, "ended": dataset[i].ended, "hours": 0, "status": "worked" });
+                            }
+                        }
+                        else {
+                            arrMonthlyPlan.push(dataset[i]);
+                            arrMonthlyPlan.push({ "project_id": dataset[i].project_id, "project_code": dataset[i].project_code, "project_name": dataset[i].project_name, "module_id": dataset[i].module_id, "module_name": dataset[i].module_name, "started": dataset[i].started, "ended": dataset[i].ended, "hours": 0, "status": "worked" });
                         }
                     }
                     else {
-                        rowValues[1] = dataset[i]['project_name'];
-                        rowValues[2] = dataset[i]['module_name'];
-                        rowValues[3] = dataset[i]['hours'];
-                        rowValues[4] = 0;
+                        if (dataset[i].status == "worked") {
+                            arrMonthlyPlan.push({ "project_id": dataset[i].project_id, "project_code": dataset[i].project_code, "project_name": dataset[i].project_name, "module_id": dataset[i].module_id, "module_name": dataset[i].module_name, "started": dataset[i].started, "ended": dataset[i].ended, "hours": 0, "status": "planed" });
+                            arrMonthlyPlan.push(dataset[i]);
+                        }
                     }
                 }
-                else { 
-                
+                else {
+                    if (dataset[i].status == "planed") { 
+                        arrMonthlyPlan.push(dataset[i]);
+                        arrMonthlyPlan.push({ "project_id": dataset[i].project_id, "project_code": dataset[i].project_code, "project_name": dataset[i].project_name, "module_id": dataset[i].module_id, "module_name": dataset[i].module_name, "started": dataset[i].started, "ended": dataset[i].ended, "hours": 0, "status": "worked" });
+                    }
+                    else { 
+                        arrMonthlyPlan.push({ "project_id": dataset[i].project_id, "project_code": dataset[i].project_code, "project_name": dataset[i].project_name, "module_id": dataset[i].module_id, "module_name": dataset[i].module_name, "started": dataset[i].started, "ended": dataset[i].ended, "hours": 0, "status": "planed" });
+                        arrMonthlyPlan.push(dataset[i]);
+                    }
                 }
+            }
+
+            for (var m = 0; m < arrMonthlyPlan.length; m++) {
                 
-                //rowValues[3] = dataset[i]['hours'];
-                //rowValues[4] = '';
-                rowValues[5] = '';
-                rowValues[6] = '';
+                if (arrMonthlyPlan[m]['status'] == "planed") {
+                    rowValues[1] = arrMonthlyPlan[m]['project_name'];
+                    rowValues[2] = arrMonthlyPlan[m]['module_name'];
+                    rowValues[3] = arrMonthlyPlan[m]['hours'];
+                    rowValues[4] = arrMonthlyPlan[m + 1]['hours'];
+                   
+                    if (arrMonthlyPlan[m]['hours'] > 0 && arrMonthlyPlan[m + 1]['hours'] > 0) rowValues[5] = ((arrMonthlyPlan[m + 1]['hours'] / arrMonthlyPlan[m]['hours']) * 100).toFixed(2);
+                    else rowValues[5] = 0;
+                    
+                    if (arrMonthlyPlan[m]['hours'] > 0 && arrMonthlyPlan[m + 1]['hours'] > 0) rowValues[6] = (100 - ((arrMonthlyPlan[m + 1]['hours'] / arrMonthlyPlan[m]['hours']) * 100)).toFixed(2);
+                    else rowValues[6] = 0;
+                    
+                    worksheet.addRow(rowValues);
+                    nRow++;
+                }
+            }
+
+            cRow = nRow;
+            nRow--;
+            cLastRow = nRow;
+        
+            worksheet.getCell("C" + cRow).border = {
+                top: { style: 'thick' }
+            };
+            worksheet.getCell("D" + cRow).border = {
+                top: { style: 'thick' }
+            };
+            
+            worksheet.getCell("B" + cRow).value = "Total Hours:";
+            worksheet.getCell("B" + cRow).font = { bold: true };
+            worksheet.getCell("B" + cRow).alignment = { vertical: 'top', horizontal: 'right' };
+            
+            worksheet.getCell("C" + cRow).value = { formula: "SUM(C6:C" + cLastRow + ")" };
+            worksheet.getCell("C" + cRow).font = { bold: true };
+            
+            worksheet.getCell("D" + cRow).value = { formula: "SUM(D6:D" + cLastRow + ")" };
+            worksheet.getCell("D" + cRow).font = { bold: true };
+            
+            worksheet.getCell("B" + parseInt(cRow + 1)).value = "Total Man Days:";
+            worksheet.getCell("B" + parseInt(cRow + 1)).font = { bold: true };
+            worksheet.getCell("B" + parseInt(cRow + 1)).alignment = { vertical: 'top', horizontal: 'right' };
+            
+            worksheet.getCell("C" + parseInt(cRow + 1)).value = { formula: "SUM(C6:C" + cLastRow + ")/8" };
+            worksheet.getCell("C" + parseInt(cRow + 1)).font = { bold: true };
+            
+            worksheet.getCell("D" + parseInt(cRow + 1)).value = { formula: "SUM(D6:D" + cLastRow + ")/8" };
+            worksheet.getCell("D" + parseInt(cRow + 1)).font = { bold: true };
+            
+            worksheet.getCell("C" + cRow).value = { formula: "SUM(C6:C" + cLastRow + ")" };
+            
+            for (var k = 6; k < 50; k++) {
+                worksheet.getCell("E" + k).alignment = { vertical: 'top', horizontal: 'right' };
+                worksheet.getCell("F" + k).alignment = { vertical: 'top', horizontal: 'right' };
+            }
+            break;
+        default:
+            worksheet.getRow(5).border = { bottom: { style: 'thin' } };
+
+            for (var i = 0; i < dataset.length; i++) {
+                var rowValues = [];
+                rowValues[1] = dataset[i]['module_name'];
+                rowValues[2] = dataset[i]['item_name'];
+                rowValues[3] = dataset[i]['datetime'];
+                rowValues[4] = dataset[i]['hours'];
+                rowValues[5] = dataset[i]['memo'];
                 worksheet.addRow(rowValues);
                 nRow++;
             }
+            
+            cRow = nRow;
+            nRow--;
+            cLastRow = nRow;
+            
+            worksheet.getCell("D" + cRow).value = { formula: "SUM(D6:D" + cLastRow + ")" };
+            worksheet.getCell("D" + cRow).font = { bold: true };
+            
+            
+            worksheet.getCell("B" + parseInt(cRow + 2)).value = "First day until now:";
+            worksheet.getCell("B" + parseInt(cRow + 2)).font = { bold: true };
             break;
     }
 }
