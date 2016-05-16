@@ -510,8 +510,28 @@ router.get('/\.xlsx', checkAuth, function (req, res) {
                 type: sequelize.QueryTypes.SELECT
             }).then(function (dataset) {
                 //logger.info(_spaceLoop(ErrorLevel.INFO), JSON.stringify(dataset, null, '    '));
+                
+                logger.info(_spaceLoop(ErrorLevel.INFO), 'l_project_id:' + dataset[0]['project_id']);
+                var l_project_id = dataset[0]['project_id'];
+                
+                sql = "SELECT m.project_id, SUM(i.hours) hours " +
+                      "FROM items i, modules m, projects p " + 
+                      "WHERE i.user_id = " + req.query.user_id + " " +
+                      "AND i.active = 1 " +
+                      "AND i.module_id = m.id " +
+                      "AND i.active = m.active " +
+                      "AND m.project_id = " + l_project_id + " " +
+                      "AND m.project_id = p.id " +
+                      "AND m.active = p.active " +
+                      "GROUP BY m.project_id";
+                logger.info(_spaceLoop(ErrorLevel.INFO), sql);
+                sequelize.query(sql, {
+                    type: sequelize.QueryTypes.SELECT
+                }).then(function (dsHours) {
+                    logger.info(_spaceLoop(ErrorLevel.INFO), JSON.stringify(dsHours, null, '    '));
+                    logger.info(_spaceLoop(ErrorLevel.INFO), 'total_hours:' + dsHours[0]['hours']);
+                });
 
-                //logger.info(_spaceLoop(ErrorLevel.INFO), 'project_name:' + dataset[0]['project_name']);
 
                 sheet = workbook.addWorksheet(dataset[0]['project_name']);
                 worksheet = workbook.getWorksheet(dataset[0]['project_name']);
@@ -554,7 +574,7 @@ router.get('/\.xlsx', checkAuth, function (req, res) {
             sequelize.query(sql, {
                 type: sequelize.QueryTypes.SELECT
             }).then(function (dataset) {
-                logger.info(_spaceLoop(ErrorLevel.INFO), JSON.stringify(dataset, null, '    '));
+                //logger.info(_spaceLoop(ErrorLevel.INFO), JSON.stringify(dataset, null, '    '));
             
                 sheet = workbook.addWorksheet("monthly plan");
                 worksheet = workbook.getWorksheet("monthly plan");
